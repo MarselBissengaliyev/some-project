@@ -2,16 +2,7 @@ import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 import FacebookDataModel from "../models/facebookData";
 import UserModel from "../models/user";
-
-interface CreateFacebookDataBody {
-  click_id?: string;
-  ip?: string;
-  user_agent?: string;
-  pixel?: string;
-  fb_click?: string;
-  domain?: string;
-  time_click?: string;
-}
+import { CreateFacebookDataBody } from "./facebookData.interface";
 
 export const createFacebookData: RequestHandler<
   unknown,
