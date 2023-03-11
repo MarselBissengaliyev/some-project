@@ -18,20 +18,7 @@ export const createFacebookData: RequestHandler<
   const domain = req.body.domain;
   const time_click = req.body.time_click;
 
-  console.log("click_id=", click_id);
-  console.log("ip=", ip);
-  console.log("user_agent=", user_agent);
-  console.log("pixel=", pixel);
-
   try {
-    const existingClickId = await FacebookDataModel.findOne({
-      click_id: click_id,
-    }).exec();
-
-    if (existingClickId) {
-      throw createHttpError(409, "Click_id already taken.");
-    }
-
     if (
       !click_id ||
       !ip ||
@@ -42,6 +29,14 @@ export const createFacebookData: RequestHandler<
       !time_click
     ) {
       throw createHttpError(400, "Parameters missing");
+    }
+
+    const existingClickId = await FacebookDataModel.findOne({
+      click_id: click_id,
+    }).exec();
+
+    if (existingClickId) {
+      throw createHttpError(409, "Click_id already taken.");
     }
 
     const newFacebookData = await FacebookDataModel.create({
