@@ -12,4 +12,4 @@ const telegramDataSchema = new Schema({
 
 type TelegramData = InferSchemaType<typeof telegramDataSchema>;
 
-export default model<TelegramData>("TelegramData", telegramDataSchema);
+export default model<TelegramData>("telegram_data_item", telegramDataSchema);

@@ -1,10 +1,15 @@
+import cors from "cors";
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from "express";
 import createHttpError, { isHttpError } from "http-errors";
 import morgan from "morgan";
 import facebookDataRoutes from "./routes/facebookData";
+import env from "./utils/validateEnv";
+
 
 const app = express();
+
+app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 
 app.use(morgan("dev"));
 

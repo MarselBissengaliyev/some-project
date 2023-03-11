@@ -3,34 +3,35 @@ import { InferSchemaType, Schema, model } from "mongoose";
 const facebookDataSchema = new Schema({
   click_id: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   ip: {
     type: String,
-    required: true
+    required: true,
   },
   user_agent: {
     type: String,
-    required: true
+    required: true,
   },
   pixel: {
     type: String,
-    required: true
+    required: true,
   },
   fb_click: {
     type: String,
-    required: true
+    required: true,
   },
   domain: {
     type: String,
-    required: true
+    required: true,
   },
   time_click: {
     type: Date,
-    required: true
+    required: true,
   },
 });
 
 type FacebookData = InferSchemaType<typeof facebookDataSchema>;
 
-export default model<FacebookData>("FacebookData", facebookDataSchema);
+export default model<FacebookData>("facebook_data_item", facebookDataSchema);
