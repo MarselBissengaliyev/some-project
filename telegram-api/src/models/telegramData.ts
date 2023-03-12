@@ -4,7 +4,7 @@ const telegramDataSchema = new Schema({
   telegram_id: {
     type: Number,
     required: true,
-    unique: true
+    unique: true,
   },
   first_name_telegram: {
     type: String,

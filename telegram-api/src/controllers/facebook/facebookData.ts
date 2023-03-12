@@ -1,18 +1,23 @@
-import bizSdk, { EventRequest } from "facebook-nodejs-business-sdk";
-import { ServerEvent, UserData } from "./facebookData.interface";
-
-const UserData = bizSdk.UserData;
-const ServerEvent = bizSdk.ServerEvent;
+import {
+  EventRequest,
+  FacebookAdsApi,
+  ServerEvent,
+  UserData,
+} from "facebook-nodejs-business-sdk";
+import {
+  ServerEventInterface,
+  UserDataInterface,
+} from "./facebookData.interface";
 
 const access_token = "<ACCESS_TOKEN>";
 const pixel_id = "<ADS_PIXEL_ID>";
-const api = bizSdk.FacebookAdsApi.init(access_token);
+FacebookAdsApi.init(access_token);
 
 const current_timestamp = Math.floor(new Date().getTime() / 1000);
 
 export const postEvent = (
-  { ip, user_agent, pixel, fb_click }: UserData,
-  { eventName, actionSource }: ServerEvent
+  { ip, user_agent, pixel, fb_click }: UserDataInterface,
+  { eventName, actionSource }: ServerEventInterface
 ) => {
   const userData = new UserData()
     .setClientIpAddress(ip)

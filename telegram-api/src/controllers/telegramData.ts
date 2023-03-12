@@ -2,14 +2,17 @@ import FacebookDataModel from "../models/facebookData";
 import TelegramDataModel, { TelegramData } from "../models/telegramData";
 import UserModel from "../models/user";
 
-export const addUser = async (click_id: string, telegramData: TelegramData) => {
+export const createTelegramData = async (
+  click_id: string,
+  telegramData: TelegramData
+) => {
   const facebookData = await FacebookDataModel.findOne({
     click_id: click_id,
   }).exec();
 
   if (!facebookData) {
     const message = "Has not been found click_id in the database";
-    console.log(message)
+    console.log(message);
     return;
   }
 
@@ -19,7 +22,7 @@ export const addUser = async (click_id: string, telegramData: TelegramData) => {
 
   if (existingTelegramData) {
     const message = "This user has already been added";
-    console.log(message)
+    console.log(message);
     return;
   }
 
@@ -38,6 +41,5 @@ export const addUser = async (click_id: string, telegramData: TelegramData) => {
 
   return {
     facebookData,
-    
   };
 };
