@@ -3,17 +3,14 @@ import TelegramDataModel, { TelegramData } from "../models/telegramData";
 import UserModel from "../models/user";
 
 export const addUser = async (click_id: string, telegramData: TelegramData) => {
- const facebookData = await FacebookDataModel.findOne({
+  const facebookData = await FacebookDataModel.findOne({
     click_id: click_id,
-  }).exec(); 
+  }).exec();
 
   if (!facebookData) {
     const message = "Has not been found click_id in the database";
-    console.log(message);
-    return {
-      message: message,
-      status: "click_id_error",
-    };
+    console.log(message)
+    return;
   }
 
   const existingTelegramData = await TelegramDataModel.findOne({
@@ -22,11 +19,8 @@ export const addUser = async (click_id: string, telegramData: TelegramData) => {
 
   if (existingTelegramData) {
     const message = "This user has already been added";
-    console.log(message);
-    return {
-      message: message,
-      status: "telegram_id_error",
-    };
+    console.log(message)
+    return;
   }
 
   const newTelegramData = await TelegramDataModel.create({ ...telegramData });
@@ -37,14 +31,13 @@ export const addUser = async (click_id: string, telegramData: TelegramData) => {
   if (!userWithFacebookId) {
     const message = "User with this facebook_data_id has not been found";
     console.log(message);
-    return {
-      message: message,
-      status: "facebook_data_id_error",
-    };
+    return;
   }
   userWithFacebookId.telegram_data_id = newTelegramData._id;
   userWithFacebookId.save();
 
-
-  return userWithFacebookId;
+  return {
+    facebookData,
+    
+  };
 };
