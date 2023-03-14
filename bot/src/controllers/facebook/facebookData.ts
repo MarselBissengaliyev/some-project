@@ -1,3 +1,5 @@
+import env from '../../utils/validateEnv';
+
 import {
   EventRequest,
   FacebookAdsApi,
@@ -9,9 +11,7 @@ import {
   UserDataInterface,
 } from "./facebookData.interface";
 
-const access_token =
-  "EAAXn2cO0ej4BAKjxwwBr5tMGNSUQEMAtF7eEt9KFPHpD9357GJ2FvyKzGxbUnZANZBf1gdnOVIIU7GrNxAEZA5HfFnOLsKA7tWVoCZAPro6eV62hf70SfojvStAfOVCV81oZBXaSjhH6CT663hkSKOxegknKGiiQVJjz4i0NVG7ZACoVlZB4ErNQaFbhLSvpmuoAWZC9trjD7exZAG9ESYEaj";
-const pixel_id = "1309528339594749";
+const access_token = env.FACEBOOK_API_ACCESS_TOKEN;
 FacebookAdsApi.init(access_token);
 
 const current_timestamp = Math.floor(new Date().getTime() / 1000);
@@ -35,7 +35,7 @@ export const postEvent = async (
 
   const eventsData = [serverEvent];
 
-  const eventRequest = new EventRequest(access_token, pixel_id).setEvents(
+  const eventRequest = new EventRequest(access_token, env.PIXEL_ID).setEvents(
     eventsData
   );
 
