@@ -31,7 +31,8 @@ export const postEvent = async (
     .setEventName(eventName)
     .setEventTime(current_timestamp)
     .setUserData(userData)
-    .setActionSource(actionSource);
+    .setActionSource(actionSource)
+    .setEventSourceUrl('https://domain.com/thanks');
 
   const eventsData = [serverEvent];
 

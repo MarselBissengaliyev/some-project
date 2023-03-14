@@ -3,7 +3,7 @@ import { create } from "../controllers/telegramData/telegramData";
 import { StartContext } from "./start.interface";
 
 export const start = async (ctx: StartContext) => {
-  await ctx.sendMessage("Hello");
+  await ctx.reply("Hello");
   const clickId = ctx.startPayload;
   if (!ctx.message) {
     console.log("Has not been found message");
