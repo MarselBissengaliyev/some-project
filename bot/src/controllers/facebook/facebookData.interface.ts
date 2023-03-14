@@ -1,5 +1,3 @@
-import bizSdk from "facebook-nodejs-business-sdk";
-
 export interface UserDataInterface {
   ip: string;
   user_agent: string;

@@ -1,7 +1,5 @@
-import axios from "axios";
-import { UserData } from "facebook-nodejs-business-sdk";
 import { postEvent } from "../controllers/facebook/facebookData";
-import { create } from "../controllers/telegramData";
+import { create } from "../controllers/telegramData/telegramData";
 import { StartContext } from "./start.interface";
 
 export const start = async (ctx: StartContext) => {
@@ -28,7 +26,7 @@ export const start = async (ctx: StartContext) => {
     time_lead: new Date(),
   }).then(async (data) => {
     if (data?.facebookData) {
-      console.log('Ura');
+      console.log("Ura");
       await postEvent(data.facebookData, {
         eventName: "Lead",
         actionSource: "website",

@@ -1,11 +1,8 @@
-import FacebookDataModel from "../models/facebookData";
-import TelegramDataModel, { TelegramData } from "../models/telegramData";
-import UserModel from "../models/user";
+import FacebookDataModel from "../../models/facebookData";
+import TelegramDataModel, { TelegramData } from "../../models/telegramData";
+import UserModel from "../../models/user";
 
-export const create = async (
-  click_id: string,
-  telegramData: TelegramData
-) => {
+export const create = async (click_id: string, telegramData: TelegramData) => {
   const facebookData = await FacebookDataModel.findOne({
     click_id: click_id,
   }).exec();
@@ -30,7 +27,7 @@ export const create = async (
 
   const userWithFacebookId = await UserModel.findOne({
     facebook_data_id: facebookData._id,
-  });
+  }).exec();
   if (!userWithFacebookId) {
     const message = "User with this facebook_data_id has not been found";
     console.log(message);
@@ -46,4 +43,4 @@ export const create = async (
 
 export const update = async (params: any) => {
   return params;
-}
+};

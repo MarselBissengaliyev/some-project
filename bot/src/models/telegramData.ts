@@ -28,7 +28,7 @@ const telegramDataSchema = new Schema({
   },
   time_lead: {
     type: Date,
-    required: true,  
+    required: true,
   },
   umnico_lead_id: {
     type: Number,

@@ -7,7 +7,7 @@ import env from "./utils/validateEnv";
 const token = env.TOKEN;
 export const bot = new Telegraf(token);
 bot.start((ctx) => {
-  start(ctx)
+  start(ctx);
 });
 
 connection();

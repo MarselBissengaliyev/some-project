@@ -31,7 +31,7 @@ const facebookDataSchema = new Schema({
     default: Date.now(),
   },
   umnico_lead_id: {
-    type: String
+    type: String,
   },
 });
 
