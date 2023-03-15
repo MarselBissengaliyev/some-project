@@ -24,32 +24,32 @@ function App() {
       .then((d) => d.json())
       .then((d) => {
         setIp(d.ip);
+      }).then(() => {
+
       });
   }, []);
+
+  useEffect(() => {
+    if (ip) {
+      fetch("https://back.roiup.team/api/facebook-data", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          click_id,
+          ip,
+          user_agent,
+          pixel,
+          fb_click,
+          domain,
+          time_click: new Date(),
+        }),
+      })
+    }
+  }, [ip])
   const handleClick = async () => {
-    await fetch("https://back.roiup.team/api/facebook-data", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        click_id,
-        ip,
-        user_agent,
-        pixel,
-        fb_click,
-        domain,
-        time_click: new Date(),
-      }),
-    })
-      .then((res) => {
-        res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        window.location.href = `https://t.me/umnico_test2_bot?start=${click_id}`;
-      })
-      .catch(console.log());
+    window.location.href = `https://t.me/umnico_test2_bot?start=${click_id}`;
   };
 
   if (!click_id || !fb_click || !pixel) {
