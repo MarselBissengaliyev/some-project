@@ -34,6 +34,13 @@ const telegramDataSchema = new Schema({
     type: Number,
     required: true,
   },
+  amount: {
+    type: Number,
+    default: 0,
+  },
+  time_sale: {
+    type: Date,
+  }
 });
 
 type TelegramData = InferSchemaType<typeof telegramDataSchema>;

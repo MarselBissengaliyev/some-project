@@ -1,4 +1,4 @@
-export interface UpdateUmnicoLeadIdDataBody {
+export interface UmnikoWebhookDataBody {
   type?: string;
   message: {
     sender: {
@@ -6,4 +6,19 @@ export interface UpdateUmnicoLeadIdDataBody {
     };
   };
   leadId: string;
+  lead?: {
+    statusId: number;
+    amount: number;
+    customer: {
+      login: string;
+    }
+  };
+}
+
+export interface StatusInterface {
+  id: number;
+  type: string;
+  name: string;
+  order: number;
+  color: string;
 }
