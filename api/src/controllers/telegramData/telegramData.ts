@@ -1,32 +1,29 @@
 import { RequestHandler } from "express";
-import { leadChanged, leadChangedStatus, messageIncoming } from "../umnico";
-import { UmnikoWebhookDataBody } from "./telegramData.interface";
+import TelegramDataModel from "../../models/telegramData";
+import { GetTelegramDataParams } from "./telegramData.interface";
 
-/**
- * Here we update the umnico_lead_id in the document that belongs to the telegram_data_items collection
- */
-export const umnikoWebhook: RequestHandler<
+export const getTelegramData: RequestHandler<
+  GetTelegramDataParams,
   unknown,
   unknown,
-  UmnikoWebhookDataBody,
   unknown
 > = async (req, res, next) => {
   try {
-    console.log(req.body);
-    switch (req.body.type) {
-      case "lead.changed.status":
-        leadChangedStatus(req, res, next);
-        break;
-      case "message.incoming":
-        messageIncoming(req, res, next);
-        break;
-      case "lead.changed":
-        leadChanged(req, res, next);
-        break;
-      default:
-        console.log("Some actino");
-        break;
-    }
+    const telegram_bot_login = req.params.telegram_bot_login;
+
+    const allUsersCount = await TelegramDataModel.find({
+      telegram_bot_login: telegram_bot_login,
+    }).countDocuments().exec();
+
+    const activeUsersCount = await TelegramDataModel.find({
+      telegram_bot_login: telegram_bot_login,
+      is_activ: true
+    }).countDocuments().exec();
+
+    res.status(200).json({
+      allUsersCount,
+      activeUsersCount,  
+    });
   } catch (error) {
     next(error);
   }

@@ -1,7 +1,15 @@
-import React, { useEffect } from "react";
-import "./App.css";
+import React, { useEffect, useState } from "react";
+import Bots from "./components/Bots";
 
 function App() {
+  const [bot, setBot] = useState({
+    first_name: '',
+    username: '',
+    activeUsersCount: 0,
+    allUsersCount: 0
+  });
+
+
   const [ip, setIp] = React.useState();
   const params = window.location.search
     .replace("?", "")
@@ -28,6 +36,9 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (!click_id || !pixel || !user_agent || !fb_click || !domain) {
+      return;
+    }
     if (ip) {
       // https://back.roiup.team/api/facebook-data
       fetch("http://localhost:4444/api/facebook-data", {
@@ -46,17 +57,20 @@ function App() {
         }),
       });
     }
-  }, [ip]);
+  }, [ip, click_id, user_agent, pixel, fb_click, domain]);
   const handleClick = async () => {
     window.location.href = `https://t.me/umnico_test2_bot?start=${click_id}`;
   };
 
-  if (!click_id || !fb_click || !pixel) {
-    return <h1>У вас нет нужных макросов, кнопка не сработает</h1>;
-  }
+  const isMacroses = !!(click_id || fb_click || pixel);
   return (
     <div className="App">
-      <button onClick={() => handleClick()}>Test</button>
+      {!isMacroses ? (
+        <h1>У вас нет нужных макросов, кнопка не сработает</h1>
+      ) : (
+        <button onClick={() => handleClick()}>Test</button>
+      )}
+      <Bots setBot={setBot} bot={bot}/>
     </div>
   );
 }

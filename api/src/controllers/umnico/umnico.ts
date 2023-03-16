@@ -1,17 +1,14 @@
 import axios from "axios";
 import { RequestHandler } from "express-serve-static-core";
 import createHttpError from "http-errors";
+import FacebookDataModel from "../../models/facebookData";
 import {
   default as TelegramData,
   default as TelegramDataModel,
-} from "../models/telegramData";
-import env from "../utils/validateEnv";
-import {
-  StatusInterface,
-  UmnikoWebhookDataBody,
-} from "./telegramData/telegramData.interface";
-import User from "../models/user";
-import FacebookDataModel from "../models/facebookData";
+} from "../../models/telegramData";
+import User from "../../models/user";
+import env from "../../utils/validateEnv";
+import { StatusInterface, UmnikoWebhookDataBody } from "./umnico.interface";
 
 /**
  * https://api.umnico.com/docs/ru/apiMethods/events.html#id1

@@ -3,9 +3,10 @@ import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import createHttpError, { isHttpError } from "http-errors";
 import morgan from "morgan";
-import { umnikoWebhook } from "./controllers/telegramData/telegramData";
 import facebookDataRoutes from "./routes/facebookData";
+import telegramDataRoutes from "./routes/telegramData";
 import pixelRoutes from "./routes/pixel";
+import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/facebook-data", facebookDataRoutes);
 app.use("/api/pixels", pixelRoutes);
+app.use("/api/telegram-data", telegramDataRoutes);
 
 /**
  * Define the webhook endpoint that Umnico will send data to
