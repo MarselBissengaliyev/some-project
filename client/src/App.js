@@ -31,7 +31,8 @@ function App() {
 
   useEffect(() => {
     if (ip) {
-      fetch("https://back.roiup.team/api/facebook-data", {
+      // https://back.roiup.team/api/facebook-data
+      fetch("http://localhost:4444/api/facebook-data", {
         headers: {
           "Content-Type": "application/json",
         },

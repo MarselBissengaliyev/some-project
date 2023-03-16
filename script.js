@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   test.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log(click_id, ip, user_agent, pixel, fb_click, domain, time_click);
+    // 
     await fetch("https://back.roiup.team/api/facebook-data", {
       headers: {
         "Content-Type": "application/json",

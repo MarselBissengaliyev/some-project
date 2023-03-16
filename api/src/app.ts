@@ -5,6 +5,7 @@ import createHttpError, { isHttpError } from "http-errors";
 import morgan from "morgan";
 import { updateUmnicoLeadId } from "./controllers/telegramData/telegramData";
 import facebookDataRoutes from "./routes/facebookData";
+import pixelRoutes from "./routes/pixel";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/api/facebook-data", facebookDataRoutes);
+app.use("/api/pixels", pixelRoutes);
 
 // Define the webhook endpoint that Umnico will send data to
 app.post("/umnico-webhook", updateUmnicoLeadId);
