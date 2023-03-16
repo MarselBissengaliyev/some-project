@@ -2,6 +2,9 @@ import FacebookDataModel from "../../models/facebookData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import UserModel from "../../models/user";
 
+/**  
+ * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
+*/
 export const createTelegramData = async (click_id: string, telegramData: TelegramData) => {
   const facebookData = await FacebookDataModel.findOne({
     click_id: click_id,
@@ -39,8 +42,4 @@ export const createTelegramData = async (click_id: string, telegramData: Telegra
   return {
     facebookData,
   };
-};
-
-export const update = async (params: any) => {
-  return params;
 };

@@ -14,6 +14,10 @@ import {
 
 const current_timestamp = Math.floor(new Date().getTime() / 1000);
 
+/**
+ * Read documentation
+ * https://developers.facebook.com/docs/marketing-api/conversions-api/using-the-api#send
+ */
 export const postEvent = async (
   { ip, user_agent, fb_click }: UserDataInterface,
   { eventName, actionSource }: ServerEventInterface,

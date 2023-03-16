@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 import PixelModel from "../../models/pixel";
 import { CreatePixelBody, DeletePixelParams } from "./pixel.interface";
 
+/**
+ * Here we create a pixel document in the database
+ */
 export const createPixel: RequestHandler<
   unknown,
   unknown,
@@ -29,6 +32,9 @@ export const createPixel: RequestHandler<
   }
 };
 
+/**
+ * Here we delete a pixel document in the database
+ */
 export const deletePixel: RequestHandler<
   DeletePixelParams,
   unknown,

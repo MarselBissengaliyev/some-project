@@ -4,6 +4,9 @@ import FacebookDataModel from "../../models/facebookData";
 import UserModel from "../../models/user";
 import { CreateFacebookDataBody } from "./facebookData.interface";
 
+/**
+ * Here we create a fecbook_data document in the database
+ */
 export const createFacebookData: RequestHandler<
   unknown,
   unknown,

@@ -7,6 +7,9 @@ import { createTelegramData } from "../controllers/telegramData/telegramData";
 import PixelModel from "../models/pixel";
 import { StartContext } from "./start.interface";
 
+/**  
+ * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
+*/
 export const start = async (ctx: StartContext) => {
   await ctx.reply("Hello");
   const clickId = ctx.startPayload;

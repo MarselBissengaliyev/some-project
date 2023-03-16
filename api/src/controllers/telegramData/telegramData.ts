@@ -3,6 +3,9 @@ import createHttpError from "http-errors";
 import TelegramData from "../../models/telegramData";
 import { UpdateUmnicoLeadIdDataBody } from "./telegramData.interface";
 
+/**
+ * Here we update the umnico_lead_id in the document that belongs to the telegram_data_items collection
+ */
 export const updateUmnicoLeadId: RequestHandler<
   unknown,
   unknown,

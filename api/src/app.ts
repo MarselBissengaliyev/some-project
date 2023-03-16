@@ -18,7 +18,9 @@ app.use(express.json());
 app.use("/api/facebook-data", facebookDataRoutes);
 app.use("/api/pixels", pixelRoutes);
 
-// Define the webhook endpoint that Umnico will send data to
+/**  
+ * Define the webhook endpoint that Umnico will send data to
+*/
 app.post("/umnico-webhook", updateUmnicoLeadId);
 
 app.use((req, res, next) => {
