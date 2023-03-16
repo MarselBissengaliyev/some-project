@@ -8,8 +8,8 @@ export const pixelSchema = new Schema({
   },
   token: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 type Pixel = InferSchemaType<typeof pixelSchema>;

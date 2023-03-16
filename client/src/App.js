@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
@@ -24,9 +23,8 @@ function App() {
       .then((d) => d.json())
       .then((d) => {
         setIp(d.ip);
-      }).then(() => {
-
-      });
+      })
+      .then(() => {});
   }, []);
 
   useEffect(() => {
@@ -46,9 +44,9 @@ function App() {
           domain,
           time_click: new Date(),
         }),
-      })
+      });
     }
-  }, [ip])
+  }, [ip]);
   const handleClick = async () => {
     window.location.href = `https://t.me/umnico_test2_bot?start=${click_id}`;
   };

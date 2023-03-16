@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import { CreatePixelBody, DeletePixelParams } from "./pixel.interface";
 import createHttpError from "http-errors";
-import PixelModel from "../../models/pixel";
 import mongoose from "mongoose";
+import PixelModel from "../../models/pixel";
+import { CreatePixelBody, DeletePixelParams } from "./pixel.interface";
 
 export const createPixel: RequestHandler<
   unknown,
@@ -43,7 +43,7 @@ export const deletePixel: RequestHandler<
     }
 
     const pixel = await PixelModel.findById(pixelId).exec();
-    
+
     if (!pixel) {
       throw createHttpError(404, "Pixel not found");
     }
