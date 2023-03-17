@@ -3,7 +3,8 @@ import * as PixelController from "../controllers/pixel/pixel";
 
 const router = express.Router();
 
+router.get("/", PixelController.getPixel);
 router.post("/", PixelController.createPixel);
-router.delete("/:pixelId", PixelController.deletePixel);
+router.delete("/", PixelController.deletePixel);
 
 export default router;

@@ -1,19 +1,21 @@
+import { network } from ".";
+
 export const updateGeneralDataMessage = async (message) => {
   try {
-    const { data } = await fetch(
+    const response = await network(
       `${process.env.REACT_APP_API_URL}/general-data/message`,
       {
         method: "PATCH",
         body: JSON.stringify({
-          bot_start_message: message
+          bot_start_message: message,
         }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
       }
     );
 
-    return data;
+    return response;
   } catch (error) {
     console.error(error);
   }
@@ -21,22 +23,35 @@ export const updateGeneralDataMessage = async (message) => {
 
 export const updateGeneralDataToken = async (token) => {
   try {
-    const { data } = await fetch(
-      `${process.env.REACT_APP_API_URL}/general-data/message`,
+    const response = await network(
+      `${process.env.REACT_APP_API_URL}/general-data/token`,
       {
         method: "PATCH",
         body: JSON.stringify({
-          bot_token: token
+          bot_token: token,
         }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
       }
     );
 
-    return data;
+    return response;
   } catch (error) {
     console.error(error);
   }
 };
 
+export const getGeneralData = async () => {
+  try {
+    const response = await network(
+      `${process.env.REACT_APP_API_URL}/general-data`,
+      {
+        method: "GET",
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};

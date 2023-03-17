@@ -36,19 +36,13 @@ export const createPixel: RequestHandler<
  * Here we delete a pixel document in the database
  */
 export const deletePixel: RequestHandler<
-  DeletePixelParams,
+  unknown,
   unknown,
   unknown,
   unknown
 > = async (req, res, next) => {
-  const pixelId = req.params.pixelId;
-
   try {
-    if (!mongoose.isValidObjectId(pixelId)) {
-      throw createHttpError(400, "Invalid pixel id");
-    }
-
-    const pixel = await PixelModel.findById(pixelId).exec();
+    const pixel = await PixelModel.findOne({}).exec();
 
     if (!pixel) {
       throw createHttpError(404, "Pixel not found");
@@ -61,3 +55,17 @@ export const deletePixel: RequestHandler<
     next(error);
   }
 };
+
+export const getPixel: RequestHandler = async (req, res, next) => {
+  try {
+    const pixel = await PixelModel.findOne({}).exec();
+
+    if (!pixel) {
+      throw createHttpError(404, "Pixel not found");
+    }
+
+    res.status(200).json(pixel);
+  } catch (error) {
+    next(error);
+  }
+}

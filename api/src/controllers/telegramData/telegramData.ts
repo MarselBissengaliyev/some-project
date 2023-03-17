@@ -22,7 +22,7 @@ export const getTelegramData: RequestHandler<
 
     const activeUsersId = await TelegramDataModel.find({
       telegram_bot_login: telegram_bot_login,
-      is_active: true
+      is_activ: true
     }, {
       telegram_id: 1
     }).exec();
