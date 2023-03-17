@@ -20,9 +20,17 @@ export const getTelegramData: RequestHandler<
       is_activ: true
     }).countDocuments().exec();
 
+    const activeUsersId = await TelegramDataModel.find({
+      telegram_bot_login: telegram_bot_login,
+      is_active: true
+    }, {
+      telegram_id: 1
+    }).exec();
+
     res.status(200).json({
       allUsersCount,
       activeUsersCount,  
+      activeUsersId
     });
   } catch (error) {
     next(error);

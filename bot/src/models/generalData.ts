@@ -11,6 +11,6 @@ export const generalDataSchema = new Schema({
   },  
 });
 
-type GeneralData = InferSchemaType<typeof generalDataSchema>;
+export type GeneralData = InferSchemaType<typeof generalDataSchema>;
 
 export default model<GeneralData>("general_data_item", generalDataSchema);

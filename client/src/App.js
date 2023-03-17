@@ -6,7 +6,8 @@ function App() {
     first_name: '',
     username: '',
     activeUsersCount: 0,
-    allUsersCount: 0
+    allUsersCount: 0,
+    activeUsersId: []
   });
 
 
@@ -66,7 +67,7 @@ function App() {
   return (
     <div className="App">
       {!isMacroses ? (
-        <h1>У вас нет нужных макросов, кнопка не сработает</h1>
+        <h1 className="text-center">У вас нет нужных макросов, кнопка не сработает</h1>
       ) : (
         <button onClick={() => handleClick()}>Test</button>
       )}

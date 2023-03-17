@@ -5,6 +5,7 @@ import createHttpError, { isHttpError } from "http-errors";
 import morgan from "morgan";
 import facebookDataRoutes from "./routes/facebookData";
 import telegramDataRoutes from "./routes/telegramData";
+import generalDataRoutes from './routes/generalData';
 import pixelRoutes from "./routes/pixel";
 import { umnikoWebhook } from "./webhooks/umnico";
 
@@ -17,8 +18,12 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/api/facebook-data", facebookDataRoutes);
+
 app.use("/api/pixels", pixelRoutes);
+
 app.use("/api/telegram-data", telegramDataRoutes);
+
+app.use("/api/general-data", generalDataRoutes);
 
 /**
  * Define the webhook endpoint that Umnico will send data to

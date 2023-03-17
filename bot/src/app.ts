@@ -1,14 +1,29 @@
 import "dotenv/config";
+import mongoose from "mongoose";
 import { Telegraf } from "telegraf";
 import { start } from "./commands/start";
-import connection from "./connection/connection";
+import GeneralDataModel, { GeneralData } from "./models/generalData";
 import env from "./utils/validateEnv";
 
-const token = env.TOKEN;
-export const bot = new Telegraf(token);
-bot.start((ctx) => {
-  console.log("Hello suka");
-  start(ctx);
-});
+// Connect to MongoDB database using Mongoose
+mongoose
+  .connect(env.MONGO_CONNECTION_STRING)
+  .then(() => {
+    console.log("Connected to MongoDB database");
 
-connection();
+    // Get token from database using Mongoose
+    GeneralDataModel.findOne({}, (err: any, data: GeneralData) => {
+      if (err) {
+        console.error(err);
+      } else {
+        // Launch Telegraf with token from database
+        const bot = new Telegraf(data.bot_token);
+        
+        bot.start((ctx) => start(ctx));
+
+        // Start listening for Telegram updates
+        bot.launch();
+      }
+    });
+  })
+  .catch((error) => console.error(error));

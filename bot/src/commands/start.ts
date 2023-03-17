@@ -6,12 +6,16 @@ import {
 import { createTelegramData } from "../controllers/telegramData/telegramData";
 import PixelModel from "../models/pixel";
 import { StartContext } from "./start.interface";
+import GeneralDataModel from "../models/generalData";
 
 /**  
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
 */
 export const start = async (ctx: StartContext) => {
-  await ctx.reply("Hello");
+  const generalData = await GeneralDataModel.find().limit(1).exec();
+  console.log(generalData);
+
+  await ctx.reply(generalData[0].bot_start_message);
   const clickId = ctx.startPayload;
 
   if (!ctx.message) {
