@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import Bots from "./components/Bots";
 import { getIp, getParams } from "./functions";
 import { createFacebookData } from "./network/facebookData";
+import Pixels from "./components/Pixels";
+import Deposists from "./components/Deposists";
+import { getTelegramData } from "./network/telegramData";
 
 function App() {
   const [bot, setBot] = useState({
@@ -10,6 +13,8 @@ function App() {
     activeUsersCount: 0,
     allUsersCount: 0,
     activeUsersId: [],
+    desositedUsers: [],
+    activeUsersWithClickId: []
   });
 
   const [ip, setIp] = React.useState();
@@ -47,7 +52,23 @@ function App() {
     window.location.href = `https://t.me/${bot.username}?start=${click_id}`;
   };
 
+  useEffect(() => {
+    if (bot.username) {
+      getTelegramData(bot.username).then((data) => {
+        setBot((bot) => ({
+          ...bot,
+          allUsersCount: data.allUsersCount,
+          activeUsersCount: data.activeUsersCount,
+          activeUsersId: data.activeUsersId,
+          desositedUsers: data.desositedUsers,
+          activeUsersWithClickId: data.activeUsersWithClickId
+        }));
+      });
+    }
+  }, [bot.username, setBot]);
+
   const isMacroses = !!(click_id || fb_click || pixel);
+  console.log(bot.activeUsersWithClickId)
   return (
     <div className="App">
       {!isMacroses ? (
@@ -55,9 +76,13 @@ function App() {
           У вас нет нужных макросов, кнопка не сработает
         </h1>
       ) : (
-        <button onClick={() => handleClick()}>Test</button>
+        <button className="btn btn-primary" onClick={() => handleClick()}>
+          Test
+        </button>
       )}
       <Bots setBot={setBot} bot={bot} />
+      <Pixels />
+      <Deposists activeUsers={bot.activeUsersWithClickId}/>
     </div>
   );
 }

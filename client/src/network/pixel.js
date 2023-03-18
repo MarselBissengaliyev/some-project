@@ -1,7 +1,7 @@
-import { network } from "."
+import { fetchData } from "."
 
 export const getPixel = async () => {
-  const response = await network(`${process.env.REACT_APP_API_URL}/pixels`, {
+  const response = await fetchData(`${process.env.REACT_APP_API_URL}/api/pixels`, {
     method: 'GET'
   })
 
@@ -9,7 +9,7 @@ export const getPixel = async () => {
 }
 
 export const deletePixel = async () => {
-  const response = await network(`${process.env.REACT_APP_API_URL}/pixels`, {
+  const response = await fetchData(`${process.env.REACT_APP_API_URL}/api/pixels`, {
     method: "DELETE",
   });
 
@@ -17,7 +17,7 @@ export const deletePixel = async () => {
 }
 
 export const createPixel = async ({ pixelId, token }) => {
-  const response = await network(`${process.env.REACT_APP_API_URL}/pixels`, {
+  const response = await fetchData(`${process.env.REACT_APP_API_URL}/api/pixels`, {
     method: "POST",
     body: JSON.stringify({
       fb_pixel_id: pixelId,

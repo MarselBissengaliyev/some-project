@@ -1,8 +1,8 @@
-import { network } from ".";
+import { fetchData } from ".";
 
 export const getTelegramData = async (botUsername) => {
-  const response = await network(
-    `${process.env.REACT_APP_API_URL}/telegram-data/${botUsername}`,
+  const response = await fetchData(
+    `${process.env.REACT_APP_API_URL}/api/telegram-data/${botUsername}`,
     {
       method: "GET",
     }

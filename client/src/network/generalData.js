@@ -1,9 +1,9 @@
-import { network } from ".";
+import { fetchData } from ".";
 
 export const updateGeneralDataMessage = async (message) => {
   try {
-    const response = await network(
-      `${process.env.REACT_APP_API_URL}/general-data/message`,
+    const response = await fetchData(
+      `${process.env.REACT_APP_API_URL}/api/general-data/message`,
       {
         method: "PATCH",
         body: JSON.stringify({
@@ -23,8 +23,8 @@ export const updateGeneralDataMessage = async (message) => {
 
 export const updateGeneralDataToken = async (token) => {
   try {
-    const response = await network(
-      `${process.env.REACT_APP_API_URL}/general-data/token`,
+    const response = await fetchData(
+      `${process.env.REACT_APP_API_URL}/api/general-data/token`,
       {
         method: "PATCH",
         body: JSON.stringify({
@@ -44,8 +44,8 @@ export const updateGeneralDataToken = async (token) => {
 
 export const getGeneralData = async () => {
   try {
-    const response = await network(
-      `${process.env.REACT_APP_API_URL}/general-data`,
+    const response = await fetchData(
+      `${process.env.REACT_APP_API_URL}/api/general-data`,
       {
         method: "GET",
       }

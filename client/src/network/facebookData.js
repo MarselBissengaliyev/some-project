@@ -7,7 +7,7 @@ export const createFacebookData = async ({
   domain,
 }) => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/facebook-data`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/facebook-data`, {
       headers: {
         "Content-Type": "application/json",
       },

@@ -45,53 +45,70 @@ const Pixels = () => {
   };
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <div className="row">
-          {isCreated && (
-            <div className="row">
-              <div className="col">
-                <h5>Пиксель ID:</h5>
-                <p>{pixelId}</p>
-              </div>
-              <div className="col">
-                <h5>TOKEN:</h5>
-                <p>{token}</p>
-              </div>
-              <div>
-                <button
-                  onClick={handleDelete}
-                  className="btn btn-danger"
-                  type="button"
-                >
-                  Удалить
-                </button>
+    <>
+      <hr />
+      <h2 className="text-center">Вкладка Пиксели</h2>
+      <div className="container">
+        <div className="row mb-3">
+          <div className="col">
+            <div className="card">
+              <div className="card-body">
+                <div className="row">
+                  {isCreated && (
+                    <div className="row">
+                      <div className="col">
+                        <h5>Пиксель ID:</h5>
+                        <p>{pixelId}</p>
+                      </div>
+                      <div className="col">
+                        <h5>TOKEN:</h5>
+                        <p>{token}</p>
+                      </div>
+                      <div>
+                        <button
+                          onClick={handleDelete}
+                          className="btn btn-danger"
+                          type="button"
+                        >
+                          Удалить
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {!isCreated && (
+                    <>
+                      <div className="col">
+                        <label>Пиксель ID</label>
+                        <input
+                          type="text"
+                          onChange={(e) => setPixelId(e.target.value)}
+                        />
+                      </div>
+                      <div className="col">
+                        <label>TOKEN</label>
+                        <input
+                          type="text"
+                          onChange={(e) => setToken(e.target.value)}
+                        />
+                      </div>
+                      <div className="mt-3">
+                        <button
+                          className="btn btn-primary"
+                          onClick={handleCreate}
+                          type="button"
+                        >
+                          Создать
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-          )}
-          {!isCreated && (
-            <>
-              <div className="col">
-                <label>Пиксель ID</label>
-                <input
-                  type="text"
-                  onChange={(e) => setPixelId(e.target.value)}
-                />
-              </div>
-              <div className="col">
-                <label>TOKEN</label>
-                <input type="text" onChange={(e) => setToken(e.target.value)} />
-              </div>
-              <div className="mt-3">
-                <button className="btn btn-primary" onClick={handleCreate} type="button">
-                  Создать
-                </button>
-              </div>
-            </>
-          )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

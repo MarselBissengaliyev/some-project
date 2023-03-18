@@ -1,7 +1,7 @@
-import { network } from ".";
+import { fetchData } from ".";
 
 export const getMe = async (token) => {
-  const response = await network(
+  const response = await fetchData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/getMe`,
     {
       method: "POST",
@@ -12,7 +12,7 @@ export const getMe = async (token) => {
 };
 
 export const sendMessage = async (token, { chat_id, text }) => {
-  const response = await network(
+  const response = await fetchData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendMessage`,
     {
       method: "POST",
@@ -34,7 +34,7 @@ export const sendMessage = async (token, { chat_id, text }) => {
 };
 
 export const sendPhoto = async (token, { chat_id, photo, caption }) => {
-  const response = await network(
+  const response = await fetchData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendPhoto`,
     {
       method: "POST",

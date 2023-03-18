@@ -9,6 +9,9 @@ export const generalDataSchema = new Schema({
     type: String,
     required: true
   },  
+  bot_avatar: {
+    type: String,
+  }
 });
 
 type GeneralData = InferSchemaType<typeof generalDataSchema>;
