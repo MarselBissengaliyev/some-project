@@ -11,10 +11,11 @@ import imgRoutes from './routes/img';
 import { umnikoWebhook } from "./webhooks/umnico";
 import path from "path";
 import multer from "multer";
+import env from './utils/validateEnv';
 
 const app = express();
 
-app.use(cors({ origin: "*", credentials: true }));
+app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
 
 app.use(morgan("dev"));
 

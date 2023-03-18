@@ -6,4 +6,5 @@ export default cleanEnv<ValidateEnvInterface>(process.env, {
   MONGO_CONNECTION_STRING: str(),
   PORT: port(),
   UMNICO_API_TOKEN: str(),
+  CLIENT_URL: str()
 });
