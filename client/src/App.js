@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link, NavLink, Route, Routes } from "react-router-dom";
 import Bots from "./components/Bots";
+import Deposists from "./components/Deposists";
+import Pixels from "./components/Pixels";
 import { getIp, getParams } from "./functions";
 import { createFacebookData } from "./network/facebookData";
-import Pixels from "./components/Pixels";
-import Deposists from "./components/Deposists";
 import { getTelegramData } from "./network/telegramData";
-import { Link, NavLink, Route, Routes } from "react-router-dom";
 
 function App() {
   const [bot, setBot] = useState({
@@ -91,7 +91,11 @@ function App() {
             <hr />
             <ul className="nav nav-pills flex-column mb-auto">
               <li className="nav-item">
-                <NavLink to="/" className="nav-link link-dark" aria-current="page">
+                <NavLink
+                  to="/"
+                  className="nav-link link-dark"
+                  aria-current="page"
+                >
                   Боты
                 </NavLink>
               </li>
