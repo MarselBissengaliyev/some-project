@@ -44,7 +44,6 @@ const Bots = ({ setBot, bot }) => {
   };
   return (
     <div>
-      <hr />
       <h2 className="text-center">Вкладка Боты</h2>
       <div className="container">
         <div className="row mb-3">
