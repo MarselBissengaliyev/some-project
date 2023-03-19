@@ -11,16 +11,19 @@ export const getMe = async (token) => {
   return response;
 };
 
-export const sendMessage = async (token, { chat_id, text }) => {
+export const sendMessage = async (
+  token,
+  { chatId, text, disableWebPagePreview }
+) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendMessage`,
     {
       method: "POST",
       body: JSON.stringify({
-        chat_id: chat_id,
+        chat_id: chatId,
         text: text,
         parse_mode: "Markdown",
-        disable_web_page_preview: false,
+        disable_web_page_preview: disableWebPagePreview,
         disable_notification: true,
         reply_to_message_id: null,
       }),
@@ -33,13 +36,13 @@ export const sendMessage = async (token, { chat_id, text }) => {
   return response;
 };
 
-export const sendPhoto = async (token, { chat_id, photo, caption }) => {
+export const sendPhoto = async (token, { chatId, photo, caption }) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendPhoto`,
     {
       method: "POST",
       body: JSON.stringify({
-        chat_id,
+        chat_id: chatId,
         photo,
         caption,
         disable_notification: false,

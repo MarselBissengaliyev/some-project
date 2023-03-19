@@ -14,7 +14,7 @@ const Pixels = () => {
         setCreated(true);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         console.error("Suka");
         setCreated(false);
       });

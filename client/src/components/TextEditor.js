@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Form } from "react-bootstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -7,6 +8,12 @@ const modules = {
 };
 
 const TextEditor = ({ value, setValue, photo, setPhoto }) => {
+  const handleUpload = (e) => {
+    const photo = e.target.files[0];
+    console.log(photo);
+
+    
+  }
   return (
     <div className="editor">
       <div className="mb-3">
@@ -22,7 +29,7 @@ const TextEditor = ({ value, setValue, photo, setPhoto }) => {
       </div>
       <div>
         <label>Картинка</label>
-        <input onChange={(e) => setPhoto(e.target.value)} type="text" placeholder="Ссылка на картинку" value={photo}/>
+        <Form.Control onChange={handleUpload} type="file" accept="image/*"/>
       </div>
     </div>
   );

@@ -3,10 +3,8 @@ import { updateGeneralDataToken } from "../network/generalData";
 
 const UpdateToken = ({ token, setToken }) => {
   const handleSubmit = async (e) => {
-    console.log('hello')
     e.preventDefault();
-    const response = await updateGeneralDataToken(token);
-    console.log(response);
+    await updateGeneralDataToken(token);
   }
   return (
     <div className="card">

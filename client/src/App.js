@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
-import Bots from "./components/Bots";
-import Deposists from "./components/Deposists";
-import Pixels from "./components/Pixels";
 import { getIp, getParams } from "./functions";
 import { createFacebookData } from "./network/facebookData";
 import { getTelegramData } from "./network/telegramData";
+import Bots from "./pages/Bots";
+import Deposists from "./pages/Deposists";
+import Pixels from "./pages/Pixels";
 
 function App() {
   const [bot, setBot] = useState({

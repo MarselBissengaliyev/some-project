@@ -14,7 +14,7 @@ export const uploadImage = async (formData) => {
   } catch (error) {
     console.error(error);
   }
-};  
+};
 
 export const deleteImage = async () => {
   try {
@@ -29,4 +29,4 @@ export const deleteImage = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};

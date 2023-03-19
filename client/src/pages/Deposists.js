@@ -7,29 +7,28 @@ const Deposists = ({ activeUsers }) => {
   const filteredByTelegramId = activeUsers
     ? activeUsers.filter((user) => {
         const telegramIdToString = user[filterBy] + "";
-        console.log(filterBy);
         return telegramIdToString.toLowerCase().includes(value.toLowerCase());
       })
     : [];
 
+  function downloadTxtFile() {
+    let csvContent = "";
 
-    function downloadTxtFile() {
-      let csvContent = "";
-
-      activeUsers && activeUsers.forEach((item) => {
+    activeUsers &&
+      activeUsers.forEach((item) => {
         if (item.click_id) {
           csvContent += `${item.click_id}:${item.amount}\n`;
         } else {
           csvContent += `${item.amount}\n`;
         }
       });
-    
-      const a = document.createElement("a");
-      const file = new Blob([csvContent], {type: "text/plain"});
-      a.href = URL.createObjectURL(file);
-      a.download = "table_data.txt";
-      a.click();
-    }
+
+    const a = document.createElement("a");
+    const file = new Blob([csvContent], { type: "text/plain" });
+    a.href = URL.createObjectURL(file);
+    a.download = "table_data.txt";
+    a.click();
+  }
 
   return (
     <>
@@ -37,7 +36,9 @@ const Deposists = ({ activeUsers }) => {
       <h2 className="text-center">Вкладка Депозиты</h2>
       <div className="container">
         <div className="mb-3 grid gap-lg-2">
-          <button className="btn btn-success mb-3" onClick={downloadTxtFile}>Скачать txt файл</button>
+          <button className="btn btn-success mb-3" onClick={downloadTxtFile}>
+            Скачать txt файл
+          </button>
           <select
             onChange={(e) => setFilterBy(e.target.value)}
             className="form-select form-select-lg mb-3"
@@ -84,7 +85,6 @@ const Deposists = ({ activeUsers }) => {
           <tbody>
             {filteredByTelegramId &&
               filteredByTelegramId.map((user) => {
-                console.log(user);
                 return (
                   <tr>
                     <th>{user.telegram_id}</th>
@@ -97,7 +97,7 @@ const Deposists = ({ activeUsers }) => {
                     <td>{user.amount}</td>
                     <td>{user.umnico_lead_id ? user.umnico_lead_id : "-"}</td>
                     <td>{user.telegram_bot_login}</td>
-                    <td>{user.click_id ? user.click_id : '-'}</td>
+                    <td>{user.click_id ? user.click_id : "-"}</td>
                   </tr>
                 );
               })}

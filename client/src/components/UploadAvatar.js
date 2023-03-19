@@ -5,7 +5,6 @@ const UploadAvatar = ({ avatar, setAvatar }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleChange = async (e) => {
-    console.log(e.target.files[0]);
     setSelectedFile(e.target.files[0]);
   };
 
@@ -16,19 +15,13 @@ const UploadAvatar = ({ avatar, setAvatar }) => {
     formData.append("avatar", selectedFile);
 
     await uploadImage(formData)
-      .then((res) => {
-        setAvatar(res);
-        console.log(res);
-      })
+      .then((res) => setAvatar(res))
       .catch((err) => console.error(err));
   };
 
   const handleDelete = async (e) => {
     await deleteImage()
-      .then((res) => {
-        console.log('deteled succefuly');
-        setAvatar("");
-      })
+      .then(() => setAvatar(""))
       .catch((err) => console.error(err));
   };
 
@@ -44,7 +37,11 @@ const UploadAvatar = ({ avatar, setAvatar }) => {
             size={512000}
           />
         )}
-        {avatar && <button onClick={handleDelete} className="btn btn-danger">Удалить</button>}
+        {avatar && (
+          <button onClick={handleDelete} className="btn btn-danger">
+            Удалить
+          </button>
+        )}
       </div>
       <div className="card-footer">
         {selectedFile && !avatar && (
