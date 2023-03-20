@@ -87,11 +87,11 @@ const Bots = ({ setBot, bot }) => {
                 </h2>
                 <h6>
                   Количество активных:{" "}
-                  <b>{bot.activeUsersCount}</b>
+                  <b>{bot.activeUsersCount ? bot.activeUsersCount : 0}</b>
                 </h6>
                 <h6>
                   Количество всего:{" "}
-                  <b>{bot.allUsersCount}</b>
+                  <b>{bot.allUsersCount ? bot.allUsersCount : 0}</b>
                 </h6>
               </div>
               <div className="btns">
