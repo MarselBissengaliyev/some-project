@@ -1,38 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { createPixel, deletePixel, getPixel } from "../network/pixel";
+import {
+  createPixel,
+  deletePixel,
+  getPixel,
+  getPixels,
+} from "../network/pixel";
+import PixelItem from "../components/PixelItem";
+import { Button } from "react-bootstrap";
+import PixelModal from "../components/modals/PixelModal";
 
 const Pixels = () => {
   const [pixelId, setPixelId] = useState("");
   const [token, setToken] = useState("");
   const [isCreated, setCreated] = useState(false);
+  const [pixels, setPixels] = useState([]);
+
+  const [show, setShow] = useState(false);
+  const [mode, setMode] = useState("");
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
-    getPixel()
-      .then((data) => {
-        setPixelId(data.fb_pixel_id);
-        setToken(data.token);
-        setCreated(true);
-      })
-      .catch((error) => {
-        console.error(error);
-        console.error("Suka");
-        setCreated(false);
-      });
+    getPixels().then((data) => {
+      console.log(data);
+      setPixels(data);
+    });
   }, []);
-
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    await deletePixel()
-      .then(() => {
-        isCreated(false);
-        token("");
-        pixelId("");
-      })
-      .catch((err) => {
-        console.error(err);
-        setCreated(false);
-      });
-  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -45,70 +39,30 @@ const Pixels = () => {
   };
 
   return (
-    <>
-      <hr />
-      <h2 className="text-center">Вкладка Пиксели</h2>
-      <div className="container">
-        <div className="row mb-3">
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <div className="row">
-                  {isCreated && (
-                    <div className="row">
-                      <div className="col">
-                        <h5>Пиксель ID:</h5>
-                        <p>{pixelId}</p>
-                      </div>
-                      <div className="col">
-                        <h5>TOKEN:</h5>
-                        <p>{token}</p>
-                      </div>
-                      <div>
-                        <button
-                          onClick={handleDelete}
-                          className="btn btn-danger"
-                          type="button"
-                        >
-                          Удалить
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  {!isCreated && (
-                    <>
-                      <div className="col">
-                        <label>Пиксель ID</label>
-                        <input
-                          type="text"
-                          onChange={(e) => setPixelId(e.target.value)}
-                        />
-                      </div>
-                      <div className="col">
-                        <label>TOKEN</label>
-                        <input
-                          type="text"
-                          onChange={(e) => setToken(e.target.value)}
-                        />
-                      </div>
-                      <div className="mt-3">
-                        <button
-                          className="btn btn-primary"
-                          onClick={handleCreate}
-                          type="button"
-                        >
-                          Создать
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="container">
+      <div className="pixels-wrapper">
+        {pixels &&
+          pixels.map((p) => (
+            <PixelItem setPixels={setPixels} key={p._id} {...p} />
+          ))}
+        <Button
+          onClick={() => {
+            setMode("create");
+            setShow(true)
+          }}
+          className="create-pixel"
+          variant="success"
+        >
+          Создать
+        </Button>
+        <PixelModal
+          setPixels={setPixels}
+          mode={mode}
+          handleClose={handleClose}
+          show={show}
+        />
       </div>
-    </>
+    </div>
   );
 };
 

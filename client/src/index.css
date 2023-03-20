@@ -150,6 +150,9 @@ img {
   }
 }
 
+body,html {
+  overflow-x: hidden;
+}
 
 .wrapper {
   display: grid;
@@ -160,6 +163,11 @@ img {
 main {
   padding: 30px 0 60px;
   width: 100%;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 20% 80%;
 }
 
 .sidebar {
@@ -243,4 +251,35 @@ main {
 
 .start-checkbox {
   margin-right: auto;
+}
+
+.pixel-btns {
+  display: flex;
+  gap: 15px;
+}
+
+.pixels-wrapper .card {
+  width: 50%;
+}
+
+.pixel-item {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pixel-item h5{
+  word-wrap: break-word; /* Перенос слов */ 
+  overflow-wrap: break-word;
+}
+
+.pixels-wrapper {
+  display: grid;
+  gap: 15px;
+  width: auto;
+}
+
+.create-pixel {
+  max-width: 250px;
+  margin-left: 20%;
 }

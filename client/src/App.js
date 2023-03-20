@@ -6,11 +6,12 @@ import { getTelegramData } from "./network/telegramData";
 import Bots from "./pages/Bots";
 import Deposists from "./pages/Deposists";
 import Pixels from "./pages/Pixels";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   const [bot, setBot] = useState({
-    first_name: "",
-    username: "",
+    first_name: "Name",
+    username: "Username",
     activeUsersCount: 0,
     allUsersCount: 0,
     activeUsersId: [],
@@ -20,9 +21,7 @@ function App() {
 
   const [ip, setIp] = React.useState();
   useEffect(() => {
-    getIp()
-      .then((d) => setIp(d.ip))
-      .catch(console.log);
+    getIp().then((d) => setIp(d.ip));
   }, []);
 
   const params = getParams();
@@ -77,41 +76,7 @@ function App() {
         </button>
       )}
       <div className="wrapper">
-        <aside>
-          <div
-            className="d-flex flex-column flex-shrink-0 p-3 sidebar"
-            style={{ width: 280 }}
-          >
-            <Link
-              to="/"
-              className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none"
-            >
-              <span className="fs-4">Navigation</span>
-            </Link>
-            <hr />
-            <ul className="nav nav-pills flex-column mb-auto">
-              <li className="nav-item">
-                <NavLink
-                  to="/"
-                  className="nav-link link-dark"
-                  aria-current="page"
-                >
-                  Боты
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/pixels" className="nav-link link-dark">
-                  Пиксели
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/deposits" className="nav-link link-dark">
-                  Депозиты
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </aside>
+        <Sidebar/>
         <main>
           <Routes>
             <Route path="/" element={<Bots setBot={setBot} bot={bot} />} />

@@ -15,58 +15,55 @@ const Mass = ({ show, handleClose, token, bot }) => {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-    setIsSending(true);
+    console.log(!!(!photo && value));
 
     e.preventDefault();
 
     // Loop through the array of users and send a message to every 20 users
-    new Promise((resolve, reject) => {
-      for (let i = 0, sec = 0; i < bot.activeUsersId.length; i += 20, sec++) {
-        const group = bot.activeUsersId.slice(i, i + 20); // get the next 20 users from the array
-        // send a message to each user in the group with a 1-second interval between each message
-        setTimeout(() => {
-          group.forEach(async (user, index) => {
-            const chatId = user.telegram_id;
-  
-            if (!photo && value) {
-              await sendMessage(token, {
-                chatId,
-                text: turndownService.turndown(value),
-                disableWebPagePreview,
+
+    for (let i = 0, sec = 0; i < bot.activeUsersId.length; i += 20, sec++) {
+      const group = bot.activeUsersId.slice(i, i + 20); // get the next 20 users from the array
+      // send a message to each user in the group with a 1-second interval between each message
+      setTimeout(() => {
+        group.forEach(async (user, index) => {
+          const chatId = user.telegram_id;
+          console.log(chatId)
+
+          if (!photo && value) {
+            console.log("please");
+            await sendMessage(token, {
+              chatId,
+              text: turndownService.turndown(value),
+              disableWebPagePreview,
+            })
+              .then(() => {
+                setCountUsers((prevNum) => prevNum + 1);
               })
-                .then(() => {
-                  setCountUsers((prevNum) => prevNum + 1);
-                })
-                .catch((err) => {
-                  console.log("suka");
-                  setError(err.description);
-                });
-            }
-  
-            if (photo) {
-              console.log(photo);
-              await sendPhoto(token, {
-                chatId,
-                photo,
-                caption: turndownService.turndown(value),
+              .catch((err) => {
+                console.log("suka");
+                setError(err.description);
+              });
+          }
+
+          if (photo) {
+            console.log(photo);
+            await sendPhoto(token, {
+              chatId,
+              photo,
+              caption: turndownService.turndown(value),
+            })
+              .then(() => {
+                setCountUsers((prevNum) => prevNum + 1);
               })
-                .then(() => {
-                  setCountUsers((prevNum) => prevNum + 1);
-                })
-                .catch((err) => {
-                  setError(err.description);
-                });
-            }
-  
-            console.log(`Sending message to ${user.telegram_id}`);
-          });
-        }, 1000 * sec);
-      }
-      resolve()
-    })
-    .then(() => {
-      setIsSending(false)
-    })
+              .catch((err) => {
+                setError(err.description);
+              });
+          }
+
+          console.log(`Sending message to ${user.telegram_id}`);
+        });
+      }, 1000 * sec);
+    }
   };
 
   const testSubmit = async (e) => {
@@ -98,11 +95,7 @@ const Mass = ({ show, handleClose, token, bot }) => {
         <Modal.Title>Массовая рассылка</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <SendMessage
-          value={value}
-          setValue={setValue}
-          setPhoto={setPhoto}
-        />
+        <SendMessage value={value} setValue={setValue} setPhoto={setPhoto} />
         {!!countUsers && (
           <Alert variant="success" className="mt-3">
             {`Количество получивших сообщение: ${countUsers}`}
@@ -130,9 +123,8 @@ const Mass = ({ show, handleClose, token, bot }) => {
             <Form.Check
               onChange={(e) => {
                 setDisableWebPagePreview(!e.target.checked);
-                console.log(disableWebPagePreview);
               }}
-              defaultChecked={disableWebPagePreview}
+              defaultChecked={!disableWebPagePreview}
               type="checkbox"
               label="Предпросмотр ссылок"
             />

@@ -8,7 +8,6 @@ import Start from "../components/modals/Start";
 
 const Bots = ({ setBot, bot }) => {
   const [token, setToken] = useState("");
-  const [message, setMessage] = useState("");
   const [showMass, setShowMass] = useState(false);
   const [showStart, setShowStart] = useState(false);
 
@@ -33,7 +32,6 @@ const Bots = ({ setBot, bot }) => {
     }
     getGeneralData().then((data) => {
       setToken(data.bot_token);
-      setMessage(data.bot_start_message);
     });
   }, []);
 
@@ -89,109 +87,33 @@ const Bots = ({ setBot, bot }) => {
                 </h2>
                 <h6>
                   Количество активных:{" "}
-                  <b>{bot.activeUsersCount ? bot.activeUsersCount : ""}</b>
+                  <b>{bot.activeUsersCount}</b>
                 </h6>
                 <h6>
                   Количество всего:{" "}
-                  <b>{bot.allUsersCount ? bot.allUsersCount : ""}</b>
+                  <b>{bot.allUsersCount}</b>
                 </h6>
               </div>
               <div className="btns">
                 <Button onClick={handleShowMass} variant="primary">
                   Массовая рассылка
                 </Button>
-                <Button onClick={handleShowStart} variant="primary">Сообщение старта</Button>
+                <Button onClick={handleShowStart} variant="primary">
+                  Сообщение старта
+                </Button>
                 <Mass
                   handleClose={handleCloseMass}
                   show={showMass}
                   token={token}
                   bot={bot}
                 />
-                <Start
-                  message={message}
-                  setMessage={setMessage}
-                  handleClose={handleCloseStart}
-                  show={showStart}
-                />
+                <Start handleClose={handleCloseStart} show={showStart} />
               </div>
             </Card.Body>
           </Card>
         </Col>
       </Row>
     </Container>
-    // <div>
-    //   <h2 className="text-center">Вкладка Боты</h2>
-    //   <div className="container">
-    //     <div className="row mb-3">
-    //       <div className="col">
-    //         <div className="card">
-    //           <div className="card-body">
-    //             <h5 className="card-title">{bot.username}</h5>
-    //             <p className="card-text">Логин бота</p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="col">
-    //         <div className="card">
-    //           <div className="card-body">
-    //             <h5 className="card-title">{bot.first_name}</h5>
-    //             <p className="card-text">Название бота</p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="col">
-    //         <div className="card">
-    //           <div className="card-body">
-    //             <h5 className="card-title">{bot.activeUsersCount}</h5>
-    //             <p className="card-text">Количество Активных юзеров</p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="col">
-    //         <div className="card">
-    //           <div className="card-body">
-    //             <h5 className="card-title">{bot.allUsersCount}</h5>
-    //             <p className="card-text">
-    //               Количество юзеров всего, которое когда либо нажимали кнопку
-    //               старт
-    //             </p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div className="row mb-3">
-    //       <div className="col">
-    //         <UpdateMessage message={message} setMessage={setMessage} />
-    //       </div>
-    //       <div className="col">
-    //         <UpdateToken token={token} setToken={setToken} />
-    //       </div>
-    //     </div>
-    //     <div className="row mb-3">
-    //       <div className="col">
-    //         <SendMessage token={token} activeUsersId={bot.activeUsersId} />
-    //       </div>
-    //     </div>
-    //     <div className="row mb-3">
-    //       <div className="col">
-    //         <div className="card">
-    //           <div className="card-body">
-    //             <button
-    //               onClick={showActuallBotName}
-    //               className="btn btn-primary"
-    //             >
-    //               Показать актуальное имя бота
-    //             </button>
-    //             <h5 className="mt-3">{bot.first_name}</h5>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="col">
-    //         <UploadAvatar setAvatar={setAvatar} avatar={avatar} />
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 

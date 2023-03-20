@@ -3,13 +3,14 @@ import { Alert, Form } from "react-bootstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { uploadImage } from "../network/img";
+import TurndownService from "turndown";
 
 const modules = {
   toolbar: [["bold", "italic"], [{ list: "ordered" }]],
 };
 
-const TextEditor = ({ value, setValue, setPhoto }) => {
-  const [img, setImg] = useState();
+const TextEditor = ({ value, setValue, setPhoto, defaultImg = '' }) => {
+  const [img, setImg] = useState(defaultImg);
   const formData = new FormData();
   const [error, setError] = useState("");
 
@@ -18,7 +19,9 @@ const TextEditor = ({ value, setValue, setPhoto }) => {
     await uploadImage(formData)
       .then((data) => {
         setImg(data);
-        setPhoto(`${process.env.REACT_APP_API_URL}/${data}`);
+        if (data) {
+          setPhoto(`/${data}`);
+        }
         setError("");
       })
       .catch((err) => {

@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { updateGeneralDataMessage } from "../../network/generalData";
 import SendMessage from "../SendMessage";
+import { getStartMessage, updateStartMessage } from "../../network/startMessage";
+import TurndownService from "turndown";
+import showdown from 'showdown';
 
-const Start = ({ show, handleClose, message, setMessage }) => {
+const Start = ({ show, handleClose }) => {
+  const turndownService = new TurndownService();
+  const converter = new showdown.Converter();
+
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
   const [photo, setPhoto] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    await updateGeneralDataMessage({ message, photo, disableWebPagePreview })
+    await updateStartMessage({ message: turndownService.turndown(message), photo, disableWebPagePreview })
       .then((data) => {
         setError("");
         setStatus("Успешно измененно стартовое сообщение");
@@ -18,9 +25,16 @@ const Start = ({ show, handleClose, message, setMessage }) => {
       .catch((err) => {
         setStatus("");
         setError(err.message);
-        console.log(err);
       });
   };
+
+  useEffect(() => {
+    getStartMessage().then((data) => {
+      setMessage(data.message);
+      setPhoto(data.photo);
+      console.log(process.env.REACT_APP_API_URL + data.photo);
+    });
+  }, [show]);
   return (
     <Modal
       size="xl"
@@ -33,16 +47,20 @@ const Start = ({ show, handleClose, message, setMessage }) => {
         <Modal.Title>Стартовое сообщение</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <SendMessage value={message} setValue={setMessage} />
+        <SendMessage
+          setPhoto={setPhoto}
+          defaultImg={photo}
+          value={converter.makeHtml(message)}
+          setValue={setMessage}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Form.Check
           className="start-checkbox"
           onChange={(e) => {
             setDisableWebPagePreview(!e.target.checked);
-            console.log(disableWebPagePreview);
           }}
-          defaultChecked={disableWebPagePreview}
+          defaultChecked={!disableWebPagePreview}
           type="checkbox"
           label="Предпросмотр ссылок"
         />
@@ -55,7 +73,7 @@ const Start = ({ show, handleClose, message, setMessage }) => {
           Отправить
         </Button>
         {status && (
-          <Alert variant="success" className="mt-3">
+            <Alert variant="success" className="mt-3">
             {status}
           </Alert>
         )}

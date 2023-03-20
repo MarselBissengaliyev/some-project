@@ -67,6 +67,7 @@ export const getTelegramData: RequestHandler<
         umnico_lead_id: activeUser.umnico_lead_id,
         amount: activeUser.amount,
         time_sale: activeUser.time_sale,
+        start_time: activeUser.start_time
       });
     }
 

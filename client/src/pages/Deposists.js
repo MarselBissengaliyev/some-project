@@ -45,16 +45,8 @@ const Deposists = ({ activeUsers }) => {
             name=""
             id=""
           >
-            <option value="telegram_id">telegram_id</option>
-            <option value="first_name_telegram">first_name_telegram</option>
-            <option value="login_telegram">login_telegram</option>
-            <option value="is_activ">is_activ</option>
-            <option value="telegram_bot_login">telegram_bot_login</option>
-            <option value="is_deposit">is_deposit</option>
             <option value="time_lead">time_lead</option>
             <option value="amount">amount</option>
-            <option value="umnico_lead_id">umnico_lead_id</option>
-            <option value="telegram_bot_login">telegram_bot_login</option>
             <option value="click_id">click_id</option>
           </select>
         </div>
@@ -69,10 +61,11 @@ const Deposists = ({ activeUsers }) => {
         <table ref={table} class="table table-success table-striped-columns">
           <thead>
             <tr>
-              
               <th>time_lead</th>
               <th>amount</th>
               <th>click_id</th>
+              <th>time_sale</th>
+              <th>start_time</th>
             </tr>
           </thead>
           <tbody>
@@ -80,17 +73,11 @@ const Deposists = ({ activeUsers }) => {
               filteredByTelegramId.map((user) => {
                 return (
                   <tr>
-                    <th>{user.telegram_id}</th>
-                    <td>{user.first_name_telegram}</td>
-                    <td>{user.login_telegram}</td>
-                    <th>{user.is_activ ? "true" : "false"}</th>
-                    <td>{user.telegram_bot_login}</td>
-                    <td>{user.is_deposit ? "true" : "false"}</td>
-                    <th>{user.time_lead}</th>
-                    <td>{user.amount}</td>
-                    <td>{user.umnico_lead_id ? user.umnico_lead_id : "-"}</td>
-                    <td>{user.telegram_bot_login}</td>
+                    <th>{user.time_lead ? user.time_lead : '-'}</th>
+                    <td>{user.amount ? user.amount : '-'}</td>
                     <td>{user.click_id ? user.click_id : "-"}</td>
+                    <td>{user.time_sale ? user.time_sale : '-'}</td>
+                    <td>{user.start_time ? user.start_time : '-'}</td>
                   </tr>
                 );
               })}

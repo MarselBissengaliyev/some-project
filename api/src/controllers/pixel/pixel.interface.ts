@@ -3,6 +3,11 @@ export interface CreatePixelBody {
   token: string;
 }
 
-export interface DeletePixelParams {
+export interface UpdatePixelParams {
   pixelId: string;
+}
+
+export interface UpdatePixelBody {
+  fb_pixel_id: string;
+  token: string;
 }

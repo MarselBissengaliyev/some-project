@@ -33,6 +33,10 @@ const telegramDataSchema = new Schema({
   umnico_lead_id: {
     type: Number,
   },
+  start_time: {
+    type: Date,
+    required: true
+  }
 });
 
 export type TelegramData = InferSchemaType<typeof telegramDataSchema>;

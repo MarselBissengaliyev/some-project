@@ -40,6 +40,9 @@ const telegramDataSchema = new Schema({
   },
   time_sale: {
     type: Date,
+  },
+  start_time: {
+    type: Date
   }
 });
 
