@@ -8,7 +8,7 @@ export const getPixel = async () => {
     }
   );
 
-  return response;
+  return response.json();
 };
 
 export const deletePixel = async () => {
@@ -19,7 +19,7 @@ export const deletePixel = async () => {
     }
   );
 
-  return response;
+  return response.json();
 };
 
 export const createPixel = async ({ pixelId, token }) => {
@@ -37,5 +37,5 @@ export const createPixel = async ({ pixelId, token }) => {
     }
   );
 
-  return response;
+  return response.json();
 };

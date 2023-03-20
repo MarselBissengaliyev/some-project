@@ -9,38 +9,6 @@ import {
   UpdateGeneralDataParams,
 } from "./generalData.interface";
 
-export const updateGeneralDataMessage: RequestHandler<
-  UpdateGeneralDataParams,
-  unknown,
-  UpdateGeneralDataBody,
-  unknown
-> = async (req, res, next) => {
-  const botStartMessage = req.body.bot_start_message;
-  console.log(req.body);
-
-  try {
-    if (!botStartMessage) {
-      throw createHttpError(400, "GeneralData must have a bot_start_message");
-    }
-
-    const generalData = await GeneralDataModel.find().limit(1).exec();
-
-    if (!generalData) {
-      throw createHttpError(404, "GeneralData not found");
-    }
-
-    generalData[0].bot_start_message = botStartMessage;
-
-    const updatedGeneralData = await generalData[0].save();
-
-    res.status(200).json({
-      bot_start_message: updatedGeneralData.bot_start_message,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const updateGeneralDataToken: RequestHandler<
   UpdateGeneralDataParams,
   unknown,
@@ -78,7 +46,6 @@ export const createGeneralData: RequestHandler<
   CreateGeneralDataBody,
   unknown
 > = async (req, res, next) => {
-  const botStartMessage = req.body.bot_start_message;
   const botToken = req.body.bot_token;
 
   try {
@@ -88,16 +55,11 @@ export const createGeneralData: RequestHandler<
       throw createHttpError(400, "Create more 'GeneralData'");
     }
 
-    if (!botStartMessage) {
-      throw createHttpError(400, "GeneralData must have a bot_start_message");
-    }
-
     if (!botToken) {
       throw createHttpError(400, "GeneralData must have a bot_token");
     }
 
     const newGeneralData = await GeneralDataModel.create({
-      bot_start_message: botStartMessage,
       bot_token: botToken,
     });
 

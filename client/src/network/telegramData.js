@@ -8,5 +8,5 @@ export const getTelegramData = async (botUsername) => {
     }
   );
 
-  return response;
+  return response.json();
 };

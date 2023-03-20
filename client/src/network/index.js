@@ -1,24 +1,31 @@
 export const fetchData = async (input, init) => {
-  try {
-    const res = await fetch(input, init);
-    if (!res.ok) {
-      throw Error(res.statusText);
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error(error);
+  const response = await fetch(input, init);
+  if (response.ok) {
+    return response;
+  } else {
+    const errorBody = await response.json();
+    const errorMessage = errorBody.error;
+    throw Error(
+      "Request failed with status: " +
+        response.status +
+        " message: " +
+        errorMessage
+    );
   }
 };
 
 export const fetchImg = async (input, init) => {
-  try {
-    const res = await fetch(input, init);
-    if (!res.ok) {
-      throw Error(res.statusText);
-    }
-    return res;
-  } catch (error) {
-    console.error(error);
+  const response = await fetch(input, init);
+  if (response.ok) {
+    return response;
+  } else {
+    const errorBody = await response.json();
+    const errorMessage = errorBody.error;
+    throw Error(
+      "Request failed with status: " +
+        response.status +
+        " message: " +
+        errorMessage
+    );
   }
 };

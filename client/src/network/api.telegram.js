@@ -8,7 +8,7 @@ export const getMe = async (token) => {
     }
   );
 
-  return response;
+  return response.json();
 };
 
 export const sendMessage = async (
@@ -33,7 +33,7 @@ export const sendMessage = async (
     }
   );
 
-  return response;
+  return response.json();
 };
 
 export const sendPhoto = async (token, { chatId, photo, caption }) => {
@@ -54,5 +54,5 @@ export const sendPhoto = async (token, { chatId, photo, caption }) => {
     }
   );
 
-  return response;
+  return response.json();
 };

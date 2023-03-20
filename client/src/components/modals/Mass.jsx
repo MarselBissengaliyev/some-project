@@ -11,45 +11,62 @@ const Mass = ({ show, handleClose, token, bot }) => {
   const [testTelegramId, setTestTelegramId] = useState("");
   const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
   const [countUsers, setCountUsers] = useState(0);
-
-  const sendMessageToPiceOfUsers = (piecesUsersId) => {
-    piecesUsersId.forEach(async (piece) => {
-      const chatId = piece.telegram_id;
-      if (!photo && value) {
-        await sendMessage(token, {
-          chatId,
-          text: turndownService.turndown(value),
-          disableWebPagePreview,
-        }).then(() => {
-          setCountUsers((prevNum) => prevNum + 1);
-          console.log(countUsers);
-        });
-      }
-      if (photo) {
-        await sendPhoto(token, {
-          chatId,
-          photo,
-          caption: turndownService.turndown(value),
-        }).then(() => {
-          setCountUsers((prevNum) => prevNum + 1);
-        });
-      }
-    });
-  };
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
+    setIsSending(true);
+
     e.preventDefault();
-    bot.activeUsersId.forEach(async (activeUserId, index) => {
-      const piecesUsersId = bot.activeUsersId.slice(index, index + 1);
-      if (index === 0) {
-        sendMessageToPiceOfUsers(piecesUsersId);
-      } else {
+
+    // Loop through the array of users and send a message to every 20 users
+    new Promise((resolve, reject) => {
+      for (let i = 0, sec = 0; i < bot.activeUsersId.length; i += 20, sec++) {
+        const group = bot.activeUsersId.slice(i, i + 20); // get the next 20 users from the array
+        // send a message to each user in the group with a 1-second interval between each message
         setTimeout(() => {
-          sendMessageToPiceOfUsers(piecesUsersId);
-        }, 10000);
+          group.forEach(async (user, index) => {
+            const chatId = user.telegram_id;
+  
+            if (!photo && value) {
+              await sendMessage(token, {
+                chatId,
+                text: turndownService.turndown(value),
+                disableWebPagePreview,
+              })
+                .then(() => {
+                  setCountUsers((prevNum) => prevNum + 1);
+                })
+                .catch((err) => {
+                  console.log("suka");
+                  setError(err.description);
+                });
+            }
+  
+            if (photo) {
+              console.log(photo);
+              await sendPhoto(token, {
+                chatId,
+                photo,
+                caption: turndownService.turndown(value),
+              })
+                .then(() => {
+                  setCountUsers((prevNum) => prevNum + 1);
+                })
+                .catch((err) => {
+                  setError(err.description);
+                });
+            }
+  
+            console.log(`Sending message to ${user.telegram_id}`);
+          });
+        }, 1000 * sec);
       }
-    });
-    console.log(countUsers);
+      resolve()
+    })
+    .then(() => {
+      setIsSending(false)
+    })
   };
 
   const testSubmit = async (e) => {
@@ -84,14 +101,16 @@ const Mass = ({ show, handleClose, token, bot }) => {
         <SendMessage
           value={value}
           setValue={setValue}
-          photo={photo}
           setPhoto={setPhoto}
-          token={token}
-          activeUsersId={bot.activeUsersId}
         />
         {!!countUsers && (
           <Alert variant="success" className="mt-3">
             {`Количество получивших сообщение: ${countUsers}`}
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="danger" className="mt-3">
+            {error}
           </Alert>
         )}
       </Modal.Body>
@@ -101,6 +120,7 @@ const Mass = ({ show, handleClose, token, bot }) => {
             <Button
               className="send"
               variant="success"
+              disabled={isSending}
               onClick={(e) => {
                 handleSubmit(e);
               }}

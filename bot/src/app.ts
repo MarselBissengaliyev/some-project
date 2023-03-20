@@ -14,6 +14,7 @@ mongoose
     // Get token from database using Mongoose
     GeneralDataModel.findOne({}, (err: any, data: GeneralData) => {
       if (err) {
+        console.log('suka')
         console.error(err);
       } else {
         // Launch Telegraf with token from database
@@ -26,4 +27,4 @@ mongoose
       }
     });
   })
-  .catch((error) => console.error(error));
+  .catch((error) => console.error(error.message));

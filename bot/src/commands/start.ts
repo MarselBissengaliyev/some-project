@@ -6,16 +6,30 @@ import {
 import { createTelegramData } from "../controllers/telegramData/telegramData";
 import PixelModel from "../models/pixel";
 import { StartContext } from "./start.interface";
-import GeneralDataModel from "../models/generalData";
+import StartMessageModel from "../models/startMessage";
+import env from '../utils/validateEnv'
 
 /**  
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
 */
 export const start = async (ctx: StartContext) => {
-  const generalData = await GeneralDataModel.find().limit(1).exec();
-  console.log(generalData);
+  console.log('hi')
+  const startMessage = await StartMessageModel.findOne({}).exec();
+  console.log(startMessage)
 
-  await ctx.reply(generalData[0].bot_start_message);
+  if (!startMessage) {
+    return;
+  }
+
+  if (startMessage.photo) {
+    await ctx.replyWithPhoto(`${env.API_URL}`);
+  }
+
+  await ctx.reply(startMessage.message, {
+    disable_notification: false,
+    disable_web_page_preview: startMessage.disable_web_page_preview,
+    parse_mode: 'Markdown'
+  });
   const clickId = ctx.startPayload;
 
   if (!ctx.message) {

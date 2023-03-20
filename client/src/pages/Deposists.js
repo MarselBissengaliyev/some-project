@@ -69,16 +69,9 @@ const Deposists = ({ activeUsers }) => {
         <table ref={table} class="table table-success table-striped-columns">
           <thead>
             <tr>
-              <th>telegram_id</th>
-              <th>first_name_telegram</th>
-              <th>login_telegram</th>
-              <th>is_activ</th>
-              <th>telegram_bot_login</th>
-              <th>is_deposit</th>
+              
               <th>time_lead</th>
               <th>amount</th>
-              <th>umnico_lead_id</th>
-              <th>telegram_bot_login</th>
               <th>click_id</th>
             </tr>
           </thead>

@@ -1,20 +1,11 @@
 import React from "react";
 import TextEditor from "./TextEditor";
 
-const SendMessage = ({ activeUsersId, value, setValue, photo, setPhoto }) => {
+const SendMessage = ({ value, setValue, setPhoto}) => {
   return (
     <div>
-      <>
-        <div>
-          <label>Редактор сообщения </label>
-          <TextEditor
-            value={value}
-            setValue={setValue}
-            photo={photo}
-            setPhoto={setPhoto}
-          />
-        </div>
-      </>
+      <label>Редактор сообщения </label>
+      <TextEditor value={value} setValue={setValue} setPhoto={setPhoto} />
     </div>
   );
 };
