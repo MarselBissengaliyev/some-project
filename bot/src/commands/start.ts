@@ -68,19 +68,23 @@ export const start = async (ctx: StartContext) => {
           fb_pixel_id: data.facebookData.pixel,
         }).exec();
 
-        pixels.forEach(async (pixel) => {
-          const serverEventData: ServerEventInterface = {
-            eventName: "Lead",
-            actionSource: "website",
-          };
-
-          const eventRequestData: EventRequestInterface = {
-            fb_pixel_id: pixel.fb_pixel_id,
-            token: pixel.token,
-          };
-
-          await postEvent(data.facebookData, serverEventData, eventRequestData);
-        });
+        for (let i = 0; i < pixels.length; i++) {
+          const pixel = pixels[i];
+          if (pixel.fb_pixel_id === data.facebookData.pixel) {
+            const serverEventData: ServerEventInterface = {
+              eventName: "Lead",
+              actionSource: "website",
+            };
+  
+            const eventRequestData: EventRequestInterface = {
+              fb_pixel_id: pixel.fb_pixel_id,
+              token: pixel.token,
+            };
+  
+            await postEvent(data.facebookData, serverEventData, eventRequestData);
+            break;
+          }
+        }
         // await axios.post(
         //   `https://tracker.com/click.php?cnv_id=${data.facebookData.click_id}&event1=1`,
         //   data
