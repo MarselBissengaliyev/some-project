@@ -20,49 +20,50 @@ const Mass = ({ show, handleClose, token, bot }) => {
     e.preventDefault();
 
     // Loop through the array of users and send a message to every 20 users
+    if (bot.activeUsersId) {
+      for (let i = 0, sec = 0; i < bot.activeUsersId.length; i += 20, sec++) {
+        const group = bot.activeUsersId.slice(i, i + 20); // get the next 20 users from the array
+        // send a message to each user in the group with a 1-second interval between each message
+        setTimeout(() => {
+          group.forEach(async (user, index) => {
+            const chatId = user.telegram_id;
+            console.log(chatId);
 
-    for (let i = 0, sec = 0; i < bot.activeUsersId.length; i += 20, sec++) {
-      const group = bot.activeUsersId.slice(i, i + 20); // get the next 20 users from the array
-      // send a message to each user in the group with a 1-second interval between each message
-      setTimeout(() => {
-        group.forEach(async (user, index) => {
-          const chatId = user.telegram_id;
-          console.log(chatId)
-
-          if (!photo && value) {
-            console.log("please");
-            await sendMessage(token, {
-              chatId,
-              text: turndownService.turndown(value),
-              disableWebPagePreview,
-            })
-              .then(() => {
-                setCountUsers((prevNum) => prevNum + 1);
+            if (!photo && value) {
+              console.log("please");
+              await sendMessage(token, {
+                chatId,
+                text: turndownService.turndown(value),
+                disableWebPagePreview,
               })
-              .catch((err) => {
-                console.log("suka");
-                setError(err.description);
-              });
-          }
+                .then(() => {
+                  setCountUsers((prevNum) => prevNum + 1);
+                })
+                .catch((err) => {
+                  console.log("suka");
+                  setError(err.description);
+                });
+            }
 
-          if (photo) {
-            console.log(photo);
-            await sendPhoto(token, {
-              chatId,
-              photo,
-              caption: turndownService.turndown(value),
-            })
-              .then(() => {
-                setCountUsers((prevNum) => prevNum + 1);
+            if (photo) {
+              console.log(photo);
+              await sendPhoto(token, {
+                chatId,
+                photo,
+                caption: turndownService.turndown(value),
               })
-              .catch((err) => {
-                setError(err.description);
-              });
-          }
+                .then(() => {
+                  setCountUsers((prevNum) => prevNum + 1);
+                })
+                .catch((err) => {
+                  setError(err.description);
+                });
+            }
 
-          console.log(`Sending message to ${user.telegram_id}`);
-        });
-      }, 1000 * sec);
+            console.log(`Sending message to ${user.telegram_id}`);
+          });
+        }, 1000 * sec);
+      }
     }
   };
 

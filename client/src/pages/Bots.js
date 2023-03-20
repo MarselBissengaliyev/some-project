@@ -113,6 +113,9 @@ const Bots = ({ setBot, bot }) => {
           </Card>
         </Col>
       </Row>
+      <Row className="mb-3">
+
+      </Row>
     </Container>
   );
 };

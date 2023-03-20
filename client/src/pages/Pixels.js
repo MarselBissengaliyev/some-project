@@ -10,16 +10,12 @@ import { Button } from "react-bootstrap";
 import PixelModal from "../components/modals/PixelModal";
 
 const Pixels = () => {
-  const [pixelId, setPixelId] = useState("");
-  const [token, setToken] = useState("");
-  const [isCreated, setCreated] = useState(false);
   const [pixels, setPixels] = useState([]);
 
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("");
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   useEffect(() => {
     getPixels().then((data) => {
@@ -27,16 +23,6 @@ const Pixels = () => {
       setPixels(data);
     });
   }, []);
-
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    await createPixel({ pixelId, token })
-      .then(() => setCreated(true))
-      .catch((err) => {
-        console.error(err);
-        setCreated(false);
-      });
-  };
 
   return (
     <div className="container">
