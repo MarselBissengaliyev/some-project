@@ -11,6 +11,7 @@ import imgRoutes from "./routes/img";
 import pixelRoutes from "./routes/pixel";
 import startMessageRoutes from "./routes/startMessage";
 import telegramDataRoutes from "./routes/telegramData";
+import telegramApiRoutes from './routes/telegramApi';
 import env from "./utils/validateEnv";
 import { umnikoWebhook } from "./webhooks/umnico";
 
@@ -35,6 +36,8 @@ app.use("/api/general-data", generalDataRoutes);
 app.use("/api/image", imgRoutes);
 
 app.use("/api/start-message", startMessageRoutes);
+
+app.use("/api/telegram-api", telegramApiRoutes);
 
 /**
  * Define the webhook endpoint that Umnico will send data to

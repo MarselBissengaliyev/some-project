@@ -32,7 +32,6 @@ const Start = ({ show, handleClose }) => {
     getStartMessage().then((data) => {
       setMessage(data.message);
       setPhoto(data.photo);
-      console.log(process.env.REACT_APP_API_URL + data.photo);
     });
   }, [show]);
   return (

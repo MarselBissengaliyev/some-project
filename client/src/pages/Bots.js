@@ -33,7 +33,7 @@ const Bots = ({ setBot, bot }) => {
     getGeneralData().then((data) => {
       setToken(data.bot_token);
     });
-  }, []);
+  }, [showMass, setBot, bot.username]);
 
   useEffect(() => {
     if (token) {

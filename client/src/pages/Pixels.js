@@ -19,7 +19,6 @@ const Pixels = () => {
 
   useEffect(() => {
     getPixels().then((data) => {
-      console.log(data);
       setPixels(data);
     });
   }, []);

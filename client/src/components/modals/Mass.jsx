@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import TurndownService from "turndown";
-import { sendMessage, sendPhoto } from "../../network/api.telegram";
+import {
+  sendMassMessage,
+  sendMessage,
+  sendPhoto,
+} from "../../network/api.telegram";
 import SendMessage from "../SendMessage";
 
 const Mass = ({ show, handleClose, token, bot }) => {
@@ -10,65 +14,36 @@ const Mass = ({ show, handleClose, token, bot }) => {
   const [photo, setPhoto] = useState("");
   const [testTelegramId, setTestTelegramId] = useState("");
   const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
-  const [countUsers, setCountUsers] = useState(0);
+  const [success, setSuccess] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-    console.log(!!(!photo && value));
-
     e.preventDefault();
+    setIsSending(true);
 
-    // Loop through the array of users and send a message to every 20 users
-    if (bot.activeUsersId) {
-      for (let i = 0, sec = 0; i < bot.activeUsersId.length; i += 20, sec++) {
-        const group = bot.activeUsersId.slice(i, i + 20); // get the next 20 users from the array
-        // send a message to each user in the group with a 1-second interval between each message
-        setTimeout(() => {
-          group.forEach(async (user, index) => {
-            const chatId = user.telegram_id;
-            console.log(chatId);
-
-            if (!photo && value) {
-              console.log("please");
-              await sendMessage(token, {
-                chatId,
-                text: turndownService.turndown(value),
-                disableWebPagePreview,
-              })
-                .then(() => {
-                  setCountUsers((prevNum) => prevNum + 1);
-                })
-                .catch((err) => {
-                  console.log("suka");
-                  setError(err.description);
-                });
-            }
-
-            if (photo) {
-              console.log(photo);
-              await sendPhoto(token, {
-                chatId,
-                photo,
-                caption: turndownService.turndown(value),
-              })
-                .then(() => {
-                  setCountUsers((prevNum) => prevNum + 1);
-                })
-                .catch((err) => {
-                  setError(err.description);
-                });
-            }
-
-            console.log(`Sending message to ${user.telegram_id}`);
-          });
-        }, 1000 * sec);
-      }
+    if (bot.activeUsersId.length > 0) {
+      await sendMassMessage({
+        activeUsersId: bot.activeUsersId,
+        disableWebPagePreview,
+        value: turndownService.turndown(value),
+        photo,
+      })
+        .then((data) => {
+          setSuccess(data.message);
+        })
+        .catch((err) => {
+          setError(err.message);
+          console.log(err);
+        });
     }
+
+    setIsSending(false);
   };
 
   const testSubmit = async (e) => {
     const chatId = testTelegramId;
+
     if (!photo && value) {
       await sendMessage(token, {
         chatId,
@@ -76,6 +51,7 @@ const Mass = ({ show, handleClose, token, bot }) => {
         disableWebPagePreview,
       });
     }
+
     if (photo) {
       await sendPhoto(token, {
         chatId,
@@ -97,9 +73,9 @@ const Mass = ({ show, handleClose, token, bot }) => {
       </Modal.Header>
       <Modal.Body>
         <SendMessage value={value} setValue={setValue} setPhoto={setPhoto} />
-        {!!countUsers && (
+        {!!success && (
           <Alert variant="success" className="mt-3">
-            {`Количество получивших сообщение: ${countUsers}`}
+            {success}
           </Alert>
         )}
         {error && (

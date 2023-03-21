@@ -9,7 +9,6 @@ const PixelItem = ({ token, fb_pixel_id, _id, setPixels }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  console.log(_id);
   const handleDelete = async (e) => {
     e.preventDefault();
     await deletePixel(_id).then((data) => {
@@ -21,19 +20,14 @@ const PixelItem = ({ token, fb_pixel_id, _id, setPixels }) => {
     });
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    console.log("updated");
-  };
-
   return (
     <div className="col">
       <div className="card">
         <div className="card-body">
           <div className="row">
             <div className="col pixel-item">
-              <h5>{token}</h5>
-              <p>{fb_pixel_id}</p>
+              <h5>{fb_pixel_id}</h5>
+              <p>{token}</p>
             </div>
             <div className="pixel-btns">
               <button

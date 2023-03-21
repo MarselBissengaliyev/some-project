@@ -3,7 +3,6 @@ import { Alert, Form } from "react-bootstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { uploadImage } from "../network/img";
-import TurndownService from "turndown";
 
 const modules = {
   toolbar: [["bold", "italic"], [{ list: "ordered" }]],
@@ -36,7 +35,7 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = '' }) => {
       <div className="mb-3">
         <ReactQuill
           theme="snow"
-          value={value}
+          defaultValue={value}
           onChange={(e) => {
             setValue(e);
           }}
