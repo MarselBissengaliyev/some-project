@@ -40,6 +40,7 @@ const Bots = ({ setBot, bot }) => {
       getMe(token).then((data) => {
         const result = data.result;
         setBot({
+          ...bot,
           first_name: result.first_name,
           username: result.username,
         });
