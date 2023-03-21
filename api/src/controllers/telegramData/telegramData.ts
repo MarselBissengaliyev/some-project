@@ -1,9 +1,8 @@
 import { RequestHandler } from "express";
-import TelegramDataModel from "../../models/telegramData";
-import { GetTelegramDataParams } from "./telegramData.interface";
 import FacebookDataModel from "../../models/facebookData";
+import TelegramDataModel from "../../models/telegramData";
 import UserModel from "../../models/user";
-import { ActiveUsersWithClickIdInterface } from "./telegramData.interface";
+import { GetTelegramDataParams } from "./telegramData.interface";
 
 export const getTelegramData: RequestHandler<
   GetTelegramDataParams,
@@ -56,7 +55,7 @@ export const getTelegramData: RequestHandler<
       ).exec();
 
       activeUsersWithClickId.push({
-        click_id: facebookData ? facebookData.click_id : '',
+        click_id: facebookData ? facebookData.click_id : "",
         telegram_id: activeUser.telegram_id,
         first_name_telegram: activeUser.first_name_telegram,
         login_telegram: activeUser.login_telegram,
@@ -67,7 +66,7 @@ export const getTelegramData: RequestHandler<
         umnico_lead_id: activeUser.umnico_lead_id,
         amount: activeUser.amount,
         time_sale: activeUser.time_sale,
-        start_time: activeUser.start_time
+        start_time: activeUser.start_time,
       });
     }
 

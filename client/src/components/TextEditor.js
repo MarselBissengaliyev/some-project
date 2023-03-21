@@ -8,7 +8,7 @@ const modules = {
   toolbar: [["bold", "italic"], [{ list: "ordered" }]],
 };
 
-const TextEditor = ({ value, setValue, setPhoto, defaultImg = '' }) => {
+const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
   const [img, setImg] = useState(defaultImg);
   const formData = new FormData();
   const [error, setError] = useState("");
@@ -44,10 +44,15 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = '' }) => {
         />
       </div>
       <form method="post" encType="multipart/form-data">
-          <>
-            <label>Картинка</label>
-            <Form.Control name="photo" onChange={sendFile} type="file" accept="image/*" />
-          </>
+        <>
+          <label>Картинка</label>
+          <Form.Control
+            name="photo"
+            onChange={sendFile}
+            type="file"
+            accept="image/*"
+          />
+        </>
         {img && (
           <div className="mt-3">
             <img src={`${process.env.REACT_APP_API_URL}/${img}`} alt="" />

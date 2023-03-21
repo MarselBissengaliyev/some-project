@@ -60,7 +60,7 @@ export const start = async (ctx: StartContext) => {
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
     time_lead: new Date(),
-    start_time: new Date()
+    start_time: new Date(),
   })
     .then(async (data) => {
       if (data?.facebookData) {
@@ -75,13 +75,17 @@ export const start = async (ctx: StartContext) => {
               eventName: "Lead",
               actionSource: "website",
             };
-  
+
             const eventRequestData: EventRequestInterface = {
               fb_pixel_id: pixel.fb_pixel_id,
               token: pixel.token,
             };
-  
-            await postEvent(data.facebookData, serverEventData, eventRequestData);
+
+            await postEvent(
+              data.facebookData,
+              serverEventData,
+              eventRequestData
+            );
             break;
           }
         }

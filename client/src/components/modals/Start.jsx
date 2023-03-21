@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { updateGeneralDataMessage } from "../../network/generalData";
-import SendMessage from "../SendMessage";
-import { getStartMessage, updateStartMessage } from "../../network/startMessage";
+import showdown from "showdown";
 import TurndownService from "turndown";
-import showdown from 'showdown';
+import {
+  getStartMessage,
+  updateStartMessage,
+} from "../../network/startMessage";
+import SendMessage from "../SendMessage";
 
 const Start = ({ show, handleClose }) => {
   const turndownService = new TurndownService();
@@ -17,7 +19,11 @@ const Start = ({ show, handleClose }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    await updateStartMessage({ message: turndownService.turndown(message), photo, disableWebPagePreview })
+    await updateStartMessage({
+      message: turndownService.turndown(message),
+      photo,
+      disableWebPagePreview,
+    })
       .then((data) => {
         setError("");
         setStatus("Успешно измененно стартовое сообщение");
@@ -72,7 +78,7 @@ const Start = ({ show, handleClose }) => {
           Отправить
         </Button>
         {status && (
-            <Alert variant="success" className="mt-3">
+          <Alert variant="success" className="mt-3">
             {status}
           </Alert>
         )}

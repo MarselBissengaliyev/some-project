@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import Mass from "../components/modals/Mass";
+import Start from "../components/modals/Start";
 import { getMe } from "../network/api.telegram";
 import { getGeneralData } from "../network/generalData";
 import { getTelegramData } from "../network/telegramData";
-import Start from "../components/modals/Start";
 
 const Bots = ({ setBot, bot }) => {
   const [token, setToken] = useState("");
@@ -113,9 +113,7 @@ const Bots = ({ setBot, bot }) => {
           </Card>
         </Col>
       </Row>
-      <Row className="mb-3">
-
-      </Row>
+      <Row className="mb-3"></Row>
     </Container>
   );
 };

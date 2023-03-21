@@ -1,16 +1,21 @@
 import { fetchData } from ".";
 
 export const getStartMessage = async () => {
-  const response = await fetchData(`${process.env.REACT_APP_API_URL}/api/start-message`, {
-    method: 'GET'
-  });
+  const response = await fetchData(
+    `${process.env.REACT_APP_API_URL}/api/start-message`,
+    {
+      method: "GET",
+    }
+  );
 
   return response.json();
-}
+};
 
-export const updateStartMessage = async (
-  { message, photo = '', disableWebPagePreview }
-) => {
+export const updateStartMessage = async ({
+  message,
+  photo = "",
+  disableWebPagePreview,
+}) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/start-message`,
     {
@@ -28,4 +33,3 @@ export const updateStartMessage = async (
 
   return response.json();
 };
-

@@ -58,7 +58,10 @@ const Deposists = ({ activeUsers }) => {
             onChange={(e) => setValue(e.target.value)}
           />
         )}
-        <table ref={table} className="table table-success table-striped-columns">
+        <table
+          ref={table}
+          className="table table-success table-striped-columns"
+        >
           <thead>
             <tr>
               <th>time_lead</th>
@@ -73,11 +76,11 @@ const Deposists = ({ activeUsers }) => {
               filteredByTelegramId.map((user) => {
                 return (
                   <tr key={user.click_id}>
-                    <th>{user.time_lead ? user.time_lead : '-'}</th>
-                    <td>{user.amount ? user.amount : '-'}</td>
+                    <th>{user.time_lead ? user.time_lead : "-"}</th>
+                    <td>{user.amount ? user.amount : "-"}</td>
                     <td>{user.click_id ? user.click_id : "-"}</td>
-                    <td>{user.time_sale ? user.time_sale : '-'}</td>
-                    <td>{user.start_time ? user.start_time : '-'}</td>
+                    <td>{user.time_sale ? user.time_sale : "-"}</td>
+                    <td>{user.start_time ? user.start_time : "-"}</td>
                   </tr>
                 );
               })}

@@ -44,7 +44,7 @@ export const sendPhoto = async (
   if (!caption) {
     caption = "";
   }
-  
+
   const generalData = await GeneralDataModel.findOne({}).exec();
 
   if (!generalData) {

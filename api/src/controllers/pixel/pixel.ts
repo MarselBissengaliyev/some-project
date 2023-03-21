@@ -54,7 +54,9 @@ export const createPixel: RequestHandler<
       throw createHttpError(400, "Pixel must have a fb_pixel_id and token");
     }
 
-    const existingPixel = await PixelModel.findOne({ fb_pixel_id: fbPixelId }).exec();
+    const existingPixel = await PixelModel.findOne({
+      fb_pixel_id: fbPixelId,
+    }).exec();
 
     if (existingPixel) {
       throw createHttpError(400, "Pixel with this Id already exists");
@@ -116,7 +118,7 @@ export const updatePixel: RequestHandler<
  */
 export const deletePixel: RequestHandler = async (req, res, next) => {
   const pixelId = req.params.pixelId;
-  console.log('Delte')
+  console.log("Delte");
   try {
     if (!mongoose.isValidObjectId(pixelId)) {
       throw createHttpError(400, "Invalid pixel id");

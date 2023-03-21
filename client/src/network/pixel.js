@@ -20,7 +20,7 @@ export const getPixels = async () => {
   );
 
   return response.json();
-}
+};
 
 export const createPixel = async ({ pixelId, token }) => {
   const response = await fetchData(
@@ -68,4 +68,3 @@ export const deletePixel = async (pixelId) => {
 
   return response;
 };
-

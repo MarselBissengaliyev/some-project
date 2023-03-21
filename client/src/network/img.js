@@ -5,7 +5,7 @@ export const uploadImage = async (formData) => {
     `${process.env.REACT_APP_API_URL}/api/image`,
     {
       method: "POST",
-      body: formData
+      body: formData,
     }
   );
 

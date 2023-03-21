@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  createPixel,
-  deletePixel,
-  getPixel,
-  getPixels,
-} from "../network/pixel";
-import PixelItem from "../components/PixelItem";
 import { Button } from "react-bootstrap";
+import PixelItem from "../components/PixelItem";
 import PixelModal from "../components/modals/PixelModal";
+import { getPixels } from "../network/pixel";
 
 const Pixels = () => {
   const [pixels, setPixels] = useState([]);
@@ -33,7 +28,7 @@ const Pixels = () => {
         <Button
           onClick={() => {
             setMode("create");
-            setShow(true)
+            setShow(true);
           }}
           className="create-pixel"
           variant="success"

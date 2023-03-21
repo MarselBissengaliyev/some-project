@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { deleteImage, uploadImage } from "../network/img";
 
 const UploadAvatar = ({ avatar, setAvatar }) => {

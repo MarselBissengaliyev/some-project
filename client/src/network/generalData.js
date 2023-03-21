@@ -12,7 +12,7 @@ export const updateGeneralDataMessage = async ({
       body: JSON.stringify({
         bot_start_message: message,
         photo: photo,
-        disableWebPagePreview
+        disableWebPagePreview,
       }),
       headers: {
         "Content-Type": "application/json",

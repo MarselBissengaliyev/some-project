@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
+import StartMessageModel from "../../models/startMessage";
 import {
   CreateStartMessageBody,
   UpdateStartMessageBody,
 } from "./startMessage.interface";
-import StartMessageModel from "../../models/startMessage";
 
 export const createStartMessage: RequestHandler<
   unknown,

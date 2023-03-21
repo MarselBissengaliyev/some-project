@@ -14,12 +14,12 @@ mongoose
     // Get token from database using Mongoose
     GeneralDataModel.findOne({}, (err: any, data: GeneralData) => {
       if (err) {
-        console.log('suka')
+        console.log("suka");
         console.error(err);
       } else {
         // Launch Telegraf with token from database
         const bot = new Telegraf(data.bot_token);
-        
+
         bot.start((ctx) => start(ctx));
 
         // Start listening for Telegram updates
