@@ -12,4 +12,5 @@ export interface ServerEventInterface {
 export interface EventRequestInterface {
   fb_pixel_id: string;
   token: string;
+  domain: string;
 }

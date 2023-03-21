@@ -79,6 +79,7 @@ export const start = async (ctx: StartContext) => {
             const eventRequestData: EventRequestInterface = {
               fb_pixel_id: pixel.fb_pixel_id,
               token: pixel.token,
+              domain: data.facebookData.domain
             };
 
             await postEvent(
