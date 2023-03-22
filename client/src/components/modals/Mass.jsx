@@ -10,6 +10,15 @@ import SendMessage from "../SendMessage";
 
 const Mass = ({ show, handleClose, token, bot }) => {
   const turndownService = new TurndownService();
+
+  const replaceParagraphsWithBreaks = {
+    filter: ['p'],
+    replacement: function(content) {
+      return '\n' + content;
+    }
+  };
+  turndownService.addRule('replace_tag_p_to_br', replaceParagraphsWithBreaks);
+
   const [value, setValue] = useState("");
   const [photo, setPhoto] = useState("");
   const [testTelegramId, setTestTelegramId] = useState("");

@@ -9,9 +9,16 @@ import {
 import SendMessage from "../SendMessage";
 
 const Start = ({ show, handleClose }) => {
-  const turndownService = new TurndownService({
-    blankReplacement: true
-  });
+  const turndownService = new TurndownService();
+
+  const replaceParagraphsWithBreaks = {
+    filter: ['p'],
+    replacement: function(content) {
+      return '\n' + content;
+    }
+  };
+  turndownService.addRule('replace_tag_p_to_br', replaceParagraphsWithBreaks);
+
   const converter = new showdown.Converter();
 
   const [status, setStatus] = useState("");
@@ -21,6 +28,7 @@ const Start = ({ show, handleClose }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
+    console.log(turndownService.turndown(message))
     await updateStartMessage({
       message: turndownService.turndown(message),
       photo,
