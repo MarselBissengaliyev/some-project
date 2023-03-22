@@ -1,3 +1,4 @@
+import axios from "axios";
 import { postEvent } from "../controllers/facebookData/facebookData";
 import {
   EventRequestInterface,
@@ -108,10 +109,7 @@ export const start = async (ctx: StartContext) => {
           }
         }
 
-        // await axios.post(
-        //   `https://tracker.com/click.php?cnv_id=${data.facebookData.click_id}&event1=1`,
-        //   data
-        // );
+        await axios.post(`http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`);
       }
     })
     .catch(console.error);
