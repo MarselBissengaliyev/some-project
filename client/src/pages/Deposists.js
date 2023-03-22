@@ -20,7 +20,7 @@ const Deposists = ({ activeUsers }) => {
       setLoading(true);
     }
 
-    if (activeUsers) {
+    if (activeUsers && (activeUsers.length === 0)) {
       setLoading(false);
       setMessage("Deposists is clear");
     }
