@@ -111,7 +111,7 @@ const Bots = ({ setBot, bot }) => {
                 </h6>
               </div>
               <div className="btns">
-                {(bot.allUsersCount !== null) ? (
+                {bot.allUsersCount ? (
                   <Button onClick={handleShowMass} variant="primary">
                     Массовая рассылка
                   </Button>
