@@ -22,7 +22,7 @@ const Start = ({ show, handleClose }) => {
 
   const handleSubmit = async (e) => {
     await updateStartMessage({
-      message: turndownService.turndown(message.replace(/<p>/g, '').replace(/<\/p>/g, '<br>')),
+      message: turndownService.turndown(message),
       photo,
       disableWebPagePreview,
     })
