@@ -68,6 +68,7 @@ const Bots = ({ setBot, bot }) => {
     await updateGeneralDataToken(tokenValue).then(data => {
       setToken(data.bot_token);
       setTokenValue(data.bot_token);
+      setTokenUpdated(true);
     });
   };
   return (
@@ -110,7 +111,7 @@ const Bots = ({ setBot, bot }) => {
                 </h6>
               </div>
               <div className="btns">
-                {!!bot.allUsersCount ? (
+                {(bot.allUsersCount !== null) ? (
                   <Button onClick={handleShowMass} variant="primary">
                     Массовая рассылка
                   </Button>
