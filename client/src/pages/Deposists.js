@@ -24,6 +24,11 @@ const Deposists = ({ activeUsers }) => {
       setLoading(false);
       setMessage("Deposists is clear");
     }
+
+    if (activeUsers && activeUsers.length > 0) {
+      setLoading(false);
+      setMessage('');
+    }
   }, [activeUsers]);
 
   function downloadTxtFile() {
