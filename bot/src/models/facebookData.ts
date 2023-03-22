@@ -22,7 +22,7 @@ const facebookDataSchema = new Schema({
     type: String,
   },
   time_click: {
-    type: Date
+    type: Number
   },
   umnico_lead_id: {
   },

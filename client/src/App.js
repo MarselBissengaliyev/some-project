@@ -5,19 +5,50 @@ import { getTelegramData } from "./network/telegramData";
 import Bots from "./pages/Bots";
 import Deposists from "./pages/Deposists";
 import Pixels from "./pages/Pixels";
+import MyContext from "./context/context";
+import Loading from "./components/Loading";
+import { getGeneralData } from "./network/generalData";
+import { getMe } from "./network/api.telegram";
 
 function App() {
   const [bot, setBot] = useState({
-    first_name: "Name",
-    username: "Username",
-    activeUsersCount: '',
-    allUsersCount: '',
-    activeUsersId: [],
-    desositedUsers: [],
+    first_name: "",
+    username: "",
+    activeUsersCount: "",
+    allUsersCount: "",
+    activeUsersId: null,
+    desositedUsers: null,
     activeUsersWithClickId: null,
   });
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState("");
+  const [showMass, setShowMass] = useState(false);
+  const [showStart, setShowStart] = useState(false);
+  const [tokenUpdated, setTokenUpdated] = useState(false);
+  const [tokenValue, setTokenValue] = useState(token);
 
   useEffect(() => {
+    getGeneralData().then((data) => {
+      setToken(data.bot_token);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      getMe(token).then((data) => {
+        const result = data.result;
+        setBot((bot) => ({
+          ...bot,
+          first_name: result.first_name,
+          username: result.username,
+        }));
+      });
+    }
+  }, [setBot, token]);
+
+  useEffect(() => {
+    setLoading(true);
+
     if (bot.username) {
       getTelegramData(bot.username).then((data) => {
         setBot((bot) => ({
@@ -28,26 +59,51 @@ function App() {
           desositedUsers: data.desositedUsers,
           activeUsersWithClickId: data.activeUsersWithClickId,
         }));
+        setLoading(false);
       });
     }
-  }, [bot.username, setBot]);
+  }, [bot.username, setBot, setLoading]);
 
   return (
-    <div className="App">
-      <div className="wrapper">
-        <Sidebar />
-        <main>
-          <Routes>
-            <Route path="/" element={<Bots setBot={setBot} bot={bot} />} />
-            <Route path="/pixels" element={<Pixels />} />
-            <Route
-              path="/deposits"
-              element={<Deposists activeUsers={bot.activeUsersWithClickId} />}
-            />
-          </Routes>
-        </main>
+    <MyContext.Provider
+      value={{
+        bot,
+        setBot,
+        loading,
+        setLoading,
+        token,
+        setToken,
+        showMass,
+        setShowMass,
+        showStart,
+        tokenUpdated,
+        setShowStart,
+        setTokenUpdated,
+        tokenValue,
+        setTokenValue,
+      }}
+    >
+      <div className="App">
+        <div className="wrapper">
+          {loading && <Loading />}
+          <Sidebar />
+          <main>
+            <Routes>
+              <Route path="/" element={<Bots />} />
+              <Route path="/pixels" element={<Pixels />} />
+              <Route
+                path="/deposits"
+                element={
+                  <Deposists
+
+                  />
+                }
+              />
+            </Routes>
+          </main>
+        </div>
       </div>
-    </div>
+    </MyContext.Provider>
   );
 }
 

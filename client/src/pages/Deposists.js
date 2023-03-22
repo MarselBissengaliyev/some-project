@@ -1,68 +1,45 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import MyContext from "../context/context";
+import { downloadTxtFile } from "../functions";
 
-const Deposists = ({ activeUsers }) => {
+const Deposists = () => {
+  const {
+    bot: { activeUsersWithClickId },
+    setLoading,
+  } = useContext(MyContext);
+
   const [value, setValue] = useState("");
   const [filterBy, setFilterBy] = useState("telegram_id");
   const table = useRef();
-  const [isLoading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-
-  const filteredByTelegramId =
-    activeUsers && activeUsers.length
-      ? activeUsers.filter((user) => {
-          const telegramIdToString = user[filterBy] + "";
-          return telegramIdToString.toLowerCase().includes(value.toLowerCase());
-        })
-      : [];
+  const [filteredDeposits, setFilteredDeposits] = useState([]);
 
   useEffect(() => {
-    if (activeUsers === null) {
+    if (activeUsersWithClickId === null) {
       setLoading(true);
     }
 
-    if (activeUsers && (activeUsers.length === 0)) {
+    if (activeUsersWithClickId && activeUsersWithClickId.length > 0) {
       setLoading(false);
-      setMessage("Deposists is clear");
+      setMessage("");
+      setFilteredDeposits(
+        activeUsersWithClickId.filter((user) => {
+          const telegramIdToString = user[filterBy] + "";
+          return telegramIdToString.toLowerCase().includes(value.toLowerCase());
+        })
+      );
     }
-
-    if (activeUsers && activeUsers.length > 0) {
-      setLoading(false);
-      setMessage('');
-    }
-  }, [activeUsers]);
-
-  function downloadTxtFile() {
-    let csvContent = "";
-
-    activeUsers &&
-      activeUsers.forEach((item) => {
-        if (item.click_id) {
-          csvContent += `${item.click_id}:${item.amount}\n`;
-        } else {
-          csvContent += `${item.amount}\n`;
-        }
-      });
-
-    const a = document.createElement("a");
-    const file = new Blob([csvContent], { type: "text/plain" });
-    a.href = URL.createObjectURL(file);
-    a.download = "table_data.txt";
-    a.click();
-  }
-
+  }, [activeUsersWithClickId, filterBy, setLoading, value]);
   return (
     <>
-      <hr />
-      <h2 className="text-center">Вкладка Депозиты</h2>
       <div className="container">
-        {message && <h1>{message}</h1>}
-        {isLoading && <h1>Загрузка данных...</h1>}
-        {!!(activeUsers && activeUsers.length) && (
+        {message && <h2>{message}</h2>}
+        {!!(filteredDeposits && filteredDeposits.length) && (
           <>
             <div className="mb-3 grid gap-lg-2">
               <button
                 className="btn btn-success mb-3"
-                onClick={downloadTxtFile}
+                onClick={() => downloadTxtFile(activeUsersWithClickId)}
               >
                 Скачать txt файл
               </button>
@@ -101,15 +78,43 @@ const Deposists = ({ activeUsers }) => {
                 </tr>
               </thead>
               <tbody>
-                {filteredByTelegramId &&
-                  filteredByTelegramId.map((user) => {
+                {filteredDeposits &&
+                  filteredDeposits.length > 0 &&
+                  filteredDeposits.map((user) => {
+                    const formatDate = (date) => {
+                      const newDate = new Date(date);
+                      let day = newDate.getUTCDay();
+                      if (day.toString().length === 1) {
+                        day = `0${day}`;
+                      }
+
+                      let month = newDate.getUTCMonth();
+                      if (month.toString().length === 1) {
+                        month = `0${month}`;
+                      }
+
+                      const year = newDate.getUTCFullYear();
+                      return `${day}.${month}.${year}`;
+                    };
                     return (
                       <tr key={user.click_id}>
-                        <th>{user.time_lead ? user.time_lead : "-"}</th>
+                        <th>
+                          {user.time_lead
+                            ? formatDate(user.time_lead)
+                            : "-"}
+                        </th>
                         <td>{user.amount ? user.amount : "-"}</td>
                         <td>{user.click_id ? user.click_id : "-"}</td>
-                        <td>{user.time_sale ? user.time_sale : "-"}</td>
-                        <td>{user.time_click ? user.time_click : "-"}</td>
+                        <td>
+                          {user.time_sale
+                            ? formatDate(user.time_sale)
+                            : "-"}
+                        </td>
+                        <td>
+                          {user.time_click
+                            ? formatDate(user.time_click)
+                            : "-"}
+                        </td>
                       </tr>
                     );
                   })}

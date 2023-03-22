@@ -5,5 +5,5 @@ export interface CreateFacebookDataBody {
   pixel?: string;
   fb_click?: string;
   domain?: string;
-  time_click?: string;
+  time_click?: number;
 }

@@ -56,7 +56,9 @@ export const messageIncoming: RequestHandler<
 
     await telegramData.save();
 
-    await axios.post(`https://traffer.online/click.php?event5=1&clickid=${facebookData.click_id}`);
+    const clickid = facebookData.click_id || telegramData.click_id;
+
+    await axios.post(`https://traffer.online/click.php?event5=1&clickid=${clickid}`);
 
     res.sendStatus(200);
   } catch (error) {
@@ -107,7 +109,7 @@ export const leadChangedStatus: RequestHandler<
     }
 
     telegramData.is_deposit = true;
-    telegramData.time_sale = new Date();
+    telegramData.time_sale = new Date().getTime();
     telegramData.amount = req.body.lead?.amount ? req.body.lead?.amount : 0;
 
     await telegramData.save();
@@ -125,7 +127,7 @@ export const leadChangedStatus: RequestHandler<
         throw createHttpError(404, 'Has not been found facebook data');
       }
 
-      const cnv_id = facebookData.click_id;
+      const cnv_id = facebookData.click_id || telegramData.click_id;
       const payout = telegramData.amount;
       const cnv_status = "approved";
 

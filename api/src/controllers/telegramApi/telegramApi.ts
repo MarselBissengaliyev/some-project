@@ -2,12 +2,11 @@ import axios from "axios";
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 import GeneralDataModel from "../../models/generalData";
+import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import env from "../../utils/validateEnv";
 import {
-  SendMassMessageBody,
-  SendMassMessageUserInterface,
+  SendMassMessageBody
 } from "./telegramApi.interface";
-import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 
 export const sendMessage = async (
   chatId: number,

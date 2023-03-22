@@ -27,7 +27,7 @@ const telegramDataSchema = new Schema({
     required: true,
   },
   time_lead: {
-    type: Date,
+    type: Number,
     required: true,
   },
   umnico_lead_id: {
@@ -39,7 +39,10 @@ const telegramDataSchema = new Schema({
     default: 0,
   },
   time_sale: {
-    type: Date,
+    type: Number,
+  },
+  click_id: {
+    type: String
   }
 });
 

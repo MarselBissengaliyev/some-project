@@ -8,7 +8,7 @@ const userSchema = new Schema({
   telegram_data_id: {
     type: Schema.Types.ObjectId,
   },
-  time_sale: Date,
+  time_sale: Number,
 });
 
 type User = InferSchemaType<typeof userSchema>;

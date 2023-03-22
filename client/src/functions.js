@@ -1,24 +1,18 @@
-export const getParams = () => {
-  const params = window.location.search
-    .replace("?", "")
-    .split("&")
-    .reduce(function (p, e) {
-      var a = e.split("=");
-      p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
-      return p;
-    }, {});
+export const downloadTxtFile = (activeUsersWithClickId) => {
+  let csvContent = "";
 
-  return params;
-};
+  !!(activeUsersWithClickId && activeUsersWithClickId.length) &&
+    activeUsersWithClickId.forEach((item) => {
+      if (item.click_id) {
+        csvContent += `${item.click_id}:${item.amount}\n`;
+      } else {
+        csvContent += `${item.amount}\n`;
+      }
+    });
 
-export const getIp = async () => {
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    if (!res.ok) {
-      throw Error('Не удалось получить ip');
-    }
-    return res.json();
-  } catch (error) {
-    console.log(error);
-  }
+  const a = document.createElement("a");
+  const file = new Blob([csvContent], { type: "text/plain" });
+  a.href = URL.createObjectURL(file);
+  a.download = "table_data.txt";
+  a.click();
 };

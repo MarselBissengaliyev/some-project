@@ -20,7 +20,7 @@ export const createFacebookData = async ({
         pixel,
         fb_click,
         domain,
-        time_click: new Date(),
+        time_click: new Date().getTime(),
       }),
     }
   );

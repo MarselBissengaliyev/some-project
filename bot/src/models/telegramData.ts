@@ -27,16 +27,16 @@ const telegramDataSchema = new Schema({
     required: true,
   },
   time_lead: {
-    type: Date,
+    type: Number,
     required: true,
   },
   umnico_lead_id: {
     type: Number,
   },
-  start_time: {
-    type: Date,
-    required: true
-  }
+  last_name_telegram: {
+    type: String,
+    required: true,
+  },
 });
 
 export type TelegramData = InferSchemaType<typeof telegramDataSchema>;

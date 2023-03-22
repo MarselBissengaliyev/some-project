@@ -56,12 +56,13 @@ export const start = async (ctx: StartContext) => {
     !ctx.message.from.id ||
     !ctx.message.from.first_name ||
     !ctx.message.from.username ||
+    !ctx.message?.from.last_name ||
     !clickId
   ) {
     console.log("Has not been found id or first_name or username or clickId");
     return;
   }
-  const { id, first_name, username } = ctx.message.from;
+  const { id, first_name, username, last_name } = ctx.message.from;
 
   await createTelegramData(clickId, {
     telegram_id: id,
@@ -70,8 +71,8 @@ export const start = async (ctx: StartContext) => {
     is_activ: true,
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
-    time_lead: new Date(),
-    start_time: new Date(),
+    time_lead: new Date().getTime(),
+    last_name_telegram: last_name
   })
     .then(async (data) => {
       console.log(data?.facebookData);
@@ -111,7 +112,7 @@ export const start = async (ctx: StartContext) => {
           }
         }
 
-        await axios.post(`http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`);
+        await axios.post(`http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`);
       }
     })
     .catch(console.error);
