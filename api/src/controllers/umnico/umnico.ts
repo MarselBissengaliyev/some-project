@@ -91,7 +91,7 @@ export const leadChangedStatus: RequestHandler<
       throw createHttpError(422, "Lead has a non-existent status");
     }
 
-    if (leadStatus.name !== "Купил") {
+    if (leadStatus.name !== "Оплатили") {
       return;
     }
 
@@ -171,7 +171,7 @@ export const leadChanged: RequestHandler<
       throw createHttpError(422, "Lead has a non-existent status");
     }
 
-    if (leadStatus.name !== "Купил") {
+    if (leadStatus.name !== "Оплатили") {
       return;
     }
 
