@@ -9,7 +9,9 @@ import {
 import SendMessage from "../SendMessage";
 
 const Start = ({ show, handleClose }) => {
-  const turndownService = new TurndownService();
+  const turndownService = new TurndownService({
+    blankReplacement: true
+  });
   const converter = new showdown.Converter();
 
   const [status, setStatus] = useState("");
@@ -20,7 +22,7 @@ const Start = ({ show, handleClose }) => {
 
   const handleSubmit = async (e) => {
     await updateStartMessage({
-      message: turndownService.turndown(message),
+      message: turndownService.turndown(message.replace(/<p>/g, '').replace(/<\/p>/g, '<br>')),
       photo,
       disableWebPagePreview,
     })
