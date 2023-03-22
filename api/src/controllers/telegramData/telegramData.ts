@@ -13,13 +13,11 @@ export const getTelegramData: RequestHandler<
   try {
     const telegram_bot_login = req.params.telegram_bot_login;
 
-    const allUsersCount = await TelegramDataModel.find().countDocuments({
-      telegram_bot_login
+    const allUsersCount = await TelegramDataModel.countDocuments({
     }).exec();
 
     const activeUsersCount = await TelegramDataModel.countDocuments({
       is_activ: true,
-      telegram_bot_login
     }).exec();
 
     const activeUsersId = await TelegramDataModel.find(
@@ -30,7 +28,7 @@ export const getTelegramData: RequestHandler<
       {
         telegram_id: 1,
       }
-    ).exec();
+    ).limit(150).exec();
 
     const desositedUsers = await TelegramDataModel.find({
       is_deposit: true,
