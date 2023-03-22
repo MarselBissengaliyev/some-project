@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import Mass from "../components/modals/Mass";
 import Start from "../components/modals/Start";
 import { getMe } from "../network/api.telegram";
-import { getGeneralData } from "../network/generalData";
+import { getGeneralData, updateGeneralDataToken } from "../network/generalData";
 import { getTelegramData } from "../network/telegramData";
 
 const Bots = ({ setBot, bot }) => {
   const [token, setToken] = useState("");
   const [showMass, setShowMass] = useState(false);
   const [showStart, setShowStart] = useState(false);
+  const [tokenUpdated, setTokenUpdated] = useState(false);
+
+  const [tokenValue, setTokenValue] = useState(token);
 
   const handleCloseMass = () => setShowMass(false);
   const handleShowMass = () => setShowMass(true);
@@ -60,6 +63,13 @@ const Bots = ({ setBot, bot }) => {
       });
     }
   };
+
+  const hamdleSubmitUpdateToken = async () => {
+    await updateGeneralDataToken(tokenValue).then(data => {
+      setToken(data.bot_token);
+      setTokenValue(data.bot_token);
+    });
+  };
   return (
     <Container>
       <Row className="mb-3">
@@ -88,17 +98,40 @@ const Bots = ({ setBot, bot }) => {
                 </h2>
                 <h6>
                   Количество активных:{" "}
-                  <b>{bot.activeUsersCount ? bot.activeUsersCount : 0}</b>
+                  <b>
+                    {bot.activeUsersCount
+                      ? bot.activeUsersCount
+                      : "Загрузка..."}
+                  </b>
                 </h6>
                 <h6>
                   Количество всего:{" "}
-                  <b>{bot.allUsersCount ? bot.allUsersCount : 0}</b>
+                  <b>{bot.allUsersCount ? bot.allUsersCount : "Загрузка..."}</b>
                 </h6>
               </div>
               <div className="btns">
-                <Button onClick={handleShowMass} variant="primary">
-                  Массовая рассылка
-                </Button>
+                {!!bot.allUsersCount ? (
+                  <Button onClick={handleShowMass} variant="primary">
+                    Массовая рассылка
+                  </Button>
+                ) : (
+                  <>
+                    <div className="lds-spinner">
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                  </>
+                )}
                 <Button onClick={handleShowStart} variant="primary">
                   Сообщение старта
                 </Button>
@@ -114,7 +147,28 @@ const Bots = ({ setBot, bot }) => {
           </Card>
         </Col>
       </Row>
-      <Row className="mb-3"></Row>
+      <Row className="mb-3">
+        <Col>
+          <Card>
+            <Card.Body>
+              <Form>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>BOT TOKEN</Form.Label>
+                  <Form.Control
+                    type="text"
+                    defaultValue={token}
+                    onChange={(e) => setTokenValue(e.target.value)}
+                  />
+                  {tokenUpdated && <Alert className="mt-3" variant="success">Токен успешно обновлен</Alert>}
+                </Form.Group>
+                <Button onClick={hamdleSubmitUpdateToken} variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };

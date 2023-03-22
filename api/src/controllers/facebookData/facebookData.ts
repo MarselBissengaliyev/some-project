@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import FacebookDataModel from "../../models/facebookData";
 import UserModel from "../../models/user";
 import { CreateFacebookDataBody } from "./facebookData.interface";
+import TelegramDataModel from "../../models/telegramData";
 
 /**
  * Here we create a fecbook_data document in the database

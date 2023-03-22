@@ -24,10 +24,10 @@ const Mass = ({ show, handleClose, token, bot }) => {
 
     if (bot.activeUsersId.length > 0) {
       await sendMassMessage({
-        activeUsersId: bot.activeUsersId,
         disableWebPagePreview,
         value: turndownService.turndown(value),
         photo,
+        telegramBotLogin: bot.username
       })
         .then((data) => {
           setSuccess(data.message);

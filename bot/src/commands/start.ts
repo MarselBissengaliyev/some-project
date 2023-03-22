@@ -13,13 +13,13 @@ import { StartContext } from "./start.interface";
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
  */
 export const start = async (ctx: StartContext) => {
-  console.log("hi");
   const startMessage = await StartMessageModel.findOne({}).exec();
 
   if (!startMessage) {
     return;
   }
 
+  console.log("hi");
   if (startMessage.photo) {
     await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
       caption: startMessage.message,
@@ -35,11 +35,19 @@ export const start = async (ctx: StartContext) => {
   }
 
   const clickId = ctx.startPayload;
+  console.log('Startpayload=',ctx.startPayload);
 
   if (!ctx.message) {
     console.log("Has not been found message");
     return;
   }
+
+  console.log(
+    ctx.message.from.id,
+    ctx.message.from.first_name,
+    ctx.message.from.username,
+    clickId
+  );
 
   if (
     !ctx.message.from.id ||
@@ -63,10 +71,19 @@ export const start = async (ctx: StartContext) => {
     start_time: new Date(),
   })
     .then(async (data) => {
-      if (data?.facebookData) {
+      console.log(data?.facebookData);
+      if (data && data.facebookData) {
         const pixels = await PixelModel.find({
           fb_pixel_id: data.facebookData.pixel,
         }).exec();
+
+        const domain = data.facebookData.domain;
+        const ip = data.facebookData.ip;
+        const fb_click = data.facebookData.fb_click;
+        const user_agent = data.facebookData.user_agent;
+        if (!domain || !ip || !fb_click || !user_agent) {
+          return;
+        }
 
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
@@ -79,17 +96,18 @@ export const start = async (ctx: StartContext) => {
             const eventRequestData: EventRequestInterface = {
               fb_pixel_id: pixel.fb_pixel_id,
               token: pixel.token,
-              domain: data.facebookData.domain
+              domain,
             };
 
             await postEvent(
-              data.facebookData,
+              { ip, fb_click, user_agent },
               serverEventData,
               eventRequestData
             );
             break;
           }
         }
+
         // await axios.post(
         //   `https://tracker.com/click.php?cnv_id=${data.facebookData.click_id}&event1=1`,
         //   data

@@ -10,11 +10,11 @@ function App() {
   const [bot, setBot] = useState({
     first_name: "Name",
     username: "Username",
-    activeUsersCount: 0,
-    allUsersCount: 0,
+    activeUsersCount: '',
+    allUsersCount: '',
     activeUsersId: [],
     desositedUsers: [],
-    activeUsersWithClickId: [],
+    activeUsersWithClickId: null,
   });
 
   useEffect(() => {

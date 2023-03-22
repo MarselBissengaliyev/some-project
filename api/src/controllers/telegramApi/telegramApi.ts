@@ -7,9 +7,10 @@ import {
   SendMassMessageBody,
   SendMassMessageUserInterface,
 } from "./telegramApi.interface";
+import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 
 export const sendMessage = async (
-  chatId: string,
+  chatId: number,
   text: string,
   disableWebPagePreview: boolean
 ) => {
@@ -37,7 +38,7 @@ export const sendMessage = async (
 };
 
 export const sendPhoto = async (
-  chatId: string,
+  chatId: number,
   photo: string,
   caption: string
 ) => {
@@ -73,10 +74,20 @@ export const sendMassMessage: RequestHandler<
   SendMassMessageBody,
   unknown
 > = async (req, res, next) => {
-  const activeUsersId = req.body.activeUsersId;
+  const telegramBotLogin = req.body.telegramBotLogin;
   const photo = req.body.photo;
   const value = req.body.value;
   const disableWebPagePreview = req.body.disableWebPagePreview ?? true;
+
+  const activeUsersId = await TelegramDataModel.find(
+    {
+      is_activ: true,
+      telegram_bot_login: telegramBotLogin
+    },
+    {
+      telegram_id: 1,
+    }
+  ).exec();
 
   try {
     if (!activeUsersId) {
@@ -91,7 +102,8 @@ export const sendMassMessage: RequestHandler<
       const group = activeUsersId.slice(i, i + 20); // get the next 20 users from the array
       // send a message to each user in the group with a 1-second interval between each message
       setTimeout(() => {
-        group.forEach(async (user: SendMassMessageUserInterface) => {
+        console.log('Work nigger');
+        group.forEach(async (user: TelegramData) => {
           const chatId = user.telegram_id;
           console.log(chatId);
 
@@ -105,7 +117,7 @@ export const sendMassMessage: RequestHandler<
 
           console.log(`Sending message to ${user.telegram_id}`);
         });
-      }, 1000 * sec);
+      }, 1000 * sec * i);
     }
 
     res.status(200).json({

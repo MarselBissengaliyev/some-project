@@ -8,27 +8,21 @@ const facebookDataSchema = new Schema({
   },
   ip: {
     type: String,
-    required: true,
   },
   user_agent: {
     type: String,
-    required: true,
   },
   pixel: {
     type: String,
-    required: true,
   },
   fb_click: {
     type: String,
-    required: true,
   },
   domain: {
     type: String,
-    required: true,
   },
   time_click: {
-    type: Date,
-    default: Date.now(),
+    type: Date
   },
 });
 

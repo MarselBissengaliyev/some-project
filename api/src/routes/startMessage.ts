@@ -9,4 +9,6 @@ router.post("/", StartMessageController.createStartMessage);
 
 router.patch("/", StartMessageController.updateStartMessage);
 
+router.delete('/', StartMessageController.deletePhotoMessage);
+
 export default router;

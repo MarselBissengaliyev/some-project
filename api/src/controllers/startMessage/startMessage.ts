@@ -5,6 +5,8 @@ import {
   CreateStartMessageBody,
   UpdateStartMessageBody,
 } from "./startMessage.interface";
+import fs from 'fs';
+import path from "path";
 
 export const createStartMessage: RequestHandler<
   unknown,
@@ -94,3 +96,32 @@ export const updateStartMessage: RequestHandler<
     next(error);
   }
 };
+
+export const deletePhotoMessage: RequestHandler = async (req, res, next) => {
+  const imagesDir = './public/uploads';
+  try {
+    fs.readdir(imagesDir, (err, files) => {
+      if (err) throw createHttpError(400, err.message)
+
+      for (const file of files) {
+        fs.unlink(path.join(imagesDir, file), err => {
+          if (err) throw createHttpError(400, err.message);
+        })
+      }
+    });
+
+    const startMessage = await StartMessageModel.findOne({}).exec();
+
+    if (!startMessage) {
+      throw createHttpError(404, 'Has not been found start message');
+    }
+
+    startMessage.photo = '';
+
+    await startMessage.save();
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+}

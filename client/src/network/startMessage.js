@@ -33,3 +33,11 @@ export const updateStartMessage = async ({
 
   return response.json();
 };
+
+export const deleteStartMessage = async () => {
+  const response = await fetchData(`${process.env.REACT_APP_API_URL}/api/start-message`, {
+    method: 'DELETE'
+  });
+
+  return response;
+}

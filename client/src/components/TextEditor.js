@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Alert, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { uploadImage } from "../network/img";
+import { deleteStartMessage, updateStartMessage } from "../network/startMessage";
 
 const modules = {
   toolbar: [["bold", "italic"], [{ list: "ordered" }]],
@@ -12,6 +13,13 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
   const [img, setImg] = useState(defaultImg);
   const formData = new FormData();
   const [error, setError] = useState("");
+
+  const deletePhoto = async () => {
+    setImg("");
+    setPhoto("");
+
+    await deleteStartMessage();
+  };
 
   const sendFile = async (e) => {
     formData.append("photo", e.target.files[0]);
@@ -53,9 +61,19 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
             accept="image/*"
           />
         </>
-        {img && (
+        {(!defaultImg && img) &&
+          <div className="mt-3">
+                <img src={`${process.env.REACT_APP_API_URL}/${img}`} alt="" />
+          </div>
+        }
+        {(defaultImg && img) && (
           <div className="mt-3">
             <img src={`${process.env.REACT_APP_API_URL}/${img}`} alt="" />
+            <div className="mt-3">
+              <Button onClick={deletePhoto} variant="danger">
+                Удалить
+              </Button>
+            </div>
           </div>
         )}
         {error && (

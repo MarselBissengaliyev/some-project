@@ -3,8 +3,8 @@ export interface SendMassMessageUserInterface {
 }
 
 export interface SendMassMessageBody {
-  activeUsersId: SendMassMessageUserInterface[];
   photo: string;
   value: string;
   disableWebPagePreview: boolean;
+  telegramBotLogin: string;
 }

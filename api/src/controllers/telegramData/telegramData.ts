@@ -13,23 +13,19 @@ export const getTelegramData: RequestHandler<
   try {
     const telegram_bot_login = req.params.telegram_bot_login;
 
-    const allUsersCount = await TelegramDataModel.find({
-      telegram_bot_login: telegram_bot_login,
-    })
-      .countDocuments()
-      .exec();
+    const allUsersCount = await TelegramDataModel.find().countDocuments({
+      telegram_bot_login
+    }).exec();
 
-    const activeUsersCount = await TelegramDataModel.find({
-      telegram_bot_login: telegram_bot_login,
+    const activeUsersCount = await TelegramDataModel.countDocuments({
       is_activ: true,
-    })
-      .countDocuments()
-      .exec();
+      telegram_bot_login
+    }).exec();
 
     const activeUsersId = await TelegramDataModel.find(
       {
-        telegram_bot_login: telegram_bot_login,
         is_activ: true,
+        telegram_bot_login: telegram_bot_login
       },
       {
         telegram_id: 1,
@@ -38,6 +34,7 @@ export const getTelegramData: RequestHandler<
 
     const desositedUsers = await TelegramDataModel.find({
       is_deposit: true,
+      telegram_bot_login
     }).exec();
 
     const activeUsersWithClickId = [];
@@ -66,7 +63,7 @@ export const getTelegramData: RequestHandler<
         umnico_lead_id: activeUser.umnico_lead_id,
         amount: activeUser.amount,
         time_sale: activeUser.time_sale,
-        start_time: activeUser.start_time,
+        time_click: facebookData?.time_click,
       });
     }
 
