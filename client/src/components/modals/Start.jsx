@@ -52,7 +52,7 @@ const Start = ({ show, handleClose }) => {
     });
   }, [show]);
 
-  console.log(converter.makeHtml(message).replace(/\n/g, '<br>'))
+  console.log(converter.makeHtml(message).replace(/[\n]+/gi, '<br>'))
   return (
     <Modal
       size="xl"
@@ -68,7 +68,7 @@ const Start = ({ show, handleClose }) => {
         <SendMessage
           setPhoto={setPhoto}
           defaultImg={photo}
-          value={converter.makeHtml(message.replace(/n/g, '<br>'))}
+          value={converter.makeHtml(message.replace(/[\n]+/gi, '<br>'))}
           setValue={setMessage}
         />
       </Modal.Body>
