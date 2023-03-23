@@ -16,7 +16,6 @@ function App() {
     username: "",
     activeUsersCount: "",
     allUsersCount: "",
-    activeUsersId: null,
     desositedUsers: null,
     activeUsersWithClickId: null,
   });
@@ -34,6 +33,23 @@ function App() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
+
+    if (bot.username) {
+      getTelegramData(bot.username, { page: 1 }).then((data) => {
+        setBot((bot) => ({
+          ...bot,
+          allUsersCount: data.allUsersCount,
+          activeUsersCount: data.activeUsersCount,
+          desositedUsers: data.desositedUsers,
+          activeUsersWithClickId: data.activeUsersWithClickId
+        }));
+        setLoading(false);
+      });
+    }
+  }, [bot.username, setBot, setLoading]);
+
+  useEffect(() => {
     if (token) {
       getMe(token).then((data) => {
         const result = data.result;
@@ -45,24 +61,6 @@ function App() {
       });
     }
   }, [setBot, token]);
-
-  useEffect(() => {
-    setLoading(true);
-
-    if (bot.username) {
-      getTelegramData(bot.username).then((data) => {
-        setBot((bot) => ({
-          ...bot,
-          allUsersCount: data.allUsersCount,
-          activeUsersCount: data.activeUsersCount,
-          activeUsersId: data.activeUsersId,
-          desositedUsers: data.desositedUsers,
-          activeUsersWithClickId: data.activeUsersWithClickId,
-        }));
-        setLoading(false);
-      });
-    }
-  }, [bot.username, setBot, setLoading]);
 
   return (
     <MyContext.Provider
@@ -93,11 +91,7 @@ function App() {
               <Route path="/pixels" element={<Pixels />} />
               <Route
                 path="/deposits"
-                element={
-                  <Deposists
-
-                  />
-                }
+                element={<Deposists/>}
               />
             </Routes>
           </main>

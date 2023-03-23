@@ -42,7 +42,8 @@ const telegramDataSchema = new Schema({
     type: Number,
   },
   click_id: {
-    type: String
+    type: String,
+    unique: true
   }
 });
 

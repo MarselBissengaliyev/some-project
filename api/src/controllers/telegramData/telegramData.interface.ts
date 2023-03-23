@@ -8,3 +8,7 @@ export interface ActiveUsersWithClickIdInterface {
   _doc: TelegramData,
   click_id: string
 }
+
+export interface GetTelegramDataQuery {
+  page?: string;
+}

@@ -31,7 +31,6 @@ const Mass = ({ show, handleClose, token, bot }) => {
     e.preventDefault();
     setIsSending(true);
 
-    if (bot.activeUsersId.length > 0) {
       await sendMassMessage({
         disableWebPagePreview,
         value: turndownService.turndown(value),
@@ -46,9 +45,6 @@ const Mass = ({ show, handleClose, token, bot }) => {
           console.log(err);
         });
     }
-
-    setIsSending(false);
-  };
 
   const testSubmit = async (e) => {
     const chatId = testTelegramId;

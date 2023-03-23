@@ -16,13 +16,11 @@ import { StartContext } from "./start.interface";
 export const start = async (ctx: StartContext) => {
   console.log('Start');
   const startMessage = await StartMessageModel.findOne({}).exec();
-  console.log(startMessage);
 
   if (!startMessage) {
     return;
   }
 
-  console.log("hi");
   if (startMessage.photo) {
     await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
       caption: startMessage.message,
@@ -38,7 +36,6 @@ export const start = async (ctx: StartContext) => {
   }
 
   const clickId = ctx.startPayload;
-  console.log('Startpayload=',ctx.startPayload);
 
   if (!ctx.message) {
     console.log("Has not been found message");
@@ -54,9 +51,6 @@ export const start = async (ctx: StartContext) => {
 
   if (
     !ctx.message.from.id ||
-    !ctx.message.from.first_name ||
-    !ctx.message.from.username ||
-    !ctx.message?.from.last_name ||
     !clickId
   ) {
     console.log("Has not been found id or first_name or username or clickId");
@@ -66,13 +60,13 @@ export const start = async (ctx: StartContext) => {
 
   await createTelegramData(clickId, {
     telegram_id: id,
-    first_name_telegram: first_name,
-    login_telegram: username,
+    first_name_telegram: first_name ?? '',
+    login_telegram: username ?? '',
     is_activ: true,
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
     time_lead: new Date().getTime(),
-    last_name_telegram: last_name
+    last_name_telegram: last_name ?? ''
   })
     .then(async (data) => {
       console.log(data?.facebookData);

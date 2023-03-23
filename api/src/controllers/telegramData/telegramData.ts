@@ -2,38 +2,39 @@ import { RequestHandler } from "express";
 import FacebookDataModel from "../../models/facebookData";
 import TelegramDataModel from "../../models/telegramData";
 import UserModel from "../../models/user";
-import { GetTelegramDataParams } from "./telegramData.interface";
+import { GetTelegramDataParams, GetTelegramDataQuery } from "./telegramData.interface";
 
 export const getTelegramData: RequestHandler<
   GetTelegramDataParams,
   unknown,
   unknown,
-  unknown
+  GetTelegramDataQuery
 > = async (req, res, next) => {
+  const page = req.query.page || 1;
+
   try {
+    const ITEMS_PER_PAGE = 15;
+
     const telegram_bot_login = req.params.telegram_bot_login;
 
-    const allUsersCount = await TelegramDataModel.countDocuments({
-    }).exec();
+    const allUsersCount = await TelegramDataModel.countDocuments({}).exec();
 
     const activeUsersCount = await TelegramDataModel.countDocuments({
       is_activ: true,
     }).exec();
 
-    const activeUsersId = await TelegramDataModel.find(
-      {
-        is_activ: true,
-        telegram_bot_login: telegram_bot_login
-      },
-      {
-        telegram_id: 1,
-      }
-    ).limit(150).exec();
+    const depositedUsersCount = await TelegramDataModel.countDocuments({
+      is_deposit: true
+    }).exec();
 
+    // console.log(page);
     const desositedUsers = await TelegramDataModel.find({
       is_deposit: true,
-      telegram_bot_login
-    }).exec();
+      telegram_bot_login,
+    })
+      .limit(ITEMS_PER_PAGE)
+      .skip((+page-1) * ITEMS_PER_PAGE)
+      .exec();
 
     const activeUsersWithClickId = [];
 
@@ -49,7 +50,9 @@ export const getTelegramData: RequestHandler<
         }
       ).exec();
 
-      console.log((facebookData && facebookData.click_id) || (activeUser.click_id));
+      console.log(
+        (facebookData && facebookData.click_id) || activeUser.click_id
+      );
 
       activeUsersWithClickId.push({
         click_id: facebookData?.click_id || activeUser.click_id,
@@ -70,9 +73,12 @@ export const getTelegramData: RequestHandler<
     res.status(200).json({
       allUsersCount,
       activeUsersCount,
-      activeUsersId,
       desositedUsers,
       activeUsersWithClickId,
+      pagination: {
+        count: depositedUsersCount,
+        pageCount: depositedUsersCount / ITEMS_PER_PAGE
+      }
     });
   } catch (error) {
     next(error);

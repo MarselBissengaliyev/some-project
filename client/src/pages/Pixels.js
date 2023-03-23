@@ -20,6 +20,7 @@ const Pixels = () => {
     setLoading(true);
     getPixels().then((data) => {
       setPixels(data);
+    }).finally(() => {
       setLoading(false);
     });
   }, [setLoading]);
