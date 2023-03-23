@@ -17,7 +17,9 @@ import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
-const whitelist = ['https://front.roiup.team'];
+app.use(express.static(path.join(__dirname, "../public")));
+
+const whitelist = ['https://front.roiup.team', 'http://localhost:3000'];
 
 app.use(
   cors({
@@ -34,8 +36,6 @@ app.use(
 app.use(morgan("dev"));
 
 app.use(express.json());
-
-app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/api/facebook-data", facebookDataRoutes);
 
