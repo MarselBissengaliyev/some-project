@@ -14,8 +14,8 @@ const Avatar = () => {
     const formData = new FormData();
     formData.append("avatar", e.target.files[0]);
 
-    await uploadAvatar(formData).then(() => {
-      getGeneralData().then((data) => {
+    await uploadAvatar(formData).then(async () => {
+      await getGeneralData().then((data) => {
         setAvatar(data.bot_avatar);
       });
     });
