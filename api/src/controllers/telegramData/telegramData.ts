@@ -2,19 +2,15 @@ import { RequestHandler } from "express";
 import FacebookDataModel from "../../models/facebookData";
 import TelegramDataModel from "../../models/telegramData";
 import UserModel from "../../models/user";
-import { GetTelegramDataParams, GetTelegramDataQuery } from "./telegramData.interface";
+import { GetTelegramDataParams } from "./telegramData.interface";
 
 export const getTelegramData: RequestHandler<
   GetTelegramDataParams,
   unknown,
   unknown,
-  GetTelegramDataQuery
+  unknown
 > = async (req, res, next) => {
-  const page = req.query.page || 1;
-
   try {
-    const ITEMS_PER_PAGE = 10;
-
     const telegram_bot_login = req.params.telegram_bot_login;
 
     const allUsersCount = await TelegramDataModel.countDocuments({}).exec();
@@ -23,18 +19,10 @@ export const getTelegramData: RequestHandler<
       is_activ: true,
     }).exec();
 
-    const depositedUsersCount = await TelegramDataModel.countDocuments({
-      is_deposit: true,
-    }).exec();
-
-    // console.log(page);
     const desositedUsers = await TelegramDataModel.find({
       is_deposit: true,
       telegram_bot_login,
-    })
-      .limit(ITEMS_PER_PAGE)
-      .skip((+page-1) * ITEMS_PER_PAGE)
-      .exec();
+    }).exec();
 
     const activeUsersWithClickId = [];
 
@@ -69,12 +57,7 @@ export const getTelegramData: RequestHandler<
     res.status(200).json({
       allUsersCount,
       activeUsersCount,
-      desositedUsers,
-      activeUsersWithClickId,
-      pagination: {
-        count: depositedUsersCount,
-        pageCount: depositedUsersCount / ITEMS_PER_PAGE
-      }
+      activeUsersWithClickId
     });
   } catch (error) {
     next(error);

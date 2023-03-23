@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Pagination } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import MyContext from "../context/context";
 import { downloadTxtFile, useQuery } from "../functions";
 import { getTelegramData } from "../network/telegramData";
-import { useParams, useNavigate } from "react-router-dom";
 
 const Deposists = () => {
   const {
-    bot: { activeUsersWithClickId, depositedUsersCount, username, loading },
+    bot: { activeUsersWithClickId , username, loading },
     setLoading,
     setBot,
   } = useContext(MyContext);
@@ -16,13 +16,6 @@ const Deposists = () => {
   const table = useRef();
   const [message, setMessage] = useState("");
   const [filteredDeposits, setFilteredDeposits] = useState([]);
-
-  const navigate = useNavigate();
-
-  const query = useQuery();
-
-  const [page, setPage] = useState(query.get("page") || 1);
-  const [pageCount, setPageCount] = useState(1);
 
   const formatDate = (date) => {
     const newDate = new Date(date);
@@ -39,28 +32,6 @@ const Deposists = () => {
     const year = newDate.getUTCFullYear();
     return `${day}.${month}.${year}`;
   };
-
-  useEffect(() => {
-    navigate(`/deposits?page=${page}`);
-  }, [page, navigate]);
-
-  useEffect(() => {
-    setLoading(true);
-
-    if (username) {
-      getTelegramData(username, { page: page }).then((data) => {
-        setBot((bot) => ({
-          ...bot,
-          allUsersCount: data.allUsersCount,
-          activeUsersCount: data.activeUsersCount,
-          desositedUsers: data.desositedUsers,
-          activeUsersWithClickId: data.activeUsersWithClickId,
-        }));
-        setPageCount(data.pagination.pageCount);
-        setLoading(false);
-      });
-    }
-  }, [setBot, username, setLoading, page]);
 
   useEffect(() => {
     if (activeUsersWithClickId === null) {
@@ -86,25 +57,6 @@ const Deposists = () => {
     }
   }, [activeUsersWithClickId, filterBy, setLoading, value]);
 
-  function handlePrev() {
-    setPage((p) => {
-      if (+p === 1) {
-        return p;
-      }
-      return p - 1;
-    });
-  }
-
-  function handleNext() {
-    setPage((p) => {
-      if (+p === +pageCount) {
-        return p;
-      }
-      return p + 1;
-    });
-  }
-
-  console.log(Math.ceil(pageCount), page);
   return (
     <>
       <div className="container">
@@ -174,16 +126,6 @@ const Deposists = () => {
                   })}
               </tbody>
             </table>
-            <Pagination>
-              <Pagination.Prev disabled={page === 1} onClick={handlePrev} />
-              <Pagination.Item active>{page}</Pagination.Item>
-              <Pagination.Next
-                disabled={
-                  Math.ceil(pageCount) ? (+page === Math.ceil(pageCount)) : true
-                }
-                onClick={handleNext}
-              />
-            </Pagination>
           </>
         )}
       </div>
