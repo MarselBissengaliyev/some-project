@@ -61,7 +61,7 @@ export const start = async (ctx: StartContext) => {
     telegram_id: id,
     first_name_telegram: first_name ?? '',
     login_telegram: username ?? '',
-    is_activ: true,
+    is_active: true,
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
     time_lead: new Date().getTime(),

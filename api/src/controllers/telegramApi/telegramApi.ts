@@ -80,7 +80,7 @@ export const sendMassMessage: RequestHandler<
 
   const activeUsersId = await TelegramDataModel.find(
     {
-      is_activ: true,
+      is_active: true,
       telegram_bot_login: telegramBotLogin
     },
     {

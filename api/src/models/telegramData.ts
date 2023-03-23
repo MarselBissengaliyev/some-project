@@ -14,7 +14,7 @@ const telegramDataSchema = new Schema({
     type: String,
     required: true,
   },
-  is_activ: {
+  is_active: {
     type: Boolean,
     required: true,
   },

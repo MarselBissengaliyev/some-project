@@ -16,7 +16,7 @@ export const getTelegramData: RequestHandler<
     const allUsersCount = await TelegramDataModel.countDocuments({}).exec();
 
     const activeUsersCount = await TelegramDataModel.countDocuments({
-      is_activ: true,
+      is_active: true,
     }).exec();
 
     const desositedUsers = await TelegramDataModel.find({
@@ -43,7 +43,7 @@ export const getTelegramData: RequestHandler<
         telegram_id: activeUser.telegram_id,
         first_name_telegram: activeUser.first_name_telegram,
         login_telegram: activeUser.login_telegram,
-        is_activ: activeUser.is_activ,
+        is_active: activeUser.is_active,
         telegram_bot_login: activeUser.telegram_bot_login,
         is_deposit: activeUser.is_deposit,
         time_lead: activeUser.time_lead,

@@ -12,7 +12,7 @@ const telegramDataSchema = new Schema({
   login_telegram: {
     type: String
   },
-  is_activ: {
+  is_active: {
     type: Boolean,
     required: true,
   },

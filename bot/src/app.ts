@@ -29,7 +29,7 @@ mongoose
             return;
           }
 
-          telegramData.is_activ = false;
+          telegramData.is_active = false;
           await telegramData.save();
         });
 
