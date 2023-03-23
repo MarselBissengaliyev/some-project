@@ -17,33 +17,19 @@ import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
-// Add headers before the routes are defined
-app.use(function (req, res, next) {
+const whitelist = ['https://front.roiup.team'];
 
-  // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', env.CLIENT_URL);
-
-  // Request methods you wish to allow
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-  // Request headers you wish to allow
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  // Pass to next layer of middleware
-  next();
-});
-
-// app.use(
-//   cors({
-//     origin: env.CLIENT_URL ?? '*',  
-//     credentials: true,
-//     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-//   })
-// );
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (origin && whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    }
+  })
+);
 
 app.use(morgan("dev"));
 
