@@ -1,3 +1,6 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
+
 export const downloadTxtFile = (activeUsersWithClickId) => {
   let csvContent = "";
 
@@ -16,3 +19,9 @@ export const downloadTxtFile = (activeUsersWithClickId) => {
   a.download = "table_data.txt";
   a.click();
 };
+
+export function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}

@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Pagination } from "react-bootstrap";
 import MyContext from "../context/context";
-import { downloadTxtFile } from "../functions";
+import { downloadTxtFile, useQuery } from "../functions";
 import { getTelegramData } from "../network/telegramData";
+import { useParams } from "react-router-dom";
 
 const Deposists = () => {
   const {
@@ -10,14 +11,16 @@ const Deposists = () => {
     setLoading,
     setBot,
   } = useContext(MyContext);
-
   const [value, setValue] = useState("");
   const [filterBy, setFilterBy] = useState("telegram_id");
   const table = useRef();
   const [message, setMessage] = useState("");
   const [filteredDeposits, setFilteredDeposits] = useState([]);
 
-  const [page, setPage] = useState(1);
+  const query = useQuery();
+  console.log(query.get('page'))
+
+  const [page, setPage] = useState(+query.get('page') || 1);
   const [pageCount, setPageCount] = useState(0);
 
   const formatDate = (date) => {
@@ -46,10 +49,9 @@ const Deposists = () => {
           allUsersCount: data.allUsersCount,
           activeUsersCount: data.activeUsersCount,
           desositedUsers: data.desositedUsers,
-          activeUsersWithClickId: data.activeUsersWithClickId,
-          depositedUsersCount: data.depositedUsersCount,
+          activeUsersWithClickId: data.activeUsersWithClickId
         }));
-        setPageCount(data.depositedUsersCount);
+        setPageCount(data.pagination.pageCount);
         setLoading(false);
       });
     }
@@ -88,13 +90,15 @@ const Deposists = () => {
 
   function handleNext() {
     setPage((p) => {
-      if (p === pageCount) {
+      if (+p === +pageCount) {
+        console.log('max')
         return p;
       }
       return p + 1;
     });
   }
 
+  console.log(Math.ceil(pageCount))
   return (
     <>
       <div className="container">
@@ -165,17 +169,9 @@ const Deposists = () => {
               </tbody>
             </table>
             <Pagination>
-              <Pagination.First
-                disabled={page === 1}
-                onClick={() => setPage(1)}
-              />
-              <Pagination.Prev onClick={handlePrev} />
+              <Pagination.Prev disabled={page === 1} onClick={handlePrev} />
               <Pagination.Item active>{page}</Pagination.Item>
-              <Pagination.Next onClick={handleNext} />
-              <Pagination.Last
-                disabled={page === pageCount}
-                onClick={() => setPage(+depositedUsersCount)}
-              />
+              <Pagination.Next disabled={page === Math.ceil(pageCount)} onClick={handleNext} />
             </Pagination>
           </>
         )}
