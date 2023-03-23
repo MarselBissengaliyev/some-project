@@ -116,7 +116,7 @@ export const sendMassMessage: RequestHandler<
 
           console.log(`Sending message to ${user.telegram_id}`);
         });
-      }, 1000 * sec * i);
+      }, 1000 * sec);
     }
 
     res.status(200).json({

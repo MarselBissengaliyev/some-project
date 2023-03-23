@@ -81,7 +81,7 @@ const Start = ({ show, handleClose }) => {
           }}
           defaultChecked={disableWebPagePreview}
           type="checkbox"
-          label="Отклюичить предпросмотр ссылок"
+          label="Отключить предпросмотр ссылок"
         />
         <Button
           variant="primary"
