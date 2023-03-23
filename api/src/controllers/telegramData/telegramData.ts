@@ -13,7 +13,7 @@ export const getTelegramData: RequestHandler<
   const page = req.query.page || 1;
 
   try {
-    const ITEMS_PER_PAGE = 15;
+    const ITEMS_PER_PAGE = 10;
 
     const telegram_bot_login = req.params.telegram_bot_login;
 
@@ -24,7 +24,7 @@ export const getTelegramData: RequestHandler<
     }).exec();
 
     const depositedUsersCount = await TelegramDataModel.countDocuments({
-      is_deposit: true
+      is_deposit: true,
     }).exec();
 
     // console.log(page);
@@ -49,10 +49,6 @@ export const getTelegramData: RequestHandler<
           click_id: 1,
         }
       ).exec();
-
-      console.log(
-        (facebookData && facebookData.click_id) || activeUser.click_id
-      );
 
       activeUsersWithClickId.push({
         click_id: facebookData?.click_id || activeUser.click_id,
