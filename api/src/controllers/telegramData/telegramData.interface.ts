@@ -6,7 +6,7 @@ export interface GetTelegramDataParams {
 
 export interface ActiveUsersWithClickIdInterface {
   _doc: TelegramData,
-  click_id: string
+  click_id?: string
 }
 
 export interface GetTelegramDataQuery {

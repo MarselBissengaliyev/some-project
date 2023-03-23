@@ -51,7 +51,7 @@ export const getTelegramData: RequestHandler<
       ).exec();
 
       activeUsersWithClickId.push({
-        click_id: facebookData?.click_id || activeUser.click_id,
+        click_id: facebookData?.click_id || activeUser.click_id || null,
         telegram_id: activeUser.telegram_id,
         first_name_telegram: activeUser.first_name_telegram,
         login_telegram: activeUser.login_telegram,

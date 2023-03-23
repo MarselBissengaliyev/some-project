@@ -131,13 +131,15 @@ export const leadChangedStatus: RequestHandler<
       const payout = telegramData.amount;
       const cnv_status = "approved";
 
-      // Send a POST request to the tracker with the inserted data, like
-      await axios.post(`https://traffer.online/click.php?event6=1&clickid=${cnv_id}`)
+      if (cnv_id) {
+        await axios.post(`https://traffer.online/click.php?event6=1&clickid=${cnv_id}`)
         .then(async () => {
           await axios.post(
             `https://traffer.online/click.php?cnv_status=${cnv_status}&payout=${payout}&cnv_id=${cnv_id}`
           );
         });
+      }
+      // Send a POST request to the tracker with the inserted data, like
     }
 
     res.sendStatus(200);

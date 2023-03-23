@@ -3,7 +3,6 @@ import { InferSchemaType, Schema, model } from "mongoose";
 const facebookDataSchema = new Schema({
   click_id: {
     type: String,
-    required: true,
     unique: true,
   },
   ip: {

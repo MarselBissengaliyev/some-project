@@ -3,7 +3,7 @@ import { Pagination } from "react-bootstrap";
 import MyContext from "../context/context";
 import { downloadTxtFile, useQuery } from "../functions";
 import { getTelegramData } from "../network/telegramData";
-import { useParams, useNavigate  } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Deposists = () => {
   const {
@@ -21,19 +21,8 @@ const Deposists = () => {
 
   const query = useQuery();
 
-  const [page, setPage] = useState(+query.get('page') || 1);
-  const [pageCount, setPageCount] = useState(0);
-
-  useEffect(() => {
-    if (page > pageCount) {
-      navigate(`/deposits?page=1`)
-      setPage(1)
-    }
-    if (page < 1) {
-      navigate(`/deposits?page=1`)
-      setPage(1)
-    }
-  }, [page, pageCount, navigate])
+  const [page, setPage] = useState(query.get("page") || 1);
+  const [pageCount, setPageCount] = useState(1);
 
   const formatDate = (date) => {
     const newDate = new Date(date);
@@ -52,6 +41,10 @@ const Deposists = () => {
   };
 
   useEffect(() => {
+    navigate(`/deposits?page=${page}`);
+  }, [page, navigate]);
+
+  useEffect(() => {
     setLoading(true);
 
     if (username) {
@@ -61,7 +54,7 @@ const Deposists = () => {
           allUsersCount: data.allUsersCount,
           activeUsersCount: data.activeUsersCount,
           desositedUsers: data.desositedUsers,
-          activeUsersWithClickId: data.activeUsersWithClickId
+          activeUsersWithClickId: data.activeUsersWithClickId,
         }));
         setPageCount(data.pagination.pageCount);
         setLoading(false);
@@ -80,44 +73,43 @@ const Deposists = () => {
       setFilteredDeposits(
         activeUsersWithClickId.filter((user) => {
           let filterToString = user[filterBy] + "";
-          console.log(user[filterBy])
-          if (filterBy === 'time_lead' || filterBy === 'time_click' || filterBy === 'time_sale') {
+          if (
+            filterBy === "time_lead" ||
+            filterBy === "time_click" ||
+            filterBy === "time_sale"
+          ) {
             filterToString = formatDate(user[filterBy]) + "";
           }
           return filterToString.toLowerCase().includes(value.toLowerCase());
         })
       );
-      // console.log(activeUsersWithClickId)
     }
   }, [activeUsersWithClickId, filterBy, setLoading, value]);
 
   function handlePrev() {
     setPage((p) => {
-      if (p === 1) {
+      if (+p === 1) {
         return p;
       }
       return p - 1;
     });
-    navigate(`/deposits?page=${page - 1}`)
   }
 
   function handleNext() {
     setPage((p) => {
       if (+p === +pageCount) {
-        console.log('max')
         return p;
       }
       return p + 1;
     });
-    navigate(`/deposits?page=${page + 1}`)
   }
 
-  console.log(Math.ceil(pageCount))
+  console.log(Math.ceil(pageCount), page);
   return (
     <>
       <div className="container">
         {message && <h2>{message}</h2>}
-        {!!(!loading) && (
+        {!!!loading && (
           <>
             <div className="mb-3 grid gap-lg-2">
               <button
@@ -185,7 +177,12 @@ const Deposists = () => {
             <Pagination>
               <Pagination.Prev disabled={page === 1} onClick={handlePrev} />
               <Pagination.Item active>{page}</Pagination.Item>
-              <Pagination.Next disabled={page === Math.ceil(pageCount)} onClick={handleNext} />
+              <Pagination.Next
+                disabled={
+                  Math.ceil(pageCount) ? (+page === Math.ceil(pageCount)) : true
+                }
+                onClick={handleNext}
+              />
             </Pagination>
           </>
         )}

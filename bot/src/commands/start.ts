@@ -50,8 +50,7 @@ export const start = async (ctx: StartContext) => {
   );
 
   if (
-    !ctx.message.from.id ||
-    !clickId
+    !ctx.message.from.id
   ) {
     console.log("Has not been found id or first_name or username or clickId");
     return;
