@@ -3,7 +3,7 @@ import { Pagination } from "react-bootstrap";
 import MyContext from "../context/context";
 import { downloadTxtFile, useQuery } from "../functions";
 import { getTelegramData } from "../network/telegramData";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 
 const Deposists = () => {
   const {
@@ -17,11 +17,23 @@ const Deposists = () => {
   const [message, setMessage] = useState("");
   const [filteredDeposits, setFilteredDeposits] = useState([]);
 
+  const navigate = useNavigate();
+
   const query = useQuery();
-  console.log(query.get('page'))
 
   const [page, setPage] = useState(+query.get('page') || 1);
   const [pageCount, setPageCount] = useState(0);
+
+  useEffect(() => {
+    if (page > pageCount) {
+      navigate(`/deposits?page=1`)
+      setPage(1)
+    }
+    if (page < 1) {
+      navigate(`/deposits?page=1`)
+      setPage(1)
+    }
+  }, [page, pageCount, navigate])
 
   const formatDate = (date) => {
     const newDate = new Date(date);
@@ -86,6 +98,7 @@ const Deposists = () => {
       }
       return p - 1;
     });
+    navigate(`/deposits?page=${page - 1}`)
   }
 
   function handleNext() {
@@ -96,6 +109,7 @@ const Deposists = () => {
       }
       return p + 1;
     });
+    navigate(`/deposits?page=${page + 1}`)
   }
 
   console.log(Math.ceil(pageCount))
