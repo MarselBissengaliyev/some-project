@@ -32,7 +32,7 @@ const Start = ({ show, handleClose }) => {
     await updateStartMessage({
       message: turndownService.turndown(message),
       photo,
-      disableWebPagePreview,
+      disableWebPagePreview: disableWebPagePreview,
     })
       .then((data) => {
         setError("");
@@ -48,7 +48,7 @@ const Start = ({ show, handleClose }) => {
     getStartMessage().then((data) => {
       setMessage(data.message);
       setPhoto(data.photo);
-      setDisableWebPagePreview(!data.disable_web_page_preview)
+      setDisableWebPagePreview(data.disable_web_page_preview)
     });
   }, [show]);
 
@@ -68,7 +68,7 @@ const Start = ({ show, handleClose }) => {
         <SendMessage
           setPhoto={setPhoto}
           defaultImg={photo}
-          value={converter.makeHtml(message).replace(/\n/g, '<br>')}
+          value={converter.makeHtml(message.replace(/n/g, '<br>'))}
           setValue={setMessage}
         />
       </Modal.Body>
@@ -76,11 +76,12 @@ const Start = ({ show, handleClose }) => {
         <Form.Check
           className="start-checkbox"
           onChange={(e) => {
-            setDisableWebPagePreview(!e.target.checked);
+            console.log(e.target.checked)
+            setDisableWebPagePreview(e.target.checked);
           }}
-          defaultChecked={!disableWebPagePreview}
+          defaultChecked={disableWebPagePreview}
           type="checkbox"
-          label="Предпросмотр ссылок"
+          label="Отклюичить предпросмотр ссылок"
         />
         <Button
           variant="primary"
