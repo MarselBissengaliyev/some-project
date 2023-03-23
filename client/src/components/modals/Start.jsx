@@ -48,8 +48,11 @@ const Start = ({ show, handleClose }) => {
     getStartMessage().then((data) => {
       setMessage(data.message);
       setPhoto(data.photo);
+      setDisableWebPagePreview(!data.disable_web_page_preview)
     });
   }, [show]);
+
+  console.log(converter.makeHtml(message).replace(/\n/g, '<br>'))
   return (
     <Modal
       size="xl"
@@ -65,7 +68,7 @@ const Start = ({ show, handleClose }) => {
         <SendMessage
           setPhoto={setPhoto}
           defaultImg={photo}
-          value={converter.makeHtml(message)}
+          value={converter.makeHtml(message).replace(/\n/g, '<br>')}
           setValue={setMessage}
         />
       </Modal.Body>

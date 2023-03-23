@@ -17,7 +17,13 @@ import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
-app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+app.use(
+  cors({
+    origin: env.CLIENT_URL ?? '*',  
+    credentials: true,
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
 
 app.use(morgan("dev"));
 
