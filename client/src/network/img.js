@@ -9,5 +9,5 @@ export const uploadImage = async (formData) => {
     }
   );
 
-  return response.json();
+  return await response.json();
 };

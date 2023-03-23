@@ -25,10 +25,12 @@ function App() {
   const [showStart, setShowStart] = useState(false);
   const [tokenUpdated, setTokenUpdated] = useState(false);
   const [tokenValue, setTokenValue] = useState(token);
+  const [avatar, setAvatar] = useState(false);
 
   useEffect(() => {
     getGeneralData().then((data) => {
       setToken(data.bot_token);
+      setAvatar(data.bot_avatar);
     });
   }, []);
 
@@ -79,6 +81,8 @@ function App() {
         setTokenUpdated,
         tokenValue,
         setTokenValue,
+        avatar,
+        setAvatar
       }}
     >
       <div className="App">

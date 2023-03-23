@@ -91,23 +91,41 @@ export const getGeneralData: RequestHandler<
   }
 };
 
-export const uploadImage: RequestHandler = async (req, res, next) => {
+export const uploadAvatar: RequestHandler = async (req, res, next) => {
+  const imagesDir = './public/avatar';
+
   try {
-    console.log(req.file);
-    const generalData = await GeneralDataModel.findOne({}).exec();
+    if (req.file) {
+      fs.readdir(imagesDir, (err, files) => {
+        if (err) throw createHttpError(400, err.message)
+  
+        for (const file of files) {
+          if (file === req.file?.filename) {
+            return;
+          }
+          fs.unlink(path.join(imagesDir, file), err => {
+            if (err) throw createHttpError(400, err.message);
+          })
+        }
+      });
 
-    if (!generalData) {
-      throw createHttpError(404, "Has not been found general data");
+      const generalData = await GeneralDataModel.findOne({}).exec();
+
+      if (!generalData) {
+        throw createHttpError(404, 'General data has not been found');
+      }
+
+      generalData.bot_avatar = `avatar/${req.file?.filename}`;
+      await generalData.save();
+
+      res.status(200).json(`avatar/${req.file?.filename}`);
+    } else {
+      res.status(400).json(`Need to upload image`);
     }
-
-    generalData.bot_avatar = `avatar/${req.file?.filename}`;
-    await generalData.save();
-
-    res.status(200).json(generalData.bot_avatar);
   } catch (error) {
     next(error);
   }
-};
+}
 
 export const deleteImage: RequestHandler = async (req, res, next) => {
   const directory = "./src/public/avatar";

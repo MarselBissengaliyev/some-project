@@ -14,6 +14,7 @@ import { getMe } from "../network/api.telegram";
 import { getGeneralData, updateGeneralDataToken } from "../network/generalData";
 import { getTelegramData } from "../network/telegramData";
 import MyContext from "../context/context";
+import Avatar from "../components/Avatar";
 
 const Bots = () => {
   const {
@@ -29,7 +30,7 @@ const Bots = () => {
     setShowStart,
     setTokenUpdated,
     tokenValue,
-    setTokenValue
+    setTokenValue,
   } = useContext(MyContext);
 
   const handleCloseMass = () => setShowMass(false);
@@ -65,13 +66,7 @@ const Bots = () => {
           <Card>
             <Card.Body className="bots">
               <div className="left">
-                <div className="bot-avatar">
-                  <img
-                    src="https://i.pinimg.com/736x/fc/06/38/fc0638e5a8ec0de49396f39f01f43e02.jpg"
-                    alt=""
-                  />
-                  <div>Загрузить новую</div>
-                </div>
+                <Avatar />
                 <Button
                   onClick={showActuallBotName}
                   variant="outline-primary"
