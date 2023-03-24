@@ -29,6 +29,7 @@ const Bots = () => {
     setTokenUpdated,
     tokenValue,
     setTokenValue,
+    setError
   } = useContext(MyContext);
 
   const handleCloseMass = () => setShowMass(false);
@@ -50,11 +51,34 @@ const Bots = () => {
     }
   };
 
-  const hamdleSubmitUpdateToken = async () => {
+  const handleSubmitUpdateToken = async (e) => {
+    e.preventDefault();
+
     await updateGeneralDataToken(tokenValue).then((data) => {
       setToken(data.bot_token);
       setTokenValue(data.bot_token);
       setTokenUpdated(true);
+
+      getMe(data.bot_token).then((data) => {
+        setError('');
+        const result = data.result;
+        
+        setBot((bot) => ({
+          ...bot,
+          first_name: result.first_name,
+          username: result.username,
+        }));
+      }).catch(err => {
+        setBot(() => ({
+          first_name: "",
+          username: "",
+          activeUsersCount: "",
+          allUsersCount: "",
+          desositedUsers: null,
+          activeUsersWithClickId: null,
+        }))
+        setError(err.message);
+      });
     });
   };
   return (
@@ -129,7 +153,7 @@ const Bots = () => {
                   )}
                 </Form.Group>
                 <Button
-                  onClick={hamdleSubmitUpdateToken}
+                  onClick={handleSubmitUpdateToken}
                   variant="primary"
                   type="submit"
                 >

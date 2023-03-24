@@ -9,6 +9,7 @@ import { getTelegramData } from "./network/telegramData";
 import Bots from "./pages/Bots";
 import Deposists from "./pages/Deposists";
 import Pixels from "./pages/Pixels";
+import Error from "./components/Error";
 
 function App() {
   const [bot, setBot] = useState({
@@ -26,6 +27,7 @@ function App() {
   const [tokenUpdated, setTokenUpdated] = useState(false);
   const [tokenValue, setTokenValue] = useState(token);
   const [avatar, setAvatar] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     getGeneralData().then((data) => {
@@ -33,24 +35,6 @@ function App() {
       setAvatar(data.bot_avatar);
     });
   }, []);
-
-  useEffect(() => {
-    setLoading(true);
-
-    getTelegramData(bot.username, { page: 1 })
-      .then((data) => {
-        setBot((bot) => ({
-          ...bot,
-          allUsersCount: data.allUsersCount,
-          activeUsersCount: data.activeUsersCount,
-          desositedUsers: data.desositedUsers,
-          activeUsersWithClickId: data.activeUsersWithClickId,
-        }));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [bot.username, setBot, setLoading]);
 
   useEffect(() => {
     if (token) {
@@ -64,6 +48,51 @@ function App() {
       });
     }
   }, [setBot, token]);
+
+  useEffect(() => {
+    setLoading(true);
+
+    async function setupGetTelegramData() {
+      let error = "";
+
+      await getTelegramData(bot.username, { page: 1 })
+        .then((data) => {
+          setBot((bot) => ({
+            ...bot,
+            allUsersCount: data.allUsersCount,
+            activeUsersCount: data.activeUsersCount,
+            desositedUsers: data.desositedUsers,
+            activeUsersWithClickId: data.activeUsersWithClickId,
+          }));
+        })
+        .then((data) => {
+          setError("");
+          error = "";
+          setLoading(false);
+        })
+        .catch((err) => {
+          error = err.message;
+          setError(err.message);
+        });
+
+      if (error) {
+        return {
+          error
+        };
+      } 
+      return {
+        success: true
+      }
+    }
+
+    setupGetTelegramData(data => {
+      if (data.error) {
+        return setError(data.error);
+      }
+      setError('');
+    })
+    setLoading(false);
+  }, [bot.username]);
 
   return (
     <MyContext.Provider
@@ -84,9 +113,11 @@ function App() {
         setTokenValue,
         avatar,
         setAvatar,
+        setError
       }}
     >
       <div className="App">
+        {error && <Error error={error} />}
         <div className="wrapper">
           {loading && <Loading />}
           <Sidebar />
