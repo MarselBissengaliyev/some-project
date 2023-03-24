@@ -43,8 +43,8 @@ const telegramDataSchema = new Schema({
   },
   click_id: {
     type: String,
-    unique: true
-  }
+    unique: true,
+  },
 });
 
 export type TelegramData = InferSchemaType<typeof telegramDataSchema>;

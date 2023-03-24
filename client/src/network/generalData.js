@@ -28,11 +28,13 @@ export const getGeneralData = async () => {
 };
 
 export const uploadAvatar = async (formData) => {
-  const response = fetchImg(`${process.env.REACT_APP_API_URL}/api/general-data/avatar`, {
-    method: 'POST',
-    body: formData
-  })
+  const response = fetchImg(
+    `${process.env.REACT_APP_API_URL}/api/general-data/avatar`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
 
-  
   return await response;
-}
+};

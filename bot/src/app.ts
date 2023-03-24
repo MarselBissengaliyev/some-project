@@ -2,9 +2,9 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import { Telegraf } from "telegraf";
 import { start } from "./commands/start";
-import GeneralDataModel, { GeneralData } from "./models/generalData";
-import env from "./utils/validateEnv";
+import GeneralDataModel from "./models/generalData";
 import TelegramDataModel from "./models/telegramData";
+import env from "./utils/validateEnv";
 
 // Connect to MongoDB database using Mongoose
 mongoose
@@ -12,14 +12,14 @@ mongoose
   .then(async () => {
     console.log("Connected to MongoDB database");
     // Get token from database using Mongoose
-    const generalData = await  GeneralDataModel.findOne({}).exec();
+    const generalData = await GeneralDataModel.findOne({}).exec();
 
     if (!generalData) {
       console.log("General data has not been found");
       return;
     }
 
-    let bot = new Telegraf(generalData.bot_token)
+    let bot = new Telegraf(generalData.bot_token);
 
     bot.hears("left_chat_member", async (ctx) => {
       const telegramData = await TelegramDataModel.findOne({
@@ -39,7 +39,6 @@ mongoose
 
     // Start listening for Telegram updates
     bot.launch();
-
 
     GeneralDataModel.watch().on("change", async (change) => {
       if (change.operationType === "update") {

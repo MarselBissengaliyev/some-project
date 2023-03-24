@@ -4,6 +4,9 @@ import TelegramDataModel from "../../models/telegramData";
 import UserModel from "../../models/user";
 import { GetTelegramDataParams } from "./telegramData.interface";
 
+/**
+ * Here we get telegram data
+ */
 export const getTelegramData: RequestHandler<
   GetTelegramDataParams,
   unknown,
@@ -24,7 +27,7 @@ export const getTelegramData: RequestHandler<
       telegram_bot_login,
     }).exec();
 
-    console.log('depositedUsers', desositedUsers.length)
+    console.log("depositedUsers", desositedUsers.length);
 
     const activeUsersWithClickId = [];
 
@@ -59,7 +62,7 @@ export const getTelegramData: RequestHandler<
     res.status(200).json({
       allUsersCount,
       activeUsersCount,
-      activeUsersWithClickId
+      activeUsersWithClickId,
     });
   } catch (error) {
     next(error);

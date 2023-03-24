@@ -14,15 +14,16 @@ const Pixels = () => {
   const [mode, setMode] = useState("");
 
   const handleClose = () => setShow(false);
-  
 
   useEffect(() => {
     setLoading(true);
-    getPixels().then((data) => {
-      setPixels(data);
-    }).finally(() => {
-      setLoading(false);
-    });
+    getPixels()
+      .then((data) => {
+        setPixels(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [setLoading]);
 
   return (

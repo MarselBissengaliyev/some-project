@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import Loading from "./components/Loading";
 import Sidebar from "./components/Sidebar";
+import MyContext from "./context/context";
+import { getMe } from "./network/api.telegram";
+import { getGeneralData } from "./network/generalData";
 import { getTelegramData } from "./network/telegramData";
 import Bots from "./pages/Bots";
 import Deposists from "./pages/Deposists";
 import Pixels from "./pages/Pixels";
-import MyContext from "./context/context";
-import Loading from "./components/Loading";
-import { getGeneralData } from "./network/generalData";
-import { getMe } from "./network/api.telegram";
 
 function App() {
   const [bot, setBot] = useState({
@@ -36,21 +36,20 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    
-      getTelegramData(bot.username, { page: 1 })
-        .then((data) => {
-          setBot((bot) => ({
-            ...bot,
-            allUsersCount: data.allUsersCount,
-            activeUsersCount: data.activeUsersCount,
-            desositedUsers: data.desositedUsers,
-            activeUsersWithClickId: data.activeUsersWithClickId,
-          }));
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    
+
+    getTelegramData(bot.username, { page: 1 })
+      .then((data) => {
+        setBot((bot) => ({
+          ...bot,
+          allUsersCount: data.allUsersCount,
+          activeUsersCount: data.activeUsersCount,
+          desositedUsers: data.desositedUsers,
+          activeUsersWithClickId: data.activeUsersWithClickId,
+        }));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [bot.username, setBot, setLoading]);
 
   useEffect(() => {

@@ -14,7 +14,7 @@ import { StartContext } from "./start.interface";
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
  */
 export const start = async (ctx: StartContext) => {
-  console.log('Start');
+  console.log("Start");
   const startMessage = await StartMessageModel.findOne({}).exec();
 
   if (!startMessage) {
@@ -49,9 +49,7 @@ export const start = async (ctx: StartContext) => {
     clickId
   );
 
-  if (
-    !ctx.message.from.id
-  ) {
+  if (!ctx.message.from.id) {
     console.log("Has not been found id or first_name or username or clickId");
     return;
   }
@@ -59,13 +57,13 @@ export const start = async (ctx: StartContext) => {
 
   await createTelegramData(clickId, {
     telegram_id: id,
-    first_name_telegram: first_name ?? '',
-    login_telegram: username ?? '',
+    first_name_telegram: first_name ?? "",
+    login_telegram: username ?? "",
     is_active: true,
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
     time_lead: new Date().getTime(),
-    last_name_telegram: last_name ?? ''
+    last_name_telegram: last_name ?? "",
   })
     .then(async (data) => {
       console.log(data?.facebookData);
@@ -105,7 +103,9 @@ export const start = async (ctx: StartContext) => {
           }
         }
 
-        await axios.post(`http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`);
+        await axios.post(
+          `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
+        );
       }
     })
     .catch(console.error);

@@ -12,12 +12,12 @@ const Mass = ({ show, handleClose, token, bot }) => {
   const turndownService = new TurndownService();
 
   const replaceParagraphsWithBreaks = {
-    filter: ['p'],
-    replacement: function(content) {
-      return '\n' + content;
-    }
+    filter: ["p"],
+    replacement: function (content) {
+      return "\n" + content;
+    },
   };
-  turndownService.addRule('replace_tag_p_to_br', replaceParagraphsWithBreaks);
+  turndownService.addRule("replace_tag_p_to_br", replaceParagraphsWithBreaks);
 
   const [value, setValue] = useState("");
   const [photo, setPhoto] = useState("");
@@ -31,20 +31,20 @@ const Mass = ({ show, handleClose, token, bot }) => {
     e.preventDefault();
     setIsSending(true);
 
-      await sendMassMessage({
-        disableWebPagePreview,
-        value: turndownService.turndown(value),
-        photo,
-        telegramBotLogin: bot.username
+    await sendMassMessage({
+      disableWebPagePreview,
+      value: turndownService.turndown(value),
+      photo,
+      telegramBotLogin: bot.username,
+    })
+      .then((data) => {
+        setSuccess(data.message);
       })
-        .then((data) => {
-          setSuccess(data.message);
-        })
-        .catch((err) => {
-          setError(err.message);
-          console.log(err);
-        });
-    }
+      .catch((err) => {
+        setError(err.message);
+        console.log(err);
+      });
+  };
 
   const testSubmit = async (e) => {
     const chatId = testTelegramId;

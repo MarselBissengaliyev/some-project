@@ -61,7 +61,7 @@ export const sendMassMessage = async ({
   photo = "",
   value,
   disableWebPagePreview,
-  telegramBotLogin
+  telegramBotLogin,
 }) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/telegram-api/send-mass`,
@@ -71,7 +71,7 @@ export const sendMassMessage = async ({
         photo,
         value,
         disableWebPagePreview,
-        telegramBotLogin
+        telegramBotLogin,
       }),
       headers: {
         "Content-Type": "application/json",

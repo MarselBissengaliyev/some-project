@@ -3,7 +3,9 @@ import { Alert, Button, Form } from "react-bootstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { uploadImage } from "../network/img";
-import { deleteStartMessage, updateStartMessage } from "../network/startMessage";
+import {
+  deleteStartMessage
+} from "../network/startMessage";
 
 const modules = {
   toolbar: [["bold", "italic"], [{ list: "ordered" }]],
@@ -61,12 +63,12 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
             accept="image/*"
           />
         </>
-        {(!defaultImg && img) &&
+        {!defaultImg && img && (
           <div className="mt-3">
-                <img src={`${process.env.REACT_APP_API_URL}/${img}`} alt="" />
+            <img src={`${process.env.REACT_APP_API_URL}/${img}`} alt="" />
           </div>
-        }
-        {(defaultImg && img) && (
+        )}
+        {defaultImg && img && (
           <div className="mt-3">
             <img src={`${process.env.REACT_APP_API_URL}/${img}`} alt="" />
             <div className="mt-3">

@@ -12,24 +12,23 @@ import pixelRoutes from "./routes/pixel";
 import startMessageRoutes from "./routes/startMessage";
 import telegramApiRoutes from "./routes/telegramApi";
 import telegramDataRoutes from "./routes/telegramData";
-import env from "./utils/validateEnv";
 import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, "../public")));
 
-const whitelist = ['https://front.roiup.team', 'http://localhost:3000'];
+const whitelist = ["https://front.roiup.team", "http://localhost:3000"];
 
 app.use(
   cors({
     origin: function (origin, callback) {
       if (origin && whitelist.indexOf(origin) !== -1) {
-        callback(null, true)
+        callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'))
+        callback(new Error("Not allowed by CORS"));
       }
-    }
+    },
   })
 );
 

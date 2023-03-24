@@ -1,5 +1,8 @@
 import { RequestHandler } from "express";
 
+/**
+ * Here we upload image to general data
+ */
 export const uploadImage: RequestHandler = async (req, res, next) => {
   try {
     if (req.file) {

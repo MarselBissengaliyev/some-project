@@ -12,12 +12,12 @@ const Start = ({ show, handleClose }) => {
   const turndownService = new TurndownService();
 
   const replaceParagraphsWithBreaks = {
-    filter: ['p'],
-    replacement: function(content) {
-      return '\n' + content;
-    }
+    filter: ["p"],
+    replacement: function (content) {
+      return "\n" + content;
+    },
   };
-  turndownService.addRule('replace_tag_p_to_br', replaceParagraphsWithBreaks);
+  turndownService.addRule("replace_tag_p_to_br", replaceParagraphsWithBreaks);
 
   const converter = new showdown.Converter();
 
@@ -28,7 +28,7 @@ const Start = ({ show, handleClose }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    console.log(turndownService.turndown(message))
+    console.log(turndownService.turndown(message));
     await updateStartMessage({
       message: turndownService.turndown(message),
       photo,
@@ -48,11 +48,11 @@ const Start = ({ show, handleClose }) => {
     getStartMessage().then((data) => {
       setMessage(data.message);
       setPhoto(data.photo);
-      setDisableWebPagePreview(data.disable_web_page_preview)
+      setDisableWebPagePreview(data.disable_web_page_preview);
     });
   }, [show]);
 
-  console.log(converter.makeHtml(message).replace(/[\n]+/gi, '<br>'))
+  console.log(converter.makeHtml(message).replace(/[\n]+/gi, "<br>"));
   return (
     <Modal
       size="xl"
@@ -68,7 +68,7 @@ const Start = ({ show, handleClose }) => {
         <SendMessage
           setPhoto={setPhoto}
           defaultImg={photo}
-          value={converter.makeHtml(message.replace(/[\n]+/gi, '<br>'))}
+          value={converter.makeHtml(message.replace(/[\n]+/gi, "<br>"))}
           setValue={setMessage}
         />
       </Modal.Body>
@@ -76,7 +76,7 @@ const Start = ({ show, handleClose }) => {
         <Form.Check
           className="start-checkbox"
           onChange={(e) => {
-            console.log(e.target.checked)
+            console.log(e.target.checked);
             setDisableWebPagePreview(e.target.checked);
           }}
           defaultChecked={disableWebPagePreview}

@@ -21,7 +21,7 @@ const facebookDataSchema = new Schema({
     type: String,
   },
   time_click: {
-    type: Number
+    type: Number,
   },
 });
 

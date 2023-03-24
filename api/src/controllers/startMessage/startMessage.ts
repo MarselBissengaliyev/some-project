@@ -1,13 +1,16 @@
 import { RequestHandler } from "express";
+import fs from "fs";
 import createHttpError from "http-errors";
+import path from "path";
 import StartMessageModel from "../../models/startMessage";
 import {
   CreateStartMessageBody,
   UpdateStartMessageBody,
 } from "./startMessage.interface";
-import fs from 'fs';
-import path from "path";
 
+/**
+ * Here we create a start message
+ */
 export const createStartMessage: RequestHandler<
   unknown,
   unknown,
@@ -41,6 +44,9 @@ export const createStartMessage: RequestHandler<
   }
 };
 
+/**
+ * Here we get a start message
+ */
 export const getStartMessage: RequestHandler<
   unknown,
   unknown,
@@ -60,6 +66,9 @@ export const getStartMessage: RequestHandler<
   }
 };
 
+/**
+ * Here we get a update message
+ */
 export const updateStartMessage: RequestHandler<
   unknown,
   unknown,
@@ -97,26 +106,29 @@ export const updateStartMessage: RequestHandler<
   }
 };
 
+/**
+ * Here we delete a photo to start message
+ */
 export const deletePhotoMessage: RequestHandler = async (req, res, next) => {
-  const imagesDir = './public/uploads';
+  const imagesDir = "./public/uploads";
   try {
     fs.readdir(imagesDir, (err, files) => {
-      if (err) throw createHttpError(400, err.message)
+      if (err) throw createHttpError(400, err.message);
 
       for (const file of files) {
-        fs.unlink(path.join(imagesDir, file), err => {
+        fs.unlink(path.join(imagesDir, file), (err) => {
           if (err) throw createHttpError(400, err.message);
-        })
+        });
       }
     });
 
     const startMessage = await StartMessageModel.findOne({}).exec();
 
     if (!startMessage) {
-      throw createHttpError(404, 'Has not been found start message');
+      throw createHttpError(404, "Has not been found start message");
     }
 
-    startMessage.photo = '';
+    startMessage.photo = "";
 
     await startMessage.save();
 
@@ -124,4 +136,4 @@ export const deletePhotoMessage: RequestHandler = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};

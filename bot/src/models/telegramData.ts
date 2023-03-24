@@ -7,10 +7,10 @@ const telegramDataSchema = new Schema({
     unique: true,
   },
   first_name_telegram: {
-    type: String
+    type: String,
   },
   login_telegram: {
-    type: String
+    type: String,
   },
   is_active: {
     type: Boolean,

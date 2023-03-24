@@ -1,6 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
-import { getGeneralData, uploadAvatar } from "../network/generalData";
+import React, { useContext, useRef } from "react";
 import MyContext from "../context/context";
+import { getGeneralData, uploadAvatar } from "../network/generalData";
 
 const Avatar = () => {
   const { avatar, setAvatar } = useContext(MyContext);
@@ -22,7 +22,9 @@ const Avatar = () => {
   };
   return (
     <div onClick={handleClick} className="bot-avatar">
-      {avatar && <img src={`${process.env.REACT_APP_API_URL}/${avatar}`} alt="" />}
+      {avatar && (
+        <img src={`${process.env.REACT_APP_API_URL}/${avatar}`} alt="" />
+      )}
       <div>Загрузить новую</div>
       <input onChange={handleUpload} ref={avatarRef} type="file" />
     </div>

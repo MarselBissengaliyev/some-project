@@ -7,7 +7,7 @@ import { getTelegramData } from "../network/telegramData";
 
 const Deposists = () => {
   const {
-    bot: { activeUsersWithClickId , username, loading },
+    bot: { activeUsersWithClickId, username, loading },
     setLoading,
     setBot,
   } = useContext(MyContext);

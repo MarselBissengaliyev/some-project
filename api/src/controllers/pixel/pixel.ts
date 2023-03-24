@@ -8,6 +8,9 @@ import {
   UpdatePixelParams,
 } from "./pixel.interface";
 
+/**
+ * Here we get a pixel
+ */
 export const getPixel: RequestHandler = async (req, res, next) => {
   const pixelId = req.params.pixelId;
   try {
@@ -27,6 +30,9 @@ export const getPixel: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Here we get the pixels
+ */
 export const getPixels: RequestHandler = async (req, res, next) => {
   try {
     const pixels = await PixelModel.find().exec();
@@ -73,6 +79,9 @@ export const createPixel: RequestHandler<
   }
 };
 
+/**
+ * Here we update pixel document in the database
+ */
 export const updatePixel: RequestHandler<
   UpdatePixelParams,
   unknown,

@@ -13,6 +13,9 @@ const storage = multer.diskStorage({
 
 const types = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
 
+/**
+ * Here we validate our avatar
+ */
 const avatarMiddleware = multer({
   limits: {
     fileSize: 512000,

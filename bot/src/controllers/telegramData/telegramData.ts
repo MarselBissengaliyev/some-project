@@ -35,7 +35,7 @@ export const createTelegramData = async (
       console.log(message);
       return;
     }
-    
+
     userWithFacebookId.telegram_data_id = newTelegramData._id;
     userWithFacebookId.save();
   }

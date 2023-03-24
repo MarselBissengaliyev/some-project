@@ -9,6 +9,9 @@ import {
   UpdateGeneralDataParams,
 } from "./generalData.interface";
 
+/**
+ * Here we update a general data token in the database
+ */
 export const updateGeneralDataToken: RequestHandler<
   UpdateGeneralDataParams,
   unknown,
@@ -40,6 +43,9 @@ export const updateGeneralDataToken: RequestHandler<
   }
 };
 
+/**
+ * Here we create a general data
+ */
 export const createGeneralData: RequestHandler<
   unknown,
   unknown,
@@ -69,6 +75,9 @@ export const createGeneralData: RequestHandler<
   }
 };
 
+/**
+ * Here we get a general data
+ */
 export const getGeneralData: RequestHandler<
   unknown,
   unknown,
@@ -91,28 +100,31 @@ export const getGeneralData: RequestHandler<
   }
 };
 
+/**
+ * Here upload avatar to general data
+ */
 export const uploadAvatar: RequestHandler = async (req, res, next) => {
-  const imagesDir = './public/avatar';
+  const imagesDir = "./public/avatar";
 
   try {
     if (req.file) {
       fs.readdir(imagesDir, (err, files) => {
-        if (err) throw createHttpError(400, err.message)
-  
+        if (err) throw createHttpError(400, err.message);
+
         for (const file of files) {
           if (file === req.file?.filename) {
             return;
           }
-          fs.unlink(path.join(imagesDir, file), err => {
+          fs.unlink(path.join(imagesDir, file), (err) => {
             if (err) throw createHttpError(400, err.message);
-          })
+          });
         }
       });
 
       const generalData = await GeneralDataModel.findOne({}).exec();
 
       if (!generalData) {
-        throw createHttpError(404, 'General data has not been found');
+        throw createHttpError(404, "General data has not been found");
       }
 
       generalData.bot_avatar = `avatar/${req.file?.filename}`;
@@ -125,8 +137,11 @@ export const uploadAvatar: RequestHandler = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
+/**
+ * Here we delete avatar to general data
+ */
 export const deleteImage: RequestHandler = async (req, res, next) => {
   const directory = "./src/public/avatar";
   try {

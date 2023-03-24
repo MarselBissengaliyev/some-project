@@ -4,7 +4,7 @@ const facebookDataSchema = new Schema({
   click_id: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   ip: {
     type: String,
@@ -22,10 +22,9 @@ const facebookDataSchema = new Schema({
     type: String,
   },
   time_click: {
-    type: Number
+    type: Number,
   },
-  umnico_lead_id: {
-  },
+  umnico_lead_id: {},
 });
 
 export type FacebookData = InferSchemaType<typeof facebookDataSchema>;
