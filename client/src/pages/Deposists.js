@@ -1,15 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Pagination } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import MyContext from "../context/context";
-import { downloadTxtFile, useQuery } from "../functions";
-import { getTelegramData } from "../network/telegramData";
+import { downloadTxtFile } from "../functions";
 
 const Deposists = () => {
   const {
-    bot: { activeUsersWithClickId, username, loading },
+    bot: { activeUsersWithClickId, loading },
     setLoading,
-    setBot,
   } = useContext(MyContext);
   const [value, setValue] = useState("");
   const [filterBy, setFilterBy] = useState("telegram_id");
