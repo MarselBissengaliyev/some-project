@@ -1,5 +1,8 @@
 import { fetchData } from ".";
 
+/*
+ ** Get the start message from database
+ */
 export const getStartMessage = async () => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/start-message`,
@@ -11,6 +14,9 @@ export const getStartMessage = async () => {
   return response.json();
 };
 
+/*
+ ** Update the start message in database
+ */
 export const updateStartMessage = async ({
   message,
   photo = "",
@@ -35,6 +41,9 @@ export const updateStartMessage = async ({
   return response.json();
 };
 
+/*
+ ** Delete the start message in database
+ */
 export const deleteStartMessage = async () => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/start-message`,

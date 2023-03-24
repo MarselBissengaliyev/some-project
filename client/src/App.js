@@ -11,6 +11,9 @@ import Deposists from "./pages/Deposists";
 import Pixels from "./pages/Pixels";
 import Error from "./components/Error";
 
+/*
+ ** Main APP Component
+ */
 function App() {
   const [bot, setBot] = useState({
     first_name: "",
@@ -72,26 +75,27 @@ function App() {
         .catch((err) => {
           error = err.message;
           setError(err.message);
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
 
       if (error) {
         return {
-          error
+          error,
         };
-      } 
-      return {
-        success: true
       }
+      return {
+        success: true,
+      };
     }
 
-    setupGetTelegramData(data => {
+    setupGetTelegramData((data) => {
       if (data.error) {
         return setError(data.error);
       }
-      setError('');
-    })
+      setError("");
+    });
   }, [bot.username]);
 
   return (
@@ -113,7 +117,7 @@ function App() {
         setTokenValue,
         avatar,
         setAvatar,
-        setError
+        setError,
       }}
     >
       <div className="App">

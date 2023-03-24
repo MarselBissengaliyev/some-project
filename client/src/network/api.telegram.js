@@ -1,5 +1,8 @@
 import { fetchData } from ".";
 
+/*
+ ** Get a my bot info from telegram api
+ */
 export const getMe = async (token) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/getMe`,
@@ -11,6 +14,9 @@ export const getMe = async (token) => {
   return response.json();
 };
 
+/*
+ ** Send message to a some user who existing in bot
+ */
 export const sendMessage = async (
   token,
   { chatId, text, disableWebPagePreview }
@@ -36,6 +42,9 @@ export const sendMessage = async (
   return response.json();
 };
 
+/*
+ ** Send photo to a some user who existing in bot
+ */
 export const sendPhoto = async (token, { chatId, photo, caption }) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendPhoto`,
@@ -57,6 +66,9 @@ export const sendPhoto = async (token, { chatId, photo, caption }) => {
   return response.json();
 };
 
+/*
+ ** Send mass message to the users who existing in bot
+ */
 export const sendMassMessage = async ({
   photo = "",
   value,

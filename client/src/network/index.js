@@ -1,3 +1,6 @@
+/*
+ ** fetch data handler
+ */
 export const fetchData = async (input, init) => {
   const response = await fetch(input, init);
   if (response.ok) {
@@ -14,6 +17,9 @@ export const fetchData = async (input, init) => {
   }
 };
 
+/*
+ ** fetch img handler
+ */
 export const fetchImg = async (input, init) => {
   const response = await fetch(input, init);
   if (response.ok) {

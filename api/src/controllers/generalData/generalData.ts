@@ -8,6 +8,8 @@ import {
   UpdateGeneralDataBody,
   UpdateGeneralDataParams,
 } from "./generalData.interface";
+import axios, { AxiosError } from "axios";
+import env from "../../utils/validateEnv";
 
 /**
  * Here we update a general data token in the database
@@ -31,13 +33,23 @@ export const updateGeneralDataToken: RequestHandler<
       throw createHttpError(404, "GeneralData not found");
     }
 
-    generalData[0].bot_token = botToken;
+    await axios
+      .get(`${env.API_TELEGRAM}${botToken}/getMe`)
+      .then(async () => {
+        generalData[0].bot_token = botToken;
 
-    const updatedGeneralData = await generalData[0].save();
+        const updatedGeneralData = await generalData[0].save();
 
-    res.status(200).json({
-      bot_token: updatedGeneralData.bot_token,
-    });
+        res.status(200).json({
+          bot_token: updatedGeneralData.bot_token,
+        });
+      })
+      .catch((err: AxiosError) => {
+        throw createHttpError(
+          err.status || 404,
+          "Bot has not been found or is not valid telegram token"
+        );
+      });
   } catch (error) {
     next(error);
   }
@@ -90,7 +102,7 @@ export const getGeneralData: RequestHandler<
     if (!generalData) {
       throw createHttpError(
         404,
-        "Genral data has not been found, make request POST by next url: http://localhost:4444/api/general-data"
+        "Genral data has not been found"
       );
     }
 

@@ -10,6 +10,9 @@ const Avatar = () => {
     avatarRef.current.click();
   };
 
+  /*
+   ** Upload Avatar function
+   */
   const handleUpload = async (e) => {
     const formData = new FormData();
     formData.append("avatar", e.target.files[0]);

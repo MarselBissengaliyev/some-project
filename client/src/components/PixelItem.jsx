@@ -9,6 +9,9 @@ const PixelItem = ({ token, fb_pixel_id, _id, setPixels }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  /*
+   ** Handle Delete a PixelItem function
+   */
   const handleDelete = async (e) => {
     e.preventDefault();
     await deletePixel(_id).then((data) => {

@@ -3,9 +3,7 @@ import { Alert, Button, Form } from "react-bootstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { uploadImage } from "../network/img";
-import {
-  deleteStartMessage
-} from "../network/startMessage";
+import { deleteStartMessage } from "../network/startMessage";
 
 const modules = {
   toolbar: [["bold", "italic"], [{ list: "ordered" }]],
@@ -16,6 +14,9 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
   const formData = new FormData();
   const [error, setError] = useState("");
 
+  /*
+   ** Delete a photo from text editor
+   */
   const deletePhoto = async () => {
     setImg("");
     setPhoto("");
@@ -23,6 +24,9 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
     await deleteStartMessage();
   };
 
+  /*
+   ** Handle Delete a PixelItem function Component
+   */
   const sendFile = async (e) => {
     formData.append("photo", e.target.files[0]);
     await uploadImage(formData)

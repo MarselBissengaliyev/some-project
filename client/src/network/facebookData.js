@@ -1,3 +1,6 @@
+/*
+ ** Create facebook data from database
+ */
 export const createFacebookData = async ({
   click_id,
   ip,

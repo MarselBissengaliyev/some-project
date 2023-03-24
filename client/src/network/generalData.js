@@ -1,5 +1,8 @@
 import { fetchData, fetchImg } from ".";
 
+/*
+ ** Update a general token from the GENERAL DATA in a database
+ */
 export const updateGeneralDataToken = async (token) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/general-data/token`,
@@ -17,6 +20,9 @@ export const updateGeneralDataToken = async (token) => {
   return response.json();
 };
 
+/*
+ ** Get a general data from the database
+ */
 export const getGeneralData = async () => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/general-data`,
@@ -27,6 +33,9 @@ export const getGeneralData = async () => {
   return response.json();
 };
 
+/*
+ ** Upload a general data avatar from the database
+ */
 export const uploadAvatar = async (formData) => {
   const response = fetchImg(
     `${process.env.REACT_APP_API_URL}/api/general-data/avatar`,

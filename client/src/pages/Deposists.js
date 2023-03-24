@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import MyContext from "../context/context";
-import { downloadTxtFile } from "../functions";
+import { downloadTxtFile, formatDate } from "../functions";
 
 const Deposists = () => {
   const {
@@ -12,22 +12,6 @@ const Deposists = () => {
   const table = useRef();
   const [message, setMessage] = useState("");
   const [filteredDeposits, setFilteredDeposits] = useState([]);
-
-  const formatDate = (date) => {
-    const newDate = new Date(date);
-    let day = newDate.getUTCDay();
-    if (day.toString().length === 1) {
-      day = `0${day}`;
-    }
-
-    let month = newDate.getUTCMonth();
-    if (month.toString().length === 1) {
-      month = `0${month}`;
-    }
-
-    const year = newDate.getUTCFullYear();
-    return `${day}.${month}.${year}`;
-  };
 
   useEffect(() => {
     if (activeUsersWithClickId === null) {

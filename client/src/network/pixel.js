@@ -1,5 +1,8 @@
 import { fetchData } from ".";
 
+/*
+ ** Get the pixel from database
+ */
 export const getPixel = async (pixelId) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/pixels/${pixelId}`,
@@ -11,6 +14,9 @@ export const getPixel = async (pixelId) => {
   return response.json();
 };
 
+/*
+ ** Get the all pixels from database
+ */
 export const getPixels = async () => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/pixels`,
@@ -22,6 +28,9 @@ export const getPixels = async () => {
   return response.json();
 };
 
+/*
+ ** Create the pixel in database
+ */
 export const createPixel = async ({ pixelId, token }) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/pixels`,
@@ -40,6 +49,9 @@ export const createPixel = async ({ pixelId, token }) => {
   return response.json();
 };
 
+/*
+ ** Update the pixel in database
+ */
 export const updatePixel = async ({ pixelId, token, id }) => {
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/pixels/${id}`,

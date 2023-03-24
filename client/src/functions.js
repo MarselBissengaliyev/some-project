@@ -1,6 +1,9 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 
+/*
+ ** Format deposited users info to amount:click_id and return txt file
+ */
 export const downloadTxtFile = (activeUsersWithClickId) => {
   let csvContent = "";
 
@@ -20,8 +23,30 @@ export const downloadTxtFile = (activeUsersWithClickId) => {
   a.click();
 };
 
+/*
+ ** The Hook for get query params
+ */
 export function useQuery() {
   const { search } = useLocation();
 
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
+
+/*
+ ** Format a date to readable view
+ */
+export const formatDate = (date) => {
+  const newDate = new Date(date);
+  let day = newDate.getUTCDay();
+  if (day.toString().length === 1) {
+    day = `0${day}`;
+  }
+
+  let month = newDate.getUTCMonth();
+  if (month.toString().length === 1) {
+    month = `0${month}`;
+  }
+
+  const year = newDate.getUTCFullYear();
+  return `${day}.${month}.${year}`;
+};
