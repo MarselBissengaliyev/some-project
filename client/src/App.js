@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import Error from "./components/Error";
 import Loading from "./components/Loading";
 import Sidebar from "./components/Sidebar";
 import MyContext from "./context/context";
@@ -9,7 +10,6 @@ import { getTelegramData } from "./network/telegramData";
 import Bots from "./pages/Bots";
 import Deposists from "./pages/Deposists";
 import Pixels from "./pages/Pixels";
-import Error from "./components/Error";
 
 /*
  ** Main APP Component
@@ -58,27 +58,29 @@ function App() {
     async function setupGetTelegramData() {
       let error = "";
 
-      await getTelegramData(bot.username, { page: 1 })
-        .then((data) => {
-          setBot((bot) => ({
-            ...bot,
-            allUsersCount: data.allUsersCount,
-            activeUsersCount: data.activeUsersCount,
-            desositedUsers: data.desositedUsers,
-            activeUsersWithClickId: data.activeUsersWithClickId,
-          }));
-        })
-        .then((data) => {
-          setError("");
-          error = "";
-        })
-        .catch((err) => {
-          error = err.message;
-          setError(err.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      if (bot.username) {
+        await getTelegramData(bot.username)
+          .then((data) => {
+            setBot((bot) => ({
+              ...bot,
+              allUsersCount: data.allUsersCount,
+              activeUsersCount: data.activeUsersCount,
+              desositedUsers: data.desositedUsers,
+              activeUsersWithClickId: data.activeUsersWithClickId,
+            }));
+          })
+          .then((data) => {
+            setError("");
+            error = "";
+          })
+          .catch((err) => {
+            error = err.message;
+            setError(err.message);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
 
       if (error) {
         return {

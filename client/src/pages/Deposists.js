@@ -8,7 +8,7 @@ const Deposists = () => {
     setLoading,
   } = useContext(MyContext);
   const [value, setValue] = useState("");
-  const [filterBy, setFilterBy] = useState("telegram_id");
+  const [filterBy, setFilterBy] = useState("time_lead");
   const table = useRef();
   const [message, setMessage] = useState("");
   const [filteredDeposits, setFilteredDeposits] = useState([]);
@@ -31,6 +31,7 @@ const Deposists = () => {
           ) {
             filterToString = formatDate(user[filterBy]) + "";
           }
+          console.log(filterBy);
           return filterToString.toLowerCase().includes(value.toLowerCase());
         })
       );
@@ -53,8 +54,6 @@ const Deposists = () => {
               <select
                 onChange={(e) => setFilterBy(e.target.value)}
                 className="form-select form-select-lg mb-3"
-                name=""
-                id=""
               >
                 <option value="time_lead">time_lead</option>
                 <option value="amount">amount</option>
