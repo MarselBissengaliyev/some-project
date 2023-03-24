@@ -1,19 +1,17 @@
 import React, { useContext } from "react";
 import {
-  Alert,
   Button,
   Card,
   Col,
   Container,
-  Form,
-  Row,
+  Row
 } from "react-bootstrap";
 import Avatar from "../components/Avatar";
+import UpdateToken from "../components/UpdateToken";
 import Mass from "../components/modals/Mass";
 import Start from "../components/modals/Start";
 import MyContext from "../context/context";
 import { getMe } from "../network/api.telegram";
-import UpdateToken from "../components/UpdateToken";
 
 /*
  ** Bot page
