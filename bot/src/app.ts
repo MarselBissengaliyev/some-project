@@ -9,26 +9,52 @@ import TelegramDataModel from "./models/telegramData";
 // Connect to MongoDB database using Mongoose
 mongoose
   .connect(env.MONGO_CONNECTION_STRING)
-  .then(() => {
+  .then(async () => {
     console.log("Connected to MongoDB database");
-
-    const generalData = GeneralDataModel.watch().on('change', data => console.log(data));
-
     // Get token from database using Mongoose
-    GeneralDataModel.findOne({}, (err: any, data: GeneralData) => {
-      if (err) {
-        console.log("suka");
-        console.error(err);
-      } else {
-        // Launch Telegraf with token from database
-        const bot = new Telegraf(data.bot_token);
-        
+    const generalData = await  GeneralDataModel.findOne({}).exec();
 
-        bot.hears('left_chat_member', async (ctx) => {
-          const telegramData = await TelegramDataModel.findOne({ telegram_id: ctx.message.from.id }).exec();
+    if (!generalData) {
+      console.log("General data has not been found");
+      return;
+    }
+
+    let bot = new Telegraf(generalData.bot_token)
+
+    bot.hears("left_chat_member", async (ctx) => {
+      const telegramData = await TelegramDataModel.findOne({
+        telegram_id: ctx.message.from.id,
+      }).exec();
+
+      if (!telegramData) {
+        console.log("Telegram data has not been found");
+        return;
+      }
+
+      telegramData.is_active = false;
+      await telegramData.save();
+    });
+
+    bot.start((ctx) => start(ctx));
+
+    // Start listening for Telegram updates
+    bot.launch();
+
+
+    GeneralDataModel.watch().on("change", async (change) => {
+      if (change.operationType === "update") {
+        bot.stop();
+
+        const updatedToken = change.updateDescription?.updatedFields?.bot_token;
+        bot = new Telegraf(updatedToken);
+
+        bot.hears("left_chat_member", async (ctx) => {
+          const telegramData = await TelegramDataModel.findOne({
+            telegram_id: ctx.message.from.id,
+          }).exec();
 
           if (!telegramData) {
-            console.log('Telegram data has not been found')
+            console.log("Telegram data has not been found");
             return;
           }
 
