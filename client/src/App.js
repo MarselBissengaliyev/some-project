@@ -68,11 +68,12 @@ function App() {
         .then((data) => {
           setError("");
           error = "";
-          setLoading(false);
         })
         .catch((err) => {
           error = err.message;
           setError(err.message);
+        }).finally(() => {
+          setLoading(false);
         });
 
       if (error) {
@@ -91,7 +92,6 @@ function App() {
       }
       setError('');
     })
-    setLoading(false);
   }, [bot.username]);
 
   return (
