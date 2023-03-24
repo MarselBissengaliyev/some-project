@@ -28,7 +28,6 @@ const Start = ({ show, handleClose }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    console.log(turndownService.turndown(message));
     await updateStartMessage({
       message: turndownService.turndown(message),
       photo,
@@ -52,7 +51,6 @@ const Start = ({ show, handleClose }) => {
     });
   }, [show]);
 
-  console.log(converter.makeHtml(message).replace(/[\n]+/gi, "<br>"));
   return (
     <Modal
       size="xl"

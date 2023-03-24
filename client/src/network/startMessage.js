@@ -22,7 +22,6 @@ export const updateStartMessage = async ({
   photo = "",
   disableWebPagePreview,
 }) => {
-  console.log(disableWebPagePreview);
   const response = await fetchData(
     `${process.env.REACT_APP_API_URL}/api/start-message`,
     {
