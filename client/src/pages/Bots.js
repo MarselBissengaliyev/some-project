@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   Alert,
   Button,
@@ -8,18 +8,16 @@ import {
   Form,
   Row,
 } from "react-bootstrap";
+import Avatar from "../components/Avatar";
 import Mass from "../components/modals/Mass";
 import Start from "../components/modals/Start";
-import { getMe } from "../network/api.telegram";
-import { getGeneralData, updateGeneralDataToken } from "../network/generalData";
-import { getTelegramData } from "../network/telegramData";
 import MyContext from "../context/context";
-import Avatar from "../components/Avatar";
+import { getMe } from "../network/api.telegram";
+import { updateGeneralDataToken } from "../network/generalData";
 
 const Bots = () => {
   const {
     bot,
-    setLoading,
     setBot,
     token,
     showMass,

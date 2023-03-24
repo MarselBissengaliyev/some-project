@@ -12,6 +12,8 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB database");
 
+    const generalData = GeneralDataModel.watch().on('change', data => console.log(data));
+
     // Get token from database using Mongoose
     GeneralDataModel.findOne({}, (err: any, data: GeneralData) => {
       if (err) {
@@ -20,6 +22,7 @@ mongoose
       } else {
         // Launch Telegraf with token from database
         const bot = new Telegraf(data.bot_token);
+        
 
         bot.hears('left_chat_member', async (ctx) => {
           const telegramData = await TelegramDataModel.findOne({ telegram_id: ctx.message.from.id }).exec();

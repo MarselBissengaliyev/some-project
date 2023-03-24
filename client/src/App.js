@@ -36,19 +36,21 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-
-    if (bot.username) {
-      getTelegramData(bot.username, { page: 1 }).then((data) => {
-        setBot((bot) => ({
-          ...bot,
-          allUsersCount: data.allUsersCount,
-          activeUsersCount: data.activeUsersCount,
-          desositedUsers: data.desositedUsers,
-          activeUsersWithClickId: data.activeUsersWithClickId
-        }));
-        setLoading(false);
-      });
-    }
+    
+      getTelegramData(bot.username, { page: 1 })
+        .then((data) => {
+          setBot((bot) => ({
+            ...bot,
+            allUsersCount: data.allUsersCount,
+            activeUsersCount: data.activeUsersCount,
+            desositedUsers: data.desositedUsers,
+            activeUsersWithClickId: data.activeUsersWithClickId,
+          }));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    
   }, [bot.username, setBot, setLoading]);
 
   useEffect(() => {
@@ -82,7 +84,7 @@ function App() {
         tokenValue,
         setTokenValue,
         avatar,
-        setAvatar
+        setAvatar,
       }}
     >
       <div className="App">
@@ -93,10 +95,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Bots />} />
               <Route path="/pixels" element={<Pixels />} />
-              <Route
-                path="/deposits"
-                element={<Deposists/>}
-              />
+              <Route path="/deposits" element={<Deposists />} />
             </Routes>
           </main>
         </div>
