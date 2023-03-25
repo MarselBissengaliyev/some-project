@@ -32,8 +32,6 @@ export const sendMessage = async (
     }
   );
 
-  console.log("send message status=", status);
-
   return data;
 };
 
@@ -108,7 +106,6 @@ export const sendMassMessage: RequestHandler<
       const group = activeUsersId.slice(i, i + 20); // get the next 20 users from the array
       // send a message to each user in the group with a 1-second interval between each message
       setTimeout(() => {
-        console.log("Work nigger");
         group.forEach(async (user: TelegramData) => {
           const chatId = user.telegram_id;
           console.log(chatId);

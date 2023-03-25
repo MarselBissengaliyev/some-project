@@ -13,7 +13,6 @@ export const createFacebookData: RequestHandler<
   CreateFacebookDataBody,
   unknown
 > = async (req, res, next) => {
-  console.log(req.body);
   const click_id = req.body.click_id;
   const ip = req.body.ip;
   const user_agent = req.body.user_agent;

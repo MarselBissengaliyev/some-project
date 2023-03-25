@@ -30,8 +30,6 @@ export const getTelegramData: RequestHandler<
       telegram_bot_login,
     }).exec();
 
-    console.log("depositedUsers", desositedUsers.length);
-
     const activeUsersWithClickId: ActiveUsersWithClickIdInterface[] = [];
 
     for (const activeUser of desositedUsers) {

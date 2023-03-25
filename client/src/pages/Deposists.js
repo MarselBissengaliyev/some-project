@@ -32,6 +32,7 @@ const Deposists = () => {
           ) {
             filterToString = formatDate(user[filterBy]);
           }
+          console.log(filterToString);
           return filterToString.toLowerCase().includes(value.toLowerCase());
         })
       );

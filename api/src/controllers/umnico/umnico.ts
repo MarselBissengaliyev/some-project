@@ -101,6 +101,8 @@ export const leadChangedStatus: RequestHandler<
       throw createHttpError(422, "Lead has a non-existent status");
     }
 
+    console.log(leadStatus.name);
+
     if (leadStatus.name !== "Оплатили") {
       return;
     }
@@ -118,7 +120,7 @@ export const leadChangedStatus: RequestHandler<
 
     telegramData.is_deposit = true;
     telegramData.time_sale = new Date().getTime();
-    telegramData.amount = req.body.lead?.amount ? req.body.lead?.amount : 0;
+    telegramData.amount = req.body.lead?.amount ? req.body.lead.amount : 0;
 
     await telegramData.save();
 
@@ -184,6 +186,8 @@ export const leadChanged: RequestHandler<
       throw createHttpError(422, "Lead has a non-existent status");
     }
 
+    console.log(leadStatus.name);
+
     if (leadStatus.name !== "Оплатили") {
       return;
     }
@@ -200,8 +204,9 @@ export const leadChanged: RequestHandler<
     }
 
     telegramData.amount = req.body.lead?.amount
-      ? req.body.lead?.amount
+      ? req.body.lead.amount
       : telegramData.amount;
+
     await telegramData.save();
     res.sendStatus(200);
   } catch (error) {

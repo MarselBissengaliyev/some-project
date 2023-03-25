@@ -16,7 +16,7 @@ export const umnikoWebhook: RequestHandler<
   unknown
 > = async (req, res, next) => {
   try {
-    console.log(req.body);
+    console.log(req.body.type);
     switch (req.body.type) {
       case "lead.changed.status":
         leadChangedStatus(req, res, next);
