@@ -18,7 +18,7 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "../public")));
 
-const whitelist = ["https://front.roiup.team", ""];
+const whitelist = ["https://front.roiup.team", "https://api.umnico.com"];
 
 app.use(
   cors({
