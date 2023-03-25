@@ -2,7 +2,10 @@ import { RequestHandler } from "express";
 import FacebookDataModel from "../../models/facebookData";
 import TelegramDataModel from "../../models/telegramData";
 import UserModel from "../../models/user";
-import { GetTelegramDataParams } from "./telegramData.interface";
+import {
+  ActiveUsersWithClickIdInterface,
+  GetTelegramDataParams,
+} from "./telegramData.interface";
 
 /**
  * Here we get telegram data
@@ -29,7 +32,7 @@ export const getTelegramData: RequestHandler<
 
     console.log("depositedUsers", desositedUsers.length);
 
-    const activeUsersWithClickId = [];
+    const activeUsersWithClickId: ActiveUsersWithClickIdInterface[] = [];
 
     for (const activeUser of desositedUsers) {
       const user = await UserModel.findOne({
@@ -52,10 +55,10 @@ export const getTelegramData: RequestHandler<
         telegram_bot_login: activeUser.telegram_bot_login,
         is_deposit: activeUser.is_deposit,
         time_lead: activeUser.time_lead,
-        umnico_lead_id: activeUser.umnico_lead_id,
+        umnico_lead_id: activeUser.umnico_lead_id || null,
         amount: activeUser.amount,
-        time_sale: activeUser.time_sale,
-        time_click: facebookData?.time_click,
+        time_sale: activeUser.time_sale || null,
+        time_click: facebookData?.time_click || null,
       });
     }
 
