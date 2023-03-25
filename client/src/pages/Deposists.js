@@ -23,14 +23,14 @@ const Deposists = () => {
       setMessage("");
       setFilteredDeposits(
         activeUsersWithClickId.filter((user) => {
-          // console.log(user[filterBy])
+          console.log(user[filterBy])
           let filterToString = user[filterBy] + "";
           if (
             filterBy === "time_lead" ||
             filterBy === "time_click" ||
             filterBy === "time_sale"
           ) {
-            filterToString = formatDate(user[filterBy]) + "";
+            filterToString = formatDate(user[filterBy]);
           }
           return filterToString.toLowerCase().includes(value.toLowerCase());
         })

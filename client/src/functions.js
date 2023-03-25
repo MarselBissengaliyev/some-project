@@ -37,13 +37,12 @@ export function useQuery() {
  */
 export const formatDate = (date) => {
   const newDate = new Date(date * 1000);
-  console.log(newDate);
   let day = newDate.getUTCDate();
   if (day.toString().length === 1) {
     day = `0${day}`;
   }
 
-  let month = newDate.getUTCMonth();
+  let month = newDate.getUTCMonth() + 1;
   if (month.toString().length === 1) {
     month = `0${month}`;
   }
