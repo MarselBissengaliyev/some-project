@@ -16,9 +16,7 @@ import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, "../public")));
-
-const whitelist = ["https://front.roiup.team", "http://localhost:3000"];
+const whitelist = ["https://front.roiup.team"];
 
 app.use(
   cors({
@@ -33,16 +31,20 @@ app.use(
     exposedHeaders: ["Access-Control-Allow-Origin"],
     credentials: true,
     allowedHeaders: ['Origin', 'Content-Type', 'Accept'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE']
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS']
   })
 );
+
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(morgan("dev"));
 
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://front.roiup.team");
+  res.setHeader("Access-Control-Allow-Origin", "https://front.roiup.team");
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Credentials', 1);
   next();
 })
 
