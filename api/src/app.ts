@@ -18,7 +18,7 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "../public")));
 
-const whitelist = ["https://front.roiup.team", "http://localhost:3000"];
+const whitelist = ["https://front.roiup.team", ""];
 
 app.use(
   cors({
