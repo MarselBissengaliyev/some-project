@@ -18,9 +18,20 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "../public")));
 
+const whitelist = ["https://front.roiup.team", 'http://localhost:3000'];
+
 app.use(
   cors({
-    origin: "https://front.roiup.team",
+    origin: function (origin, callback) {
+      console.log(origin);
+      if (!origin || whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    exposedHeaders: ['Access-Control-Allow-Origin'],
+    credentials: true
   })
 );
 
