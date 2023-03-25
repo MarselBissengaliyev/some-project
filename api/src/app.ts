@@ -18,13 +18,13 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "../public")));
 
-const whitelist = ["front.roiup.team", "api.umnico.com"];
+const whitelist = ["https://front.roiup.team", 'https://api.umnico.com'];
 
 app.use(
   cors({
     origin: function (origin, callback) {
       console.log(origin);
-      if (origin && whitelist.indexOf(origin) !== -1) {
+      if (!origin || whitelist.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
