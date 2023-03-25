@@ -30,6 +30,8 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
+    exposedHeaders: ['Access-Control-Allow-Origin'],
+    credentials: true
   })
 );
 
