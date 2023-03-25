@@ -36,7 +36,8 @@ export function useQuery() {
  ** Format a date to readable view
  */
 export const formatDate = (date) => {
-  const newDate = new Date(date);
+  const newDate = new Date(date * 1000);
+  console.log(newDate);
   let day = newDate.getUTCDay();
   if (day.toString().length === 1) {
     day = `0${day}`;

@@ -23,6 +23,7 @@ const Deposists = () => {
       setMessage("");
       setFilteredDeposits(
         activeUsersWithClickId.filter((user) => {
+          // console.log(user[filterBy])
           let filterToString = user[filterBy] + "";
           if (
             filterBy === "time_lead" ||
