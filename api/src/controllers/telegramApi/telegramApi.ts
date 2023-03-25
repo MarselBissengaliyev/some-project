@@ -20,7 +20,7 @@ export const sendMessage = async (
     return "General data has not been found";
   }
 
-  const { data, status } = await axios.post(
+  const { data } = await axios.post(
     `${env.API_TELEGRAM}${generalData.bot_token}/sendMessage`,
     {
       chat_id: chatId,
