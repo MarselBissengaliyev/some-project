@@ -23,6 +23,7 @@ const whitelist = ["https://front.roiup.team", "https://api.umnico.com"];
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log(origin);
       if (origin && whitelist.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
