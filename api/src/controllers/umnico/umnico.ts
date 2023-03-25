@@ -87,7 +87,7 @@ export const leadChangedStatus: RequestHandler<
     const statusesResponse = await axios.get(
       "https://api.umnico.com/v1.3/statuses",
       {
-        headers: { Authorization: env.UMNICO_API_TOKEN },
+        headers: { Authorization: env.UMNICO_API_TOKEN, Host: 'api.umnico.com' },
       }
     );
 
@@ -172,7 +172,7 @@ export const leadChanged: RequestHandler<
     const statusesResponse = await axios.get(
       "https://api.umnico.com/v1.3/statuses",
       {
-        headers: { Authorization: env.UMNICO_API_TOKEN },
+        headers: { Authorization: env.UMNICO_API_TOKEN, Host: 'api.umnico.com' },
       }
     );
 
