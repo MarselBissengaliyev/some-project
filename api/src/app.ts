@@ -41,6 +41,11 @@ app.use(morgan("dev"));
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://front.roiup.team");
+  next();
+})
+
 app.use("/api/facebook-data", facebookDataRoutes);
 
 app.use("/api/pixels", pixelRoutes);
