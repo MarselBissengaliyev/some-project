@@ -89,7 +89,7 @@ const Start = ({ show, handleClose }) => {
         <Form.Check
           className="start-checkbox"
           onChange={(e) => {
-            setDisableWebPagePreview(!e.target.checked);
+            setDisableWebPagePreview(e.target.checked);
           }}
           defaultChecked={disableWebPagePreview}
           type="checkbox"
