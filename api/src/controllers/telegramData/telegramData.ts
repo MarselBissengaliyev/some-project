@@ -6,6 +6,7 @@ import {
   ActiveUsersWithClickIdInterface,
   GetTelegramDataParams,
 } from "./telegramData.interface";
+import createHttpError from "http-errors";
 
 /**
  * Here we get telegram data
@@ -46,6 +47,12 @@ export const getDepositedUsers: RequestHandler<
       telegram_bot_login,
     }).exec();
 
+    if (!desositedUsers) {
+      throw createHttpError(404, "Deposited users has not been found");
+    }
+
+    console.log(desositedUsers);
+
     const activeUsersWithClickId: ActiveUsersWithClickIdInterface[] = [];
 
     for (const activeUser of desositedUsers) {
@@ -74,9 +81,8 @@ export const getDepositedUsers: RequestHandler<
         time_sale: activeUser.time_sale || null,
         time_click: facebookData?.time_click || null,
       });
-
-      res.status(200).json(activeUsersWithClickId);
     }
+    res.status(200).json(activeUsersWithClickId);
   } catch (error) {
     next(error);
   }

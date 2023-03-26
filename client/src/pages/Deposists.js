@@ -34,13 +34,12 @@ const Deposists = () => {
               return filterToString.toLowerCase().includes(value.toLowerCase());
             })
           );
+          setLoading(false);
         })
         .catch((err) => {
           setError(err.message);
-        })
-        .finally(() => {
           setLoading(false);
-        });
+        })
     }
   }, [filterBy, setError, setLoading, value, username]);
 

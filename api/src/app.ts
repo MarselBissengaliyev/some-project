@@ -27,11 +27,7 @@ app.use(
       } else {
         callback(new Error("Not allowed by CORS"));
       }
-    },
-    exposedHeaders: ["Access-Control-Allow-Origin"],
-    credentials: true,
-    allowedHeaders: ['Origin', 'Content-Type', 'Accept'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS']
+    }
   })
 );
 
