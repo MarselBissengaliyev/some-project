@@ -16,6 +16,12 @@ import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, "../public")));
+
+app.use(express.json());
+
+app.use(morgan("dev"));
+
 const whitelist = ["https://front.roiup.team", 'http://localhost:3000'];
 
 app.use(
@@ -30,12 +36,6 @@ app.use(
     }
   })
 );
-
-app.use(express.static(path.join(__dirname, "../public")));
-
-app.use(morgan("dev"));
-
-app.use(express.json());
 
 app.use("/api/facebook-data", facebookDataRoutes);
 

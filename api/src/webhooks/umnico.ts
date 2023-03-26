@@ -29,6 +29,7 @@ export const umnikoWebhook: RequestHandler<
         break;
       default:
         console.log("Some action");
+        res.sendStatus(204);
         break;
     }
   } catch (error) {
