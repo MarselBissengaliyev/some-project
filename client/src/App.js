@@ -38,77 +38,45 @@ function App() {
       getGeneralData().then((data) => {
         setToken(data.bot_token);
         setAvatar(data.bot_avatar);
-        setLoading(false);
+
+        setTimeout(() => {
+          getMe(data.bot_token).then((data) => {
+            const result = data.result;
+            setBot((bot) => ({
+              ...bot,
+              first_name: result.first_name,
+              username: result.username,
+            }));
+
+            setTimeout(async () => {
+              await getTelegramData(result.username)
+                .then((data) => {
+                  setBot((bot) => ({
+                    ...bot,
+                    allUsersCount: data.allUsersCount,
+                    activeUsersCount: data.activeUsersCount,
+                    desositedUsers: data.desositedUsers,
+                    activeUsersWithClickId: data.activeUsersWithClickId,
+                  }));
+                })
+                .then((data) => {
+                  setError("");
+                })
+                .catch((err) => {
+                  setError(err.message);
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            }, 1000);
+          });
+        }, 1000);
       });
     }, 1000);
   }, []);
 
   useEffect(() => {
-    if (token) {
-      setLoading(true);
-      setTimeout(() => {
-        getMe(token).then((data) => {
-          const result = data.result;
-          setBot((bot) => ({
-            ...bot,
-            first_name: result.first_name,
-            username: result.username,
-          }));
-          setLoading(false);
-        });
-      }, 1000)
-    }
-  }, [setBot, token]);
-
-  useEffect(() => {
     setLoading(true);
-
-    async function setupGetTelegramData() {
-      let error = "";
-
-      if (bot.username) {
-        await getTelegramData(bot.username)
-          .then((data) => {
-            setBot((bot) => ({
-              ...bot,
-              allUsersCount: data.allUsersCount,
-              activeUsersCount: data.activeUsersCount,
-              desositedUsers: data.desositedUsers,
-              activeUsersWithClickId: data.activeUsersWithClickId,
-            }));
-          })
-          .then((data) => {
-            setError("");
-            error = "";
-          })
-          .catch((err) => {
-            error = err.message;
-            setError(err.message);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }
-
-      if (error) {
-        return {
-          error,
-        };
-      }
-      return {
-        success: true,
-      };
-    }
-
-    setTimeout(() => {
-      setupGetTelegramData((data) => {
-        setLoading(false);
-        if (data.error) {
-          return setError(data.error);
-        }
-        setError("");
-      });
-    }, 1000)
   }, [bot.username]);
 
   return (
