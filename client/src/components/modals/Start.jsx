@@ -8,7 +8,7 @@ import {
 import SendMessage from "../SendMessage";
 import MyContext from "../../context/context";
 
-const Start = ({ show, handleClose }) => {
+const Start = ({ handleClose }) => {
   const turndownService = new TurndownService();
   const { setLoading } = useContext(MyContext);
 
@@ -72,7 +72,7 @@ const Start = ({ show, handleClose }) => {
       size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      show={show}
+      show={true}
       onHide={handleClose}
     >
       <Modal.Header closeButton>

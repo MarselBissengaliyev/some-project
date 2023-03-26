@@ -1,11 +1,5 @@
 import React, { useContext } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Row
-} from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import Avatar from "../components/Avatar";
 import UpdateToken from "../components/UpdateToken";
 import Mass from "../components/modals/Mass";
@@ -25,7 +19,7 @@ const Bots = () => {
     showStart,
     setShowMass,
     setShowStart,
-    setLoading
+    setLoading,
   } = useContext(MyContext);
 
   const handleCloseMass = () => setShowMass(false);
@@ -48,9 +42,9 @@ const Bots = () => {
             first_name: result.first_name,
             username: result.username,
           }));
-          setLoading(false)
+          setLoading(false);
         });
-      }, 1000)
+      }, 1000);
     }
   };
   return (
@@ -94,13 +88,12 @@ const Bots = () => {
                 <Button onClick={handleShowStart} variant="primary">
                   Сообщение старта
                 </Button>
-                <Mass
+                {showMass && <Mass
                   handleClose={handleCloseMass}
-                  show={showMass}
                   token={token}
                   bot={bot}
-                />
-                <Start handleClose={handleCloseStart} show={showStart} />
+                />}
+                {showStart && <Start handleClose={handleCloseStart} />}
               </div>
             </Card.Body>
           </Card>

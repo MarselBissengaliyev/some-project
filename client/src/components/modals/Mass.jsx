@@ -8,7 +8,7 @@ import {
 } from "../../network/api.telegram";
 import SendMessage from "../SendMessage";
 
-const Mass = ({ show, handleClose, token, bot }) => {
+const Mass = ({ handleClose, token, bot }) => {
   const turndownService = new TurndownService();
 
   const replaceParagraphsWithBreaks = {
@@ -70,7 +70,7 @@ const Mass = ({ show, handleClose, token, bot }) => {
       size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      show={show}
+      show={true}
       onHide={handleClose}
     >
       <Modal.Header closeButton>
