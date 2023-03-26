@@ -19,7 +19,6 @@ const Deposists = () => {
     async function fetchGetDeposits() {
       try {
         const deposits = await getDepositors(username);
-        console.log(deposits);
         setFilteredDeposits(
           deposits.filter((user) => {
             console.log(user[filterBy]);
