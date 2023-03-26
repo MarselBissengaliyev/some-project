@@ -5,7 +5,7 @@ import { fetchData } from ".";
  */
 export const getPixel = async (pixelId) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/pixels/${pixelId}`,
+    `/api/pixels/${pixelId}`,
     {
       method: "GET",
     }
@@ -19,7 +19,7 @@ export const getPixel = async (pixelId) => {
  */
 export const getPixels = async () => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/pixels`,
+    `/api/pixels`,
     {
       method: "GET",
     }
@@ -33,7 +33,7 @@ export const getPixels = async () => {
  */
 export const createPixel = async ({ pixelId, token }) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/pixels`,
+    `/api/pixels`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -54,7 +54,7 @@ export const createPixel = async ({ pixelId, token }) => {
  */
 export const updatePixel = async ({ pixelId, token, id }) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/pixels/${id}`,
+    `/api/pixels/${id}`,
     {
       method: "PATCH",
       body: JSON.stringify({
@@ -72,7 +72,7 @@ export const updatePixel = async ({ pixelId, token, id }) => {
 
 export const deletePixel = async (pixelId) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/pixels/${pixelId}`,
+    `/api/pixels/${pixelId}`,
     {
       method: "DELETE",
     }

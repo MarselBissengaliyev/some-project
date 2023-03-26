@@ -5,7 +5,7 @@ import { fetchData } from ".";
  */
 export const getTelegramData = async () => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/telegram-data`,
+    `/api/telegram-data`,
     {
       method: "GET",
     }
@@ -16,7 +16,7 @@ export const getTelegramData = async () => {
 
 export const getDepositors = async (botUsername) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/telegram-data/depositors/${botUsername}`,
+    `/api/telegram-data/depositors/${botUsername}`,
     {
       method: "GET",
     }

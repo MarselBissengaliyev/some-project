@@ -23,7 +23,7 @@ export const updateStartMessage = async ({
   disableWebPagePreview,
 }) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/start-message`,
+    `/api/start-message`,
     {
       method: "PATCH",
       body: JSON.stringify({

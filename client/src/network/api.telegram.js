@@ -1,11 +1,13 @@
 import { fetchData } from ".";
 
+const API_TELEGRAM = 'https://api.telegram.org/bot';
+
 /*
  ** Get a my bot info from telegram api
  */
 export const getMe = async (token) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_TELEGRAM}${token}/getMe`,
+    `${API_TELEGRAM}${token}/getMe`,
     {
       method: "POST",
     }
@@ -22,7 +24,7 @@ export const sendMessage = async (
   { chatId, text, disableWebPagePreview }
 ) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_TELEGRAM}${token}/sendMessage`,
+    `${API_TELEGRAM}${token}/sendMessage`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -47,7 +49,7 @@ export const sendMessage = async (
  */
 export const sendPhoto = async (token, { chatId, photo, caption }) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_TELEGRAM}${token}/sendPhoto`,
+    `${API_TELEGRAM}${token}/sendPhoto`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -76,7 +78,7 @@ export const sendMassMessage = async ({
   telegramBotLogin,
 }) => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/telegram-api/send-mass`,
+    `/api/telegram-api/send-mass`,
     {
       method: "POST",
       body: JSON.stringify({
