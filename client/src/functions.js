@@ -36,17 +36,8 @@ export function useQuery() {
  ** Format a date to readable view
  */
 export const formatDate = (date) => {
-  const newDate = new Date(date * 1000);
-  let day = newDate.getUTCDate();
-  if (day.toString().length === 1) {
-    day = `0${day}`;
-  }
+  let newDate = new Date(date * 1000);
+  let readableDate = newDate.toISOString().slice(0,10).replace(/-/g, '.');
 
-  let month = newDate.getUTCMonth() + 1;
-  if (month.toString().length === 1) {
-    month = `0${month}`;
-  }
-
-  const year = newDate.getUTCFullYear();
-  return `${day}.${month}.${year}`;
+  return readableDate;
 };
