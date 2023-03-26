@@ -16,7 +16,7 @@ import { umnikoWebhook } from "./webhooks/umnico";
 
 const app = express();
 
-const whitelist = ["https://front.roiup.team"];
+const whitelist = ["https://front.roiup.team", 'http://localhost:3000'];
 
 app.use(
   cors({
@@ -40,13 +40,6 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(morgan("dev"));
 
 app.use(express.json());
-
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://front.roiup.team");
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Credentials', 1);
-  next();
-})
 
 app.use("/api/facebook-data", facebookDataRoutes);
 
