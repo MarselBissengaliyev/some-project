@@ -10,7 +10,7 @@ import MyContext from "../../context/context";
 
 const Start = ({ handleClose }) => {
   const turndownService = new TurndownService();
-  const { setLoading } = useContext(MyContext);
+  const { setLoading, loading } = useContext(MyContext);
 
   const replaceParagraphsWithBreaks = {
     filter: ["p"],
@@ -22,7 +22,8 @@ const Start = ({ handleClose }) => {
 
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
-  const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
+  const [disableWebPagePreview, setDisableWebPagePreview] = useState();
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [photo, setPhoto] = useState("");
   const [message, setMessage] = useState("");
   const [isDisabled, setDisabled] = useState(false);
@@ -78,43 +79,47 @@ const Start = ({ handleClose }) => {
       <Modal.Header closeButton>
         <Modal.Title>Стартовое сообщение</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <SendMessage
-          setPhoto={setPhoto}
-          defaultImg={photo}
-          setValue={setMessage}
-        />
-      </Modal.Body>
-      <Modal.Footer>
-        <Form.Check
-          className="start-checkbox"
-          onChange={(e) => {
-            setDisableWebPagePreview(e.target.checked);
-          }}
-          defaultChecked={disableWebPagePreview}
-          type="checkbox"
-          label="Отключить предпросмотр ссылок"
-        />
-        <Button
-          variant="primary"
-          onClick={(e) => {
-            handleSubmit(e);
-          }}
-          disabled={isDisabled}
-        >
-          Отправить
-        </Button>
-        {status && (
-          <Alert variant="success" className="mt-3">
-            {status}
-          </Alert>
-        )}
-        {error && (
-          <Alert variant="danger" className="mt-3">
-            {error}
-          </Alert>
-        )}
-      </Modal.Footer>
+      {!loading && (
+        <>
+          <Modal.Body>
+            <SendMessage
+              setPhoto={setPhoto}
+              defaultImg={photo}
+              setValue={setMessage}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Form.Check
+              className="start-checkbox"
+              onChange={(e) => {
+                setDisableWebPagePreview(e.target.checked);
+              }}
+              defaultChecked={disableWebPagePreview}
+              type="checkbox"
+              label="Отключить предпросмотр ссылок"
+            />
+            <Button
+              variant="primary"
+              onClick={(e) => {
+                handleSubmit(e);
+              }}
+              disabled={isDisabled}
+            >
+              Отправить
+            </Button>
+            {status && (
+              <Alert variant="success" className="mt-3">
+                {status}
+              </Alert>
+            )}
+            {error && (
+              <Alert variant="danger" className="mt-3">
+                {error}
+              </Alert>
+            )}
+          </Modal.Footer>
+        </>
+      )}
     </Modal>
   );
 };
