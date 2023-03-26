@@ -122,7 +122,10 @@ export const leadChangedStatus: RequestHandler<
     }
 
     telegramData.is_deposit = true;
-    telegramData.time_sale = new Date().getTime();
+
+    const date = new Date();
+    const unixTimeStamp = Math.floor(date.getTime() / 1000);
+    telegramData.time_sale = unixTimeStamp;
     telegramData.amount = req.body.lead?.amount ? req.body.lead.amount : 0;
 
     await telegramData.save();

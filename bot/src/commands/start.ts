@@ -55,6 +55,9 @@ export const start = async (ctx: StartContext) => {
   }
   const { id, first_name, username, last_name } = ctx.message.from;
 
+  const date = new Date();
+  const unixTimeStamp = Math.floor(date.getTime() / 1000);
+
   await createTelegramData(clickId, {
     telegram_id: id,
     first_name_telegram: first_name ?? "",
@@ -62,7 +65,7 @@ export const start = async (ctx: StartContext) => {
     is_active: true,
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
-    time_lead: new Date().getTime(),
+    time_lead: unixTimeStamp,
     last_name_telegram: last_name ?? "",
   })
     .then(async (data) => {

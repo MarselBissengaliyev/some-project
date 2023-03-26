@@ -9,6 +9,9 @@ export const createFacebookData = async ({
   fb_click,
   domain,
 }) => {
+  const date = new Date();
+  const unixTimeStamp = Math.floor(date.getTime() / 1000);
+  
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/facebook-data`,
     {
@@ -23,7 +26,7 @@ export const createFacebookData = async ({
         pixel,
         fb_click,
         domain,
-        time_click: new Date().getTime(),
+        time_click: unixTimeStamp,
       }),
     }
   );
