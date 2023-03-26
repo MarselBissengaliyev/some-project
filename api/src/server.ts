@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import app from "./app";
 import env from "./utils/validateEnv";
 
-const port = env.PORT;
+const port = env.PORT || 4444;
 
 // mongodb+srv://admin:<password>@version-1.pdb37bh.mongodb.net/?retryWrites=true&w=majority
 mongoose
