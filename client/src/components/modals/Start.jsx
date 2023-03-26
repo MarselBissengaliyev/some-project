@@ -100,9 +100,9 @@ const Start = ({ handleClose }) => {
           <Modal.Footer>
             <Form.Check
               className="start-checkbox"
-              onChange={(e) => {
-                setDisableWebPagePreview(e.target.checked);
-                console.log(e.target.checked)
+              onClick={(e) => {
+                console.log(!disableWebPagePreview);
+                setDisableWebPagePreview(!disableWebPagePreview);
               }}
               defaultChecked={disableWebPagePreview}
               type="checkbox"

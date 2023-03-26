@@ -30,7 +30,7 @@ const UpdateToken = () => {
         setTokenUpdated(true);
       } catch (error) {
         setError(error.message);
-        console.log(error);
+        console.error(error);
       }
     } 
 

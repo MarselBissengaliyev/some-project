@@ -39,7 +39,7 @@ function App() {
         setToken(data.bot_token);
         setAvatar(data.bot_avatar);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setError(error.message);
       }
     }
@@ -60,7 +60,7 @@ function App() {
         }));
       } catch (error) {
         setError(error.message);
-        console.log(error);
+        console.error(error);
       }
     }
 

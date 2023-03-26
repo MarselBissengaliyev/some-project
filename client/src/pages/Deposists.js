@@ -21,7 +21,6 @@ const Deposists = () => {
         const deposits = await getDepositors(username);
         setFilteredDeposits(
           deposits.filter((user) => {
-            console.log(user[filterBy]);
             let filterToString = user[filterBy] + "";
             if (
               filterBy === "time_lead" ||

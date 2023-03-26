@@ -72,7 +72,6 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
           defaultValue={value}
           onChange={(e) => {
             setValue(e);
-            console.log(value);
           }}
           className="editor-input"
           modules={modules}
