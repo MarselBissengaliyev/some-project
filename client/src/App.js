@@ -32,35 +32,37 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    getGeneralData().then((data) => {
-      setToken(data.bot_token);
-      setAvatar(data.bot_avatar);
+    setTimeout(async () => {
+      await getGeneralData().then(async (data) => {
+        setToken(data.bot_token);
+        setAvatar(data.bot_avatar);
 
-      getMe(data.bot_token).then(async (data) => {
-        const result = data.result;
-        setBot((bot) => ({
-          ...bot,
-          first_name: result.first_name,
-          username: result.username,
-        }));
+        await getMe(data.bot_token).then(async (data) => {
+          const result = data.result;
+          setBot((bot) => ({
+            ...bot,
+            first_name: result.first_name,
+            username: result.username,
+          }));
 
-        await getTelegramData(result.username)
-          .then((data) => {
-            setBot((bot) => ({
-              ...bot,
-              allUsersCount: data.allUsersCount,
-              activeUsersCount: data.activeUsersCount
-            }))
-            setError("");
-          })
-          .catch((err) => {
-            setError(err.message);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+          await getTelegramData(result.username)
+            .then((data) => {
+              setBot((bot) => ({
+                ...bot,
+                allUsersCount: data.allUsersCount,
+                activeUsersCount: data.activeUsersCount,
+              }));
+              setError("");
+            })
+            .catch((err) => {
+              setError(err.message);
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        });
       });
-    });
+    }, 500);
   }, []);
 
   return (

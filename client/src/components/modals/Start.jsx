@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import TurndownService from "turndown";
 import {
@@ -6,9 +6,11 @@ import {
   updateStartMessage,
 } from "../../network/startMessage";
 import SendMessage from "../SendMessage";
+import MyContext from "../../context/context";
 
 const Start = ({ show, handleClose }) => {
   const turndownService = new TurndownService();
+  const { setLoading } = useContext(MyContext);
 
   const replaceParagraphsWithBreaks = {
     filter: ["p"],
@@ -23,33 +25,47 @@ const Start = ({ show, handleClose }) => {
   const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
   const [photo, setPhoto] = useState("");
   const [message, setMessage] = useState("");
+  const [isDisabled, setDisabled] = useState(false);
 
   const handleSubmit = async (e) => {
+    setDisabled(true);
     console.log(message);
-    await updateStartMessage({
-      message: turndownService.turndown(message),
-      photo,
-      disableWebPagePreview: disableWebPagePreview,
-    })
-      .then((data) => {
-        setError("");
-        setStatus("Успешно измененно стартовое сообщение");
+    if (message || photo) {
+      await updateStartMessage({
+        message: turndownService.turndown(message),
+        photo,
+        disableWebPagePreview: disableWebPagePreview,
       })
-      .catch((err) => {
-        setStatus("");
-        setError(err.message);
-      });
+        .then((data) => {
+          setError("");
+          setStatus("Успешно измененно стартовое сообщение");
+          setDisableWebPagePreview(data.disable_web_page_preview);
+        })
+        .catch((err) => {
+          setStatus("");
+          setError(err.message);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            setDisabled(false);
+          }, 5000);
+        });
+    }
   };
 
   useEffect(() => {
-    if (show) {
+    if (show === true) {
+      setLoading(true);
       getStartMessage().then((data) => {
-        setMessage(data.message);
         setPhoto(data.photo);
         setDisableWebPagePreview(data.disable_web_page_preview);
+      }).finally(() => {
+        setTimeout(() => {
+          setLoading(false);
+        }, 500)
       });
     }
-  }, [show]);
+  }, [show, setLoading]);
 
   return (
     <Modal
@@ -73,8 +89,7 @@ const Start = ({ show, handleClose }) => {
         <Form.Check
           className="start-checkbox"
           onChange={(e) => {
-            console.log(e.target.checked);
-            setDisableWebPagePreview(e.target.checked);
+            setDisableWebPagePreview(!e.target.checked);
           }}
           defaultChecked={disableWebPagePreview}
           type="checkbox"
@@ -85,6 +100,7 @@ const Start = ({ show, handleClose }) => {
           onClick={(e) => {
             handleSubmit(e);
           }}
+          disabled={isDisabled}
         >
           Отправить
         </Button>

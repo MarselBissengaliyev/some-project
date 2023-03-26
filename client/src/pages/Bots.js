@@ -40,8 +40,8 @@ const Bots = () => {
   const showActuallBotName = () => {
     if (token) {
       setLoading(true);
-      setTimeout(() => {
-        getMe(token).then((data) => {
+      setTimeout(async () => {
+        await getMe(token).then((data) => {
           const result = data.result;
           setBot(() => ({
             ...bot,
