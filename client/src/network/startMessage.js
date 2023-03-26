@@ -5,7 +5,7 @@ import { fetchData } from ".";
  */
 export const getStartMessage = async () => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/start-message`,
+    `/start-message`,
     {
       method: "GET",
     }
@@ -23,7 +23,7 @@ export const updateStartMessage = async ({
   disableWebPagePreview,
 }) => {
   const response = await fetchData(
-    `/api/start-message`,
+    `/start-message`,
     {
       method: "PATCH",
       body: JSON.stringify({
@@ -45,7 +45,7 @@ export const updateStartMessage = async ({
  */
 export const deleteStartMessage = async () => {
   const response = await fetchData(
-    `${process.env.REACT_APP_API_URL}/api/start-message`,
+    `/start-message`,
     {
       method: "DELETE",
     }

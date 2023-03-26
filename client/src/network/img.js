@@ -5,7 +5,7 @@ import { fetchImg } from ".";
  */
 export const uploadImage = async (formData) => {
   const response = await fetchImg(
-    `/api/image`,
+    `/image`,
     {
       method: "POST",
       body: formData,

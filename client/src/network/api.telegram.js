@@ -78,7 +78,7 @@ export const sendMassMessage = async ({
   telegramBotLogin,
 }) => {
   const response = await fetchData(
-    `/api/telegram-api/send-mass`,
+    `/telegram-api/send-mass`,
     {
       method: "POST",
       body: JSON.stringify({

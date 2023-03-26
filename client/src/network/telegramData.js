@@ -5,7 +5,7 @@ import { fetchData } from ".";
  */
 export const getTelegramData = async () => {
   const response = await fetchData(
-    `/api/telegram-data`,
+    `/telegram-data`,
     {
       method: "GET",
     }
@@ -16,7 +16,7 @@ export const getTelegramData = async () => {
 
 export const getDepositors = async (botUsername) => {
   const response = await fetchData(
-    `/api/telegram-data/depositors/${botUsername}`,
+    `/telegram-data/depositors/${botUsername}`,
     {
       method: "GET",
     }

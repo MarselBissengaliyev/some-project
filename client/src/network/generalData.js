@@ -38,7 +38,7 @@ export const getGeneralData = async () => {
  */
 export const uploadAvatar = async (formData) => {
   const response = fetchImg(
-    `/api/general-data/avatar`,
+    `/general-data/avatar`,
     {
       method: "POST",
       body: formData,

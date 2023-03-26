@@ -72,7 +72,7 @@ export const updatePixel = async ({ pixelId, token, id }) => {
 
 export const deletePixel = async (pixelId) => {
   const response = await fetchData(
-    `/api/pixels/${pixelId}`,
+    `/pixels/${pixelId}`,
     {
       method: "DELETE",
     }
