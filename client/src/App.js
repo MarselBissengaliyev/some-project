@@ -39,45 +39,35 @@ function App() {
         setToken(data.bot_token);
         setAvatar(data.bot_avatar);
 
-        setTimeout(() => {
-          getMe(data.bot_token).then((data) => {
-            const result = data.result;
-            setBot((bot) => ({
-              ...bot,
-              first_name: result.first_name,
-              username: result.username,
-            }));
+        getMe(data.bot_token).then(async (data) => {
+          const result = data.result;
+          setBot((bot) => ({
+            ...bot,
+            first_name: result.first_name,
+            username: result.username,
+          }));
 
-            setTimeout(async () => {
-              await getTelegramData(result.username)
-                .then((data) => {
-                  setBot((bot) => ({
-                    ...bot,
-                    allUsersCount: data.allUsersCount,
-                    activeUsersCount: data.activeUsersCount,
-                    desositedUsers: data.desositedUsers,
-                    activeUsersWithClickId: data.activeUsersWithClickId,
-                  }));
-                })
-                .then((data) => {
-                  setError("");
-                })
-                .catch((err) => {
-                  setError(err.message);
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            }, 1000);
-          });
-        }, 1000);
+          await getTelegramData(result.username)
+            .then((data) => {
+              setBot((bot) => ({
+                ...bot,
+                allUsersCount: data.allUsersCount,
+                activeUsersCount: data.activeUsersCount,
+                desositedUsers: data.desositedUsers,
+                activeUsersWithClickId: data.activeUsersWithClickId,
+              }));
+              setError("");
+            })
+            .catch((err) => {
+              setError(err.message);
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        });
       });
     }, 1000);
   }, []);
-
-  useEffect(() => {
-    setLoading(true);
-  }, [bot.username]);
 
   return (
     <MyContext.Provider
