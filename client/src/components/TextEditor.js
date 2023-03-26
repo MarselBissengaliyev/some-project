@@ -1,50 +1,68 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { uploadImage } from "../network/img";
 import { deleteStartMessage } from "../network/startMessage";
+import MyContext from "../context/context";
 
 const modules = {
-  toolbar: [
-    ["bold", "italic"],
-  ],
+  toolbar: [["bold", "italic"]],
 };
 
 const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
   const [img, setImg] = useState(defaultImg);
   const formData = new FormData();
   const [error, setError] = useState("");
+  const { setLoading } = useContext(MyContext);
 
   /*
    ** Delete a photo from text editor
    */
   const deletePhoto = async () => {
-    setImg("");
-    setPhoto("");
+    setLoading(true);
+    async function fetchDeleteStartMessage() {
+      try {
+        setImg("");
+        setPhoto("");
+        await deleteStartMessage();
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
 
-    await deleteStartMessage();
+    fetchDeleteStartMessage();
+
+    setLoading(false);
   };
 
   /*
    ** Handle Delete a PixelItem function Component
    */
   const sendFile = async (e) => {
+    setLoading(true);
     formData.append("photo", e.target.files[0]);
-    await uploadImage(formData)
-      .then((data) => {
+    async function fetchUploadImage() {
+      try {
+        const data = await uploadImage(formData);
+
         setImg(data);
         if (data) {
           setPhoto(`/${data}`);
         }
         setError("");
-      })
-      .catch((err) => {
-        setPhoto(``);
-        console.log(err);
-        setImg("");
-        setError(err.message);
-      });
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+
+    if (formData.get("photo")) {
+      fetchUploadImage();
+    }
+
+    setLoading(false);
   };
   return (
     <div className="editor">

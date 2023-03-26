@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { deletePixel } from "../network/pixel";
 import PixelModal from "./modals/PixelModal";
+import MyContext from "../context/context";
 
 const PixelItem = ({ token, fb_pixel_id, _id, setPixels }) => {
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("");
+  const { setLoading, setError } = useContext(MyContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -14,13 +16,27 @@ const PixelItem = ({ token, fb_pixel_id, _id, setPixels }) => {
    */
   const handleDelete = async (e) => {
     e.preventDefault();
-    await deletePixel(_id).then((data) => {
-      setPixels((pixels) =>
-        pixels.filter((pixel) => {
-          return pixel._id !== _id;
-        })
-      );
-    });
+    setLoading(true);
+    async function fetchDeletePixel() {
+      try {
+        await deletePixel(_id);
+
+        setPixels((pixels) =>
+          pixels.filter((pixel) => {
+            return pixel._id !== _id;
+          })
+        );
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+    
+    if (_id) {
+      fetchDeletePixel();
+    }
+
+    setLoading(false);
   };
 
   return (

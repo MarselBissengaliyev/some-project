@@ -1,38 +1,66 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { createPixel, updatePixel } from "../../network/pixel";
+import MyContext from "../../context/context";
 
 const PixelModal = ({ show, handleClose, mode, id, setPixels }) => {
   const [token, setToken] = useState("");
   const [pixelId, setPixelId] = useState("");
+  const { setLoading, setError } = useContext(MyContext);
 
   const handleUpdate = async (e) => {
-    await updatePixel({ id, token, pixelId }).then((data) => {
-      setPixels((pixels) =>
-        pixels.map((pixel) => {
-          if (pixel._id === id) {
-            return {
-              ...pixel,
-              token: token,
-              fb_pixel_id: pixelId,
-            };
-          }
-          return pixel;
-        })
-      );
-      handleClose();
-    });
+    setLoading(true);
+    async function fetchUpdatePixel() {
+      try {
+        await updatePixel({ id, token, pixelId });
+        setPixels((pixels) =>
+          pixels.map((pixel) => {
+            if (pixel._id === id) {
+              return {
+                ...pixel,
+                token: token,
+                fb_pixel_id: pixelId,
+              };
+            }
+            return pixel;
+          })
+        );
+        handleClose();
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+
+    if (id && token && pixelId) {
+      fetchUpdatePixel();
+    }
+
+    setLoading(false);
   };
 
   const handleCreate = async (e) => {
-    await createPixel({ pixelId, token }).then((data) => {
-      setPixels((pixels) => {
-        return [...pixels, data];
-      });
-      handleClose();
-    });
+    setLoading(true);
+    async function fetchCreatePixel() {
+      try {
+        const data = await createPixel({ pixelId, token });
+        setPixels((pixels) => {
+          return [...pixels, data];
+        });
+        handleClose();
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+    
+    if (pixelId && token) {
+      fetchCreatePixel();
+    }
+
+    setLoading(false);
   };
   return (
     <Modal show={show} onHide={handleClose} animation={false}>

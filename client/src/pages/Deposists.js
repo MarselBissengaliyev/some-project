@@ -16,31 +16,34 @@ const Deposists = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (username) {
-      getDepositors(username)
-        .then((deposits) => {
-          setFilteredDeposits(
-            deposits.filter((user) => {
-              console.log(user[filterBy]);
-              let filterToString = user[filterBy] + "";
-              if (
-                filterBy === "time_lead" ||
-                filterBy === "time_click" ||
-                filterBy === "time_sale"
-              ) {
-                filterToString = formatDate(user[filterBy]);
-              }
-              console.log(filterToString);
-              return filterToString.toLowerCase().includes(value.toLowerCase());
-            })
-          );
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(err.message);
-          setLoading(false);
-        })
+    async function fetchGetDeposits() {
+      try {
+        const deposits = await getDepositors(username);
+        console.log(deposits);
+        setFilteredDeposits(
+          deposits.filter((user) => {
+            console.log(user[filterBy]);
+            let filterToString = user[filterBy] + "";
+            if (
+              filterBy === "time_lead" ||
+              filterBy === "time_click" ||
+              filterBy === "time_sale"
+            ) {
+              filterToString = formatDate(user[filterBy]);
+            }
+            return filterToString.toLowerCase().includes(value.toLowerCase());
+          })
+        );
+      } catch (error) {
+        console.error(error);
+        setError(error.message);
+      }
     }
+    if (username) {
+      fetchGetDeposits();
+    }
+
+    setLoading(false);
   }, [filterBy, setError, setLoading, value, username]);
 
   return (

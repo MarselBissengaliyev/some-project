@@ -32,42 +32,63 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(async () => {
-      await getGeneralData().then(async (data) => {
+    async function fetchGetGenetalData() {
+      try {
+        const data = await getGeneralData();
+
         setToken(data.bot_token);
         setAvatar(data.bot_avatar);
-
-        setTimeout(async () => {
-          await getMe(data.bot_token).then(async (data) => {
-            const result = data.result;
-            setBot((bot) => ({
-              ...bot,
-              first_name: result.first_name,
-              username: result.username,
-            }));
-
-            setTimeout(async () => {
-              await getTelegramData(result.username)
-                .then((data) => {
-                  setBot((bot) => ({
-                    ...bot,
-                    allUsersCount: data.allUsersCount,
-                    activeUsersCount: data.activeUsersCount,
-                  }));
-                  setError("");
-                })
-                .catch((err) => {
-                  setError(err.message);
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            }, 1000);
-          });
-        }, 1000);
-      });
-    }, 500);
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      }
+    }
+    fetchGetGenetalData();
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    async function fetchGetMe() {
+      try {
+        const { result } = await getMe(token);
+
+        setBot((bot) => ({
+          ...bot,
+          first_name: result.first_name,
+          username: result.username,
+        }));
+      } catch (error) {
+        setError(error.message);
+        console.log(error);
+      }
+    }
+
+    if (token) {
+      fetchGetMe();
+    }
+
+    setLoading(false);
+  }, [token]);
+
+  useEffect(() => {
+    setLoading(true);
+    async function fetchGetTelegramData() {
+      const data = await getTelegramData(bot.username);
+
+      setBot((bot) => ({
+        ...bot,
+        allUsersCount: data.allUsersCount,
+        activeUsersCount: data.activeUsersCount,
+      }));
+    }
+
+    if (bot.username) {
+      fetchGetTelegramData();
+    }
+
+    setLoading(false);
+  }, [bot.username]);
 
   return (
     <MyContext.Provider

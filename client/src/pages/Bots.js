@@ -20,6 +20,7 @@ const Bots = () => {
     setShowMass,
     setShowStart,
     setLoading,
+    setError,
   } = useContext(MyContext);
 
   const handleCloseMass = () => setShowMass(false);
@@ -32,18 +33,27 @@ const Bots = () => {
    ** Make a request to telegram api and get actuall bot name
    */
   const showActuallBotName = async () => {
-    if (token) {
-      setLoading(true);
-      await getMe(token).then((data) => {
-        const result = data.result;
-        setBot(() => ({
+    setLoading(true);
+    async function fetchGetMe() {
+      try {
+        const { result } = await getMe(token);
+
+        setBot((bot) => ({
           ...bot,
           first_name: result.first_name,
           username: result.username,
         }));
-        setLoading(false);
-      });
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
     }
+
+    if (token) {
+      fetchGetMe();
+    }
+
+    setLoading(false);
   };
   return (
     <Container>

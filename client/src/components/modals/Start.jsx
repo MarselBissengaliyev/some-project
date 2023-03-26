@@ -23,49 +23,58 @@ const Start = ({ handleClose }) => {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [disableWebPagePreview, setDisableWebPagePreview] = useState();
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [photo, setPhoto] = useState("");
   const [message, setMessage] = useState("");
-  const [isDisabled, setDisabled] = useState(false);
 
   const handleSubmit = async (e) => {
-    setDisabled(true);
-    console.log(message);
-    if (message || photo) {
-      await updateStartMessage({
-        message: turndownService.turndown(message),
-        photo,
-        disableWebPagePreview: disableWebPagePreview,
-      })
-        .then((data) => {
-          setError("");
-          setStatus("Успешно измененно стартовое сообщение");
-          setDisableWebPagePreview(data.disable_web_page_preview);
-        })
-        .catch((err) => {
-          setStatus("");
-          setError(err.message);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            setDisabled(false);
-          }, 5000);
+    setLoading(true);
+
+    async function fetchUpdateStartMessage() {
+      try {
+        const data = await updateStartMessage({
+          message: turndownService.turndown(message),
+          photo,
+          disableWebPagePreview: disableWebPagePreview,
         });
+
+        setError("");
+        setStatus("Успешно измененно стартовое сообщение");
+        setDisableWebPagePreview(data.disable_web_page_preview);
+
+        setTimeout(() => {
+          handleClose()
+        }, 3000)
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
     }
+
+
+    if (message || photo) {
+      fetchUpdateStartMessage();
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {
     setLoading(true);
-    getStartMessage()
-      .then((data) => {
+    async function fetchGetStartMessage() {
+      try {
+        const data = await getStartMessage();
+
         setPhoto(data.photo);
         setDisableWebPagePreview(data.disable_web_page_preview);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
-      });
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+
+    fetchGetStartMessage();
+
+    setLoading(false);
   }, [setLoading]);
 
   return (
@@ -93,6 +102,7 @@ const Start = ({ handleClose }) => {
               className="start-checkbox"
               onChange={(e) => {
                 setDisableWebPagePreview(e.target.checked);
+                console.log(e.target.checked)
               }}
               defaultChecked={disableWebPagePreview}
               type="checkbox"
@@ -103,7 +113,6 @@ const Start = ({ handleClose }) => {
               onClick={(e) => {
                 handleSubmit(e);
               }}
-              disabled={isDisabled}
             >
               Отправить
             </Button>

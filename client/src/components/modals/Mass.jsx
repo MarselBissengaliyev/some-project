@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import TurndownService from "turndown";
 import {
@@ -7,14 +7,16 @@ import {
   sendPhoto,
 } from "../../network/api.telegram";
 import SendMessage from "../SendMessage";
+import MyContext from "../../context/context";
 
 const Mass = ({ handleClose, token, bot }) => {
   const turndownService = new TurndownService();
+  const { setLoading } = useContext(MyContext);
 
   const replaceParagraphsWithBreaks = {
     filter: ["p"],
     replacement: function (content) {
-      return "<br>" + content;
+      return "\n" + content;
     },
   };
   turndownService.addRule("replace_tag_p_to_br", replaceParagraphsWithBreaks);
@@ -24,46 +26,76 @@ const Mass = ({ handleClose, token, bot }) => {
   const [testTelegramId, setTestTelegramId] = useState("");
   const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
   const [success, setSuccess] = useState("");
-  const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSending(true);
+    setLoading(true);
 
-    await sendMassMessage({
-      disableWebPagePreview,
-      value: turndownService.turndown(value),
-      photo,
-      telegramBotLogin: bot.username,
-    })
-      .then((data) => {
+    async function fetchSendMassMessage() {
+      try {
+        const data = await sendMassMessage({
+          disableWebPagePreview,
+          value: turndownService.turndown(value),
+          photo,
+          telegramBotLogin: bot.username,
+        });
         setSuccess(data.message);
-      })
-      .catch((err) => {
-        setError(err.message);
-        console.log(err);
-      });
+
+        setTimeout(() => {
+          handleClose()
+        }, 3000)
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+
+    if (bot.username) {
+      fetchSendMassMessage();
+    }
+
+    setLoading(false);
   };
 
   const testSubmit = async (e) => {
     const chatId = testTelegramId;
+    setLoading(true);
 
+    async function fetchSendMessage() {
+      try {
+        await sendMessage(token, {
+          chatId,
+          text: turndownService.turndown(value),
+          disableWebPagePreview,
+        });
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
     if (!photo && value) {
-      await sendMessage(token, {
-        chatId,
-        text: turndownService.turndown(value),
-        disableWebPagePreview,
-      });
+      fetchSendMessage();
+    }
+
+    async function fetchSendPhoto() {
+      try {
+        await sendPhoto(token, {
+          chatId,
+          photo,
+          caption: turndownService.turndown(value),
+        });
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
     }
 
     if (photo) {
-      await sendPhoto(token, {
-        chatId,
-        photo,
-        caption: turndownService.turndown(value),
-      });
+      fetchSendPhoto();
     }
+
+    setLoading(false);
   };
   return (
     <Modal
@@ -95,7 +127,6 @@ const Mass = ({ handleClose, token, bot }) => {
             <Button
               className="send"
               variant="success"
-              disabled={isSending}
               onClick={(e) => {
                 handleSubmit(e);
               }}

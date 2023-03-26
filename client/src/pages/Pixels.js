@@ -6,7 +6,7 @@ import { getPixels } from "../network/pixel";
 import MyContext from "../context/context";
 
 const Pixels = () => {
-  const { setLoading } = useContext(MyContext);
+  const { setLoading, setError } = useContext(MyContext);
 
   const [pixels, setPixels] = useState([]);
 
@@ -17,14 +17,20 @@ const Pixels = () => {
 
   useEffect(() => {
     setLoading(true);
-    getPixels()
-      .then((data) => {
+
+    async function fetchGetPixels() {
+      try {
+        const data = await getPixels();
         setPixels(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [setLoading]);
+      } catch (error) {
+        console.error(error);
+        setError(error.message);
+      }
+    }
+
+    fetchGetPixels();
+    setLoading(false);
+  }, [setLoading, setError]);
 
   return (
     <div className="container">

@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Alert, Button, Card, Col, Form } from "react-bootstrap";
 import MyContext from "../context/context";
-import { getMe } from "../network/api.telegram";
 import { updateGeneralDataToken } from "../network/generalData";
 
 const UpdateToken = () => {
@@ -10,10 +9,9 @@ const UpdateToken = () => {
     token,
     setTokenValue,
     tokenUpdated,
-    tokenValue,
     setTokenUpdated,
     setToken,
-    setBot,
+    setLoading
   } = useContext(MyContext);
 
   /*
@@ -21,40 +19,23 @@ const UpdateToken = () => {
    */
   const handleSubmitUpdateToken = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    await updateGeneralDataToken(tokenValue)
-      .then((data) => {
+    function fetchUpdateToken() {
+      try {
+        const { data } = updateGeneralDataToken();
+
         setToken(data.bot_token);
         setTokenValue(data.bot_token);
         setTokenUpdated(true);
+      } catch (error) {
+        setError(error.message);
+        console.log(error);
+      }
+    } 
 
-        getMe(data.bot_token)
-          .then((data) => {
-            setError("");
-            const result = data.result;
-
-            setBot((bot) => ({
-              ...bot,
-              first_name: result.first_name,
-              username: result.username,
-            }));
-          })
-          .catch((err) => {
-            setBot(() => ({
-              first_name: "",
-              username: "",
-              activeUsersCount: "",
-              allUsersCount: "",
-              desositedUsers: null,
-              activeUsersWithClickId: null,
-            }));
-            setError(err.message);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err.message);
-      });
+    fetchUpdateToken();
+    setLoading(false);
   };
   return (
     <Col>

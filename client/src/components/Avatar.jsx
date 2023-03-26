@@ -5,6 +5,7 @@ import { getGeneralData, uploadAvatar } from "../network/generalData";
 const Avatar = () => {
   const { avatar, setAvatar } = useContext(MyContext);
   const avatarRef = useRef();
+  const { setLoading, setError } = useContext(MyContext);
 
   const handleClick = () => {
     avatarRef.current.click();
@@ -14,14 +15,27 @@ const Avatar = () => {
    ** Upload Avatar function
    */
   const handleUpload = async (e) => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("avatar", e.target.files[0]);
 
-    await uploadAvatar(formData).then(async () => {
-      await getGeneralData().then((data) => {
+    async function fetchUploadAvatar() {
+      try {
+        await uploadAvatar(formData);
+
+        const data = await getGeneralData();
         setAvatar(data.bot_avatar);
-      });
-    });
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+
+    if (formData.get('avatar')) {
+      fetchUploadAvatar();
+    }
+
+    setLoading(false);
   };
   return (
     <div onClick={handleClick} className="bot-avatar">
