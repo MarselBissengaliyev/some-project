@@ -13,7 +13,7 @@ export const createFacebookData = async ({
   const unixTimeStamp = Math.floor(date.getTime() / 1000);
   
   const response = await fetch(
-    `/facebook-data`,
+    `${process.env.REACT_APP_API_URL}/api/facebook-data`,
     {
       headers: {
         "Content-Type": "application/json",

@@ -5,9 +5,6 @@ import GeneralDataModel from "../../models/generalData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import env from "../../utils/validateEnv";
 import { SendMassMessageBody } from "./telegramApi.interface";
-
-const API_TELEGRAM = 'https://api.telegram.org/bot';
-
 /**
  * Here we send message to a user
  */
@@ -23,7 +20,7 @@ export const sendMessage = async (
   }
 
   const { data } = await axios.post(
-    `${API_TELEGRAM}${generalData.bot_token}/sendMessage`,
+    `${env.API_TELEGRAM}${generalData.bot_token}/sendMessage`,
     {
       chat_id: chatId,
       text: text,
@@ -56,7 +53,7 @@ export const sendPhoto = async (
   }
 
   const { data, status } = await axios.post(
-    `${API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
+    `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
     {
       chat_id: chatId,
       photo,

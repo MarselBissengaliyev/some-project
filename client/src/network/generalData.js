@@ -25,7 +25,7 @@ export const updateGeneralDataToken = async (token) => {
  */
 export const getGeneralData = async () => {
   const response = await fetchData(
-    `/api/general-data`,
+    `${process.env.REACT_APP_API_URL}/api/general-data`,
     {
       method: "GET",
     }
@@ -38,7 +38,7 @@ export const getGeneralData = async () => {
  */
 export const uploadAvatar = async (formData) => {
   const response = fetchImg(
-    `/general-data/avatar`,
+    `${process.env.REACT_APP_API_URL}/api/general-data/avatar`,
     {
       method: "POST",
       body: formData,
