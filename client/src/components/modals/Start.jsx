@@ -28,6 +28,7 @@ const Start = ({ show, handleClose }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
+    console.log(message);
     await updateStartMessage({
       message: turndownService.turndown(message),
       photo,
@@ -66,7 +67,6 @@ const Start = ({ show, handleClose }) => {
         <SendMessage
           setPhoto={setPhoto}
           defaultImg={photo}
-          value={converter.makeHtml(message.replace(/[\n]+/gi, "<br>"))}
           setValue={setMessage}
         />
       </Modal.Body>

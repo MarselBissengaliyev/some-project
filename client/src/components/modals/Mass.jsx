@@ -14,7 +14,7 @@ const Mass = ({ show, handleClose, token, bot }) => {
   const replaceParagraphsWithBreaks = {
     filter: ["p"],
     replacement: function (content) {
-      return "\n" + content;
+      return "<br>" + content;
     },
   };
   turndownService.addRule("replace_tag_p_to_br", replaceParagraphsWithBreaks);

@@ -6,7 +6,9 @@ import { uploadImage } from "../network/img";
 import { deleteStartMessage } from "../network/startMessage";
 
 const modules = {
-  toolbar: [["bold", "italic"], [{ list: "ordered" }]],
+  toolbar: [
+    ["bold", "italic"],
+  ],
 };
 
 const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
@@ -52,6 +54,7 @@ const TextEditor = ({ value, setValue, setPhoto, defaultImg = "" }) => {
           defaultValue={value}
           onChange={(e) => {
             setValue(e);
+            console.log(value);
           }}
           className="editor-input"
           modules={modules}
