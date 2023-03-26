@@ -17,15 +17,13 @@ const Pixels = () => {
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(async () => {
-      await getPixels()
-        .then((data) => {
-          setPixels(data);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, 500);
+    getPixels()
+      .then((data) => {
+        setPixels(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [setLoading]);
 
   return (

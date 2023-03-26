@@ -37,30 +37,34 @@ function App() {
         setToken(data.bot_token);
         setAvatar(data.bot_avatar);
 
-        await getMe(data.bot_token).then(async (data) => {
-          const result = data.result;
-          setBot((bot) => ({
-            ...bot,
-            first_name: result.first_name,
-            username: result.username,
-          }));
+        setTimeout(async () => {
+          await getMe(data.bot_token).then(async (data) => {
+            const result = data.result;
+            setBot((bot) => ({
+              ...bot,
+              first_name: result.first_name,
+              username: result.username,
+            }));
 
-          await getTelegramData(result.username)
-            .then((data) => {
-              setBot((bot) => ({
-                ...bot,
-                allUsersCount: data.allUsersCount,
-                activeUsersCount: data.activeUsersCount,
-              }));
-              setError("");
-            })
-            .catch((err) => {
-              setError(err.message);
-            })
-            .finally(() => {
-              setLoading(false);
-            });
-        });
+            setTimeout(async () => {
+              await getTelegramData(result.username)
+                .then((data) => {
+                  setBot((bot) => ({
+                    ...bot,
+                    allUsersCount: data.allUsersCount,
+                    activeUsersCount: data.activeUsersCount,
+                  }));
+                  setError("");
+                })
+                .catch((err) => {
+                  setError(err.message);
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            }, 1000);
+          });
+        }, 1000);
       });
     }, 500);
   }, []);

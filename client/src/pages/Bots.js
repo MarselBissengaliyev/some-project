@@ -31,20 +31,18 @@ const Bots = () => {
   /*
    ** Make a request to telegram api and get actuall bot name
    */
-  const showActuallBotName = () => {
+  const showActuallBotName = async () => {
     if (token) {
       setLoading(true);
-      setTimeout(async () => {
-        await getMe(token).then((data) => {
-          const result = data.result;
-          setBot(() => ({
-            ...bot,
-            first_name: result.first_name,
-            username: result.username,
-          }));
-          setLoading(false);
-        });
-      }, 1000);
+      await getMe(token).then((data) => {
+        const result = data.result;
+        setBot(() => ({
+          ...bot,
+          first_name: result.first_name,
+          username: result.username,
+        }));
+        setLoading(false);
+      });
     }
   };
   return (
@@ -88,11 +86,9 @@ const Bots = () => {
                 <Button onClick={handleShowStart} variant="primary">
                   Сообщение старта
                 </Button>
-                {showMass && <Mass
-                  handleClose={handleCloseMass}
-                  token={token}
-                  bot={bot}
-                />}
+                {showMass && (
+                  <Mass handleClose={handleCloseMass} token={token} bot={bot} />
+                )}
                 {showStart && <Start handleClose={handleCloseStart} />}
               </div>
             </Card.Body>
