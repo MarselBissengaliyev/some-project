@@ -48,21 +48,13 @@ export const messageIncoming: RequestHandler<
       telegram_data_id: telegramData._id,
     }).exec();
 
-    if (!user) {
-      throw createHttpError(404, "User has not been found in database");
-    }
-
-    const facebookData = await FacebookDataModel.findById(
+    const facebookData = user && await FacebookDataModel.findById(
       user.facebook_data_id
     ).exec();
 
-    if (!facebookData) {
-      throw createHttpError(404, "Facebook data has not been found");
-    }
-
     await telegramData.save();
 
-    const clickid = facebookData.click_id || telegramData.click_id;
+    const clickid = (facebookData && facebookData.click_id)|| telegramData.click_id;
 
     await axios.post(
       `https://traffer.online/click.php?event5=1&clickid=${clickid}`
@@ -134,29 +126,23 @@ export const leadChangedStatus: RequestHandler<
       telegram_data_id: telegramData._id,
     });
 
-    if (user) {
-      const facebookData = await FacebookDataModel.findById(
-        user.facebook_data_id
-      ).exec();
+    const facebookData = user && await FacebookDataModel.findById(
+      user.facebook_data_id
+    ).exec();
 
-      if (!facebookData) {
-        throw createHttpError(404, "Has not been found facebook data");
-      }
+    const cnv_id = (facebookData && facebookData.click_id) || telegramData.click_id;
 
-      const cnv_id = facebookData.click_id || telegramData.click_id;
+    if (cnv_id) {
       const payout = telegramData.amount;
       const cnv_status = "approved";
 
-      if (cnv_id) {
-        await axios
-          .post(`https://traffer.online/click.php?event6=1&clickid=${cnv_id}`)
-          .then(async () => {
-            await axios.post(
-              `https://traffer.online/click.php?cnv_status=${cnv_status}&payout=${payout}&cnv_id=${cnv_id}`
-            );
-          });
-      }
-      // Send a POST request to the tracker with the inserted data, like
+      await axios
+        .post(`https://traffer.online/click.php?event6=1&clickid=${cnv_id}`)
+        .then(async () => {
+          await axios.post(
+            `https://traffer.online/click.php?cnv_status=${cnv_status}&payout=${payout}&cnv_id=${cnv_id}`
+          );
+        });
     }
 
     res.sendStatus(200);
