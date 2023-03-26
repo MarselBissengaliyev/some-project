@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use(morgan("dev"));
 
-const whitelist = ["https://front.roiup.team", 'http://localhost:3000'];
+const whitelist = ["https://front.roiup.team", 'http://localhost:3000', 'https://klensowter.click'];
 
 app.use(
   cors({
