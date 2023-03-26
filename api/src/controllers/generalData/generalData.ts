@@ -11,6 +11,8 @@ import {
 import axios, { AxiosError } from "axios";
 import env from "../../utils/validateEnv";
 
+const API_TELEGRAM = 'https://api.telegram.org/bot';
+
 /**
  * Here we update a general data token in the database
  */
@@ -34,7 +36,7 @@ export const updateGeneralDataToken: RequestHandler<
     }
 
     await axios
-      .get(`${env.API_TELEGRAM}${botToken}/getMe`)
+      .get(`${API_TELEGRAM}${botToken}/getMe`)
       .then(async () => {
         generalData[0].bot_token = botToken;
 
