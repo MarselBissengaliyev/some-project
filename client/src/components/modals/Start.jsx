@@ -54,18 +54,18 @@ const Start = ({ show, handleClose }) => {
   };
 
   useEffect(() => {
-    if (show === true) {
-      setLoading(true);
-      getStartMessage().then((data) => {
+    setLoading(true);
+    getStartMessage()
+      .then((data) => {
         setPhoto(data.photo);
         setDisableWebPagePreview(data.disable_web_page_preview);
-      }).finally(() => {
+      })
+      .finally(() => {
         setTimeout(() => {
           setLoading(false);
-        }, 500)
+        }, 500);
       });
-    }
-  }, [show, setLoading]);
+  }, [setLoading]);
 
   return (
     <Modal
