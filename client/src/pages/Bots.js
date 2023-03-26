@@ -43,12 +43,12 @@ const Bots = () => {
       setTimeout(() => {
         getMe(token).then((data) => {
           const result = data.result;
-          setBot({
+          setBot(() => ({
             ...bot,
             first_name: result.first_name,
             username: result.username,
-          });
-          setLoading(false);
+          }));
+          setLoading(false)
         });
       }, 1000)
     }

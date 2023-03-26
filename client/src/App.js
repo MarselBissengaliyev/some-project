@@ -20,8 +20,6 @@ function App() {
     username: "",
     activeUsersCount: "",
     allUsersCount: "",
-    desositedUsers: null,
-    activeUsersWithClickId: null,
   });
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
@@ -51,10 +49,8 @@ function App() {
             setBot((bot) => ({
               ...bot,
               allUsersCount: data.allUsersCount,
-              activeUsersCount: data.activeUsersCount,
-              desositedUsers: data.desositedUsers,
-              activeUsersWithClickId: data.activeUsersWithClickId,
-            }));
+              activeUsersCount: data.activeUsersCount
+            }))
             setError("");
           })
           .catch((err) => {

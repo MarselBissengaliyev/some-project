@@ -1,54 +1,58 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import MyContext from "../context/context";
 import { downloadTxtFile, formatDate } from "../functions";
+import { getDepositors } from "../network/telegramData";
 
 const Deposists = () => {
   const {
-    bot: { activeUsersWithClickId, loading },
+    bot: { loading, username },
     setLoading,
+    setError,
   } = useContext(MyContext);
   const [value, setValue] = useState("");
   const [filterBy, setFilterBy] = useState("time_lead");
   const table = useRef();
-  const [message, setMessage] = useState("");
   const [filteredDeposits, setFilteredDeposits] = useState([]);
 
   useEffect(() => {
-    if (activeUsersWithClickId === null) {
-      setLoading(true);
-    }
-
-    if (activeUsersWithClickId && activeUsersWithClickId.length > 0) {
-      setLoading(false);
-      setMessage("");
-      setFilteredDeposits(
-        activeUsersWithClickId.filter((user) => {
-          console.log(user[filterBy])
-          let filterToString = user[filterBy] + "";
-          if (
-            filterBy === "time_lead" ||
-            filterBy === "time_click" ||
-            filterBy === "time_sale"
-          ) {
-            filterToString = formatDate(user[filterBy]);
-          }
-          console.log(filterToString);
-          return filterToString.toLowerCase().includes(value.toLowerCase());
+    setLoading(true);
+    if (username) {
+      getDepositors(username)
+        .then((deposits) => {
+          setFilteredDeposits(
+            deposits.filter((user) => {
+              console.log(user[filterBy]);
+              let filterToString = user[filterBy] + "";
+              if (
+                filterBy === "time_lead" ||
+                filterBy === "time_click" ||
+                filterBy === "time_sale"
+              ) {
+                filterToString = formatDate(user[filterBy]);
+              }
+              console.log(filterToString);
+              return filterToString.toLowerCase().includes(value.toLowerCase());
+            })
+          );
         })
-      );
+        .catch((err) => {
+          setError(err.message);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-  }, [activeUsersWithClickId, filterBy, setLoading, value]);
+  }, [filterBy, setError, setLoading, value, username]);
 
   return (
     <>
       <div className="container">
-        {message && <h2>{message}</h2>}
         {!!!loading && (
           <>
             <div className="mb-3 grid gap-lg-2">
               <button
                 className="btn btn-success mb-3"
-                onClick={() => downloadTxtFile(activeUsersWithClickId)}
+                onClick={() => downloadTxtFile(filteredDeposits)}
               >
                 Скачать txt файл
               </button>
