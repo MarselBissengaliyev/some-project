@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import showdown from "showdown";
 import TurndownService from "turndown";
 import {
   getStartMessage,
@@ -18,8 +17,6 @@ const Start = ({ show, handleClose }) => {
     },
   };
   turndownService.addRule("replace_tag_p_to_br", replaceParagraphsWithBreaks);
-
-  const converter = new showdown.Converter();
 
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -45,11 +42,13 @@ const Start = ({ show, handleClose }) => {
   };
 
   useEffect(() => {
-    getStartMessage().then((data) => {
-      setMessage(data.message);
-      setPhoto(data.photo);
-      setDisableWebPagePreview(data.disable_web_page_preview);
-    });
+    if (show) {
+      getStartMessage().then((data) => {
+        setMessage(data.message);
+        setPhoto(data.photo);
+        setDisableWebPagePreview(data.disable_web_page_preview);
+      });
+    }
   }, [show]);
 
   return (

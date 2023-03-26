@@ -25,6 +25,7 @@ const Bots = () => {
     showStart,
     setShowMass,
     setShowStart,
+    setLoading
   } = useContext(MyContext);
 
   const handleCloseMass = () => setShowMass(false);
@@ -38,14 +39,18 @@ const Bots = () => {
    */
   const showActuallBotName = () => {
     if (token) {
-      getMe(token).then((data) => {
-        const result = data.result;
-        setBot({
-          ...bot,
-          first_name: result.first_name,
-          username: result.username,
+      setLoading(true);
+      setTimeout(() => {
+        getMe(token).then((data) => {
+          const result = data.result;
+          setBot({
+            ...bot,
+            first_name: result.first_name,
+            username: result.username,
+          });
+          setLoading(false);
         });
-      });
+      }, 1000)
     }
   };
   return (

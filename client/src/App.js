@@ -29,26 +29,34 @@ function App() {
   const [showStart, setShowStart] = useState(false);
   const [tokenUpdated, setTokenUpdated] = useState(false);
   const [tokenValue, setTokenValue] = useState(token);
-  const [avatar, setAvatar] = useState(false);
+  const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    getGeneralData().then((data) => {
-      setToken(data.bot_token);
-      setAvatar(data.bot_avatar);
-    });
+    setLoading(true);
+    setTimeout(() => {
+      getGeneralData().then((data) => {
+        setToken(data.bot_token);
+        setAvatar(data.bot_avatar);
+        setLoading(false);
+      });
+    }, 1000);
   }, []);
 
   useEffect(() => {
     if (token) {
-      getMe(token).then((data) => {
-        const result = data.result;
-        setBot((bot) => ({
-          ...bot,
-          first_name: result.first_name,
-          username: result.username,
-        }));
-      });
+      setLoading(true);
+      setTimeout(() => {
+        getMe(token).then((data) => {
+          const result = data.result;
+          setBot((bot) => ({
+            ...bot,
+            first_name: result.first_name,
+            username: result.username,
+          }));
+          setLoading(false);
+        });
+      }, 1000)
     }
   }, [setBot, token]);
 
@@ -92,12 +100,15 @@ function App() {
       };
     }
 
-    setupGetTelegramData((data) => {
-      if (data.error) {
-        return setError(data.error);
-      }
-      setError("");
-    });
+    setTimeout(() => {
+      setupGetTelegramData((data) => {
+        setLoading(false);
+        if (data.error) {
+          return setError(data.error);
+        }
+        setError("");
+      });
+    }, 1000)
   }, [bot.username]);
 
   return (
