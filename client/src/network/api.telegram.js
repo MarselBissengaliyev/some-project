@@ -1,5 +1,7 @@
 import { fetchData, fetchTelegramApiData } from ".";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 /*
  ** Get a my bot info from telegram api
  */
@@ -52,7 +54,7 @@ export const sendAnimation = async (token, { chatId, animation, caption }) => {
       method: "POST",
       body: JSON.stringify({
         chat_id: chatId,
-        animation,
+        animation: `${API_URL}/${animation}`,
         caption,
         disable_notification: false,
         reply_to_message_id: null,
@@ -76,7 +78,7 @@ export const sendAnimation = async (token, { chatId, animation, caption }) => {
       method: "POST",
       body: JSON.stringify({
         chat_id: chatId,
-        photo,
+        animation: `${API_URL}/${photo}`,
         caption,
         disable_notification: false,
         reply_to_message_id: null,
