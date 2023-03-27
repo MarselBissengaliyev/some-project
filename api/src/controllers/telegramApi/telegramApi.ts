@@ -72,6 +72,7 @@ export const sendPhoto = async (
         caption,
         disable_notification: false,
         reply_to_message_id: null,
+        parse_mode: "Markdown",
       }
     );
 
@@ -112,6 +113,7 @@ export const sendAnimation = async (
         caption,
         disable_notification: false,
         reply_to_message_id: null,
+        parse_mode: "Markdown",
       }
     );
 
