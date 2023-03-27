@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import TurndownService from "turndown";
 import {
+  sendAnimation,
   sendMassMessage,
   sendMessage,
   sendPhoto,
@@ -40,7 +41,7 @@ const Mass = ({ handleClose, token, bot }) => {
           photo,
           telegramBotLogin: bot.username,
         });
-        
+
         setSuccess(data.message);
       } catch (error) {
         setError(error.message);
@@ -88,7 +89,27 @@ const Mass = ({ handleClose, token, bot }) => {
       }
     }
 
+    async function fetchSendAnimation() {
+      try {
+        await sendAnimation(token, {
+          chatId,
+          animation: photo,
+          caption: turndownService.turndown(value),
+        });
+      } catch (error) {
+        setError(error.message);
+        console.error(error);
+      }
+    }
+
     if (photo) {
+      const re = /(?:\.([^.]+))?$/;
+      const extension = re.exec(photo)[1];
+      console.log(extension);
+
+      if (extension === "gif") {
+        return fetchSendAnimation();
+      }
       fetchSendPhoto();
     }
 
@@ -148,7 +169,6 @@ const Mass = ({ handleClose, token, bot }) => {
             <Button
               variant="primary"
               onClick={(e) => {
-                handleClose(true);
                 testSubmit(e);
               }}
             >

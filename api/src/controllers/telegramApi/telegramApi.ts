@@ -82,6 +82,46 @@ export const sendPhoto = async (
 };
 
 /**
+ * Here we send animation message to a user
+ */
+export const sendAnimation = async (
+  chatId: number,
+  animation: string,
+  caption: string,
+  next: NextFunction
+) => {
+  if (!caption) {
+    caption = "";
+  }
+
+  try {
+    const generalData = await GeneralDataModel.findOne({}).exec();
+
+    if (!generalData) {
+      console.log("General data has not been found");
+      throw createHttpError(404, "General data has not been found");
+    }
+
+    const { data, status } = await axios.post(
+      `${env.API_TELEGRAM}${generalData.bot_token}/sendAnimation`,
+      {
+        chat_id: chatId,
+        animation,
+        caption,
+        disable_notification: false,
+        reply_to_message_id: null,
+      }
+    );
+
+    console.log("send photo status=", status);
+
+    return data;
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Here we send mass message to active users
  */
 export const sendMassMessage: RequestHandler<
@@ -127,6 +167,13 @@ export const sendMassMessage: RequestHandler<
           }
 
           if (photo) {
+            const re = /(?:\.([^.]+))?$/;
+            const extension = photo && re.exec(photo);
+        
+            if ((extension && extension[1]) === "gif") {
+              return await sendAnimation(chatId, photo, value, next)
+            }
+            
             await sendPhoto(chatId, photo, value, next);
           }
 

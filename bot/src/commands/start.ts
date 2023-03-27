@@ -22,6 +22,20 @@ export const start = async (ctx: StartContext) => {
   }
 
   if (startMessage.photo) {
+    const re = /(?:\.([^.]+))?$/;
+    const extension = startMessage.photo && re.exec(startMessage.photo);
+
+    if ((extension && extension[1]) === "gif") {
+      return await ctx.replyWithAnimation(
+        `${env.API_URL}${startMessage.photo}`,
+        {
+          caption: startMessage.message,
+          parse_mode: "Markdown",
+          disable_notification: false,
+        }
+      );
+    }
+
     await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
       caption: startMessage.message,
       parse_mode: "Markdown",

@@ -17,6 +17,22 @@ export const fetchData = async (input, init) => {
   }
 };
 
+export const fetchTelegramApiData = async (input, init) => {
+  const response = await fetch(input, init);
+  if (response.ok) {
+    return response;
+  } else {
+    const errorBody = await response.json();
+    const errorMessage = errorBody.description;
+    throw Error(
+      "Request failed with status: " +
+        response.error_code +
+        " message: " +
+        errorMessage
+    );
+  }
+}; 
+
 /*
  ** fetch img handler
  */

@@ -1,10 +1,10 @@
-import { fetchData } from ".";
+import { fetchData, fetchTelegramApiData } from ".";
 
 /*
  ** Get a my bot info from telegram api
  */
 export const getMe = async (token) => {
-  const response = await fetchData(
+  const response = await fetchTelegramApiData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/getMe`,
     {
       method: "POST",
@@ -21,7 +21,7 @@ export const sendMessage = async (
   token,
   { chatId, text, disableWebPagePreview }
 ) => {
-  const response = await fetchData(
+  const response = await fetchTelegramApiData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendMessage`,
     {
       method: "POST",
@@ -43,10 +43,34 @@ export const sendMessage = async (
 };
 
 /*
+ ** Send animation to a some user who existing in bot
+ */
+export const sendAnimation = async (token, { chatId, animation, caption }) => {
+  const response = await fetchTelegramApiData(
+    `${process.env.REACT_APP_API_TELEGRAM}${token}/sendAnimation`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        chat_id: chatId,
+        animation,
+        caption,
+        disable_notification: false,
+        reply_to_message_id: null,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.json();
+};
+
+/*
  ** Send photo to a some user who existing in bot
  */
-export const sendPhoto = async (token, { chatId, photo, caption }) => {
-  const response = await fetchData(
+ export const sendPhoto = async (token, { chatId, photo, caption }) => {
+  const response = await fetchTelegramApiData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendPhoto`,
     {
       method: "POST",
