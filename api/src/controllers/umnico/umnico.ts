@@ -80,8 +80,7 @@ export const leadChangedStatus: RequestHandler<
       "https://api.umnico.com/v1.3/statuses",
       {
         headers: {
-          Authorization: env.UMNICO_API_TOKEN,
-          Host: "api.umnico.com",
+          Authorization: env.UMNICO_API_TOKEN
         },
       }
     );
@@ -103,8 +102,12 @@ export const leadChangedStatus: RequestHandler<
     }
 
     const telegramData = await TelegramDataModel.findOne({
-      umnico_lead_id: req.body.leadId,
+      umnico_lead_id: +req.body.leadId,
     }).exec();
+
+    if (+req.body.leadId === 25901949) {
+      console.log('It is work');
+    }
 
     if (!telegramData) {
       throw createHttpError(
