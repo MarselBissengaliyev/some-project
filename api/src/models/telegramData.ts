@@ -11,8 +11,7 @@ const telegramDataSchema = new Schema({
     required: true,
   },
   login_telegram: {
-    type: String,
-    required: true,
+    type: String
   },
   is_active: {
     type: Boolean,
@@ -44,6 +43,9 @@ const telegramDataSchema = new Schema({
   click_id: {
     type: String,
     unique: true,
+  },
+  last_name_telegram: {
+    type: String,
   },
 });
 

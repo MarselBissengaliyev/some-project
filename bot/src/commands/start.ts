@@ -80,7 +80,7 @@ export const start = async (ctx: StartContext) => {
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
     time_lead: unixTimeStamp,
-    last_name_telegram: last_name ?? "",
+    last_name_telegram: last_name ?? ""
   })
     .then(async (data) => {
       console.log(data?.facebookData);
