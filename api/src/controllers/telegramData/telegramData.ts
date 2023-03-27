@@ -75,7 +75,7 @@ export const getDepositedUsers: RequestHandler<
         is_active: activeUser.is_active,
         telegram_bot_login: activeUser.telegram_bot_login,
         is_deposit: activeUser.is_deposit,
-        time_lead: activeUser.time_lead,
+        time_lead: activeUser.time_lead || null,
         umnico_lead_id: activeUser.umnico_lead_id || null,
         amount: activeUser.amount,
         time_sale: activeUser.time_sale || null,
