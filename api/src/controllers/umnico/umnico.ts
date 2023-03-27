@@ -23,8 +23,8 @@ export const messageIncoming: RequestHandler<
     console.log("message.incoming");
     const socialId: string = req.body.message.sender.socialId;
 
-    const leadId = req.body.leadId;
-    const telegramId = socialId.replace("user_", "");
+    const leadId = +req.body.leadId;
+    const telegramId = +socialId.replace("user_", "");
     if (!leadId || !telegramId) {
       console.log("Params does not exist");
       throw createHttpError(422, "Params does not exist");
@@ -105,10 +105,6 @@ export const leadChangedStatus: RequestHandler<
       umnico_lead_id: +req.body.leadId,
     }).exec();
 
-    if (+req.body.leadId === 25901949) {
-      console.log('It is work');
-    }
-
     if (!telegramData) {
       throw createHttpError(
         404,
@@ -121,7 +117,7 @@ export const leadChangedStatus: RequestHandler<
     const date = new Date();
     const unixTimeStamp = Math.floor(date.getTime() / 1000);
     telegramData.time_sale = unixTimeStamp;
-    telegramData.amount = req.body.lead?.amount ? req.body.lead.amount : 0;
+    telegramData.amount = req.body.lead?.amount ? +req.body.lead.amount : 0;
 
     await telegramData.save();
 
@@ -191,7 +187,7 @@ export const leadChanged: RequestHandler<
     }
 
     const telegramData = await TelegramDataModel.findOne({
-      umnico_lead_id: req.body.leadId,
+      umnico_lead_id: +req.body.leadId,
     }).exec();
 
     if (!telegramData) {
@@ -202,8 +198,8 @@ export const leadChanged: RequestHandler<
     }
 
     telegramData.amount = req.body.lead?.amount
-      ? req.body.lead.amount
-      : telegramData.amount;
+      ? +req.body.lead.amount
+      : +telegramData.amount;
 
     await telegramData.save();
     res.sendStatus(200);
