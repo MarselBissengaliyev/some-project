@@ -56,6 +56,7 @@ export const sendAnimation = async (token, { chatId, animation, caption }) => {
         chat_id: chatId,
         animation: `${API_URL}/${animation}`,
         caption,
+        parse_mode: "Markdown",
         disable_notification: false,
         reply_to_message_id: null,
       }),
@@ -81,6 +82,7 @@ export const sendAnimation = async (token, { chatId, animation, caption }) => {
         chat_id: chatId,
         photo: `${API_URL}${photo}`,
         caption,
+        parse_mode: "Markdown",
         disable_notification: false,
         reply_to_message_id: null,
       }),
@@ -109,6 +111,7 @@ export const sendMassMessage = async ({
       body: JSON.stringify({
         photo,
         value,
+        parse_mode: "Markdown",
         disableWebPagePreview,
         telegramBotLogin,
       }),
