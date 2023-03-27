@@ -62,6 +62,8 @@ export const sendPhoto = async (
       throw createHttpError(404, "General data has not been found");
     }
 
+    console.log(photo);
+
     const { data, status } = await axios.post(
       `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
       {
@@ -173,7 +175,7 @@ export const sendMassMessage: RequestHandler<
             if ((extension && extension[1]) === "gif") {
               return await sendAnimation(chatId, photo, value, next)
             }
-            
+
             await sendPhoto(chatId, photo, value, next);
           }
 

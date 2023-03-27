@@ -72,13 +72,14 @@ export const sendAnimation = async (token, { chatId, animation, caption }) => {
  ** Send photo to a some user who existing in bot
  */
  export const sendPhoto = async (token, { chatId, photo, caption }) => {
+  console.log(`${API_URL}/${photo}`);
   const response = await fetchTelegramApiData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendPhoto`,
     {
       method: "POST",
       body: JSON.stringify({
         chat_id: chatId,
-        animation: `${API_URL}/${photo}`,
+        photo: `${API_URL}${photo}`,
         caption,
         disable_notification: false,
         reply_to_message_id: null,
