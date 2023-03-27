@@ -71,7 +71,7 @@ export const getDepositedUsers: RequestHandler<
         click_id: facebookData?.click_id || activeUser.click_id || null,
         telegram_id: activeUser.telegram_id,
         first_name_telegram: activeUser.first_name_telegram,
-        login_telegram: activeUser.login_telegram || "",
+        login_telegram: activeUser.login_telegram || null,
         is_active: activeUser.is_active,
         telegram_bot_login: activeUser.telegram_bot_login,
         is_deposit: activeUser.is_deposit,
