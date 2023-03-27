@@ -108,6 +108,7 @@ const Mass = ({ handleClose, token, bot }) => {
       console.log(extension);
 
       if (extension === "gif") {
+        setLoading(false);
         return fetchSendAnimation();
       }
       fetchSendPhoto();
