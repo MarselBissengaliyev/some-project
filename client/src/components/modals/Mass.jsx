@@ -40,11 +40,8 @@ const Mass = ({ handleClose, token, bot }) => {
           photo,
           telegramBotLogin: bot.username,
         });
+        
         setSuccess(data.message);
-
-        setTimeout(() => {
-          handleClose()
-        }, 3000)
       } catch (error) {
         setError(error.message);
         console.error(error);

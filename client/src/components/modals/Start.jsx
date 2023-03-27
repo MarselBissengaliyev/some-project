@@ -40,10 +40,6 @@ const Start = ({ handleClose }) => {
         setError("");
         setStatus("Успешно измененно стартовое сообщение");
         setDisableWebPagePreview(data.disable_web_page_preview);
-
-        setTimeout(() => {
-          handleClose()
-        }, 3000)
       } catch (error) {
         setError(error.message);
         console.error(error);

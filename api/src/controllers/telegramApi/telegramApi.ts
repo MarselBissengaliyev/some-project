@@ -1,37 +1,44 @@
 import axios from "axios";
-import { RequestHandler } from "express";
+import { NextFunction, RequestHandler } from "express";
 import createHttpError from "http-errors";
 import GeneralDataModel from "../../models/generalData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import env from "../../utils/validateEnv";
 import { SendMassMessageBody } from "./telegramApi.interface";
+
 /**
  * Here we send message to a user
  */
 export const sendMessage = async (
   chatId: number,
   text: string,
-  disableWebPagePreview: boolean
+  disableWebPagePreview: boolean,
+  next: NextFunction
 ) => {
-  const generalData = await GeneralDataModel.findOne({}).exec();
+  try {
+    const generalData = await GeneralDataModel.findOne({}).exec();
 
-  if (!generalData) {
-    return "General data has not been found";
-  }
-
-  const { data } = await axios.post(
-    `${env.API_TELEGRAM}${generalData.bot_token}/sendMessage`,
-    {
-      chat_id: chatId,
-      text: text,
-      parse_mode: "Markdown",
-      disable_web_page_preview: disableWebPagePreview,
-      disable_notification: true,
-      reply_to_message_id: null,
+    if (!generalData) {
+      console.log("General data has not been found");
+      throw createHttpError(404, "General data has not been found");
     }
-  );
 
-  return data;
+    const { data } = await axios.post(
+      `${env.API_TELEGRAM}${generalData.bot_token}/sendMessage`,
+      {
+        chat_id: chatId,
+        text: text,
+        parse_mode: "Markdown",
+        disable_web_page_preview: disableWebPagePreview,
+        disable_notification: true,
+        reply_to_message_id: null,
+      }
+    );
+
+    return data;
+  } catch (error) {
+    next(error);
+  }
 };
 
 /**
@@ -40,32 +47,38 @@ export const sendMessage = async (
 export const sendPhoto = async (
   chatId: number,
   photo: string,
-  caption: string
+  caption: string,
+  next: NextFunction
 ) => {
   if (!caption) {
     caption = "";
   }
 
-  const generalData = await GeneralDataModel.findOne({}).exec();
+  try {
+    const generalData = await GeneralDataModel.findOne({}).exec();
 
-  if (!generalData) {
-    return "General data has not been found";
-  }
-
-  const { data, status } = await axios.post(
-    `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
-    {
-      chat_id: chatId,
-      photo,
-      caption,
-      disable_notification: false,
-      reply_to_message_id: null,
+    if (!generalData) {
+      console.log("General data has not been found");
+      throw createHttpError(404, "General data has not been found");
     }
-  );
 
-  console.log("send photo status=", status);
+    const { data, status } = await axios.post(
+      `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
+      {
+        chat_id: chatId,
+        photo,
+        caption,
+        disable_notification: false,
+        reply_to_message_id: null,
+      }
+    );
 
-  return data;
+    console.log("send photo status=", status);
+
+    return data;
+  } catch (error) {
+    next(error);
+  }
 };
 
 /**
@@ -110,11 +123,11 @@ export const sendMassMessage: RequestHandler<
           console.log(chatId);
 
           if (!photo && value) {
-            await sendMessage(chatId, value, disableWebPagePreview);
+            await sendMessage(chatId, value, disableWebPagePreview, next);
           }
 
           if (photo) {
-            await sendPhoto(chatId, photo, value);
+            await sendPhoto(chatId, photo, value, next);
           }
 
           console.log(`Sending message to ${user.telegram_id}`);
