@@ -70,7 +70,7 @@ export const getDepositedUsers: RequestHandler<
       activeUsersWithClickId.push({
         click_id: facebookData?.click_id || activeUser.click_id || null,
         telegram_id: activeUser.telegram_id,
-        first_name_telegram: activeUser.first_name_telegram,
+        first_name_telegram: activeUser.first_name_telegram || null,
         login_telegram: activeUser.login_telegram || null,
         is_active: activeUser.is_active,
         telegram_bot_login: activeUser.telegram_bot_login,
