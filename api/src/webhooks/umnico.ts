@@ -27,7 +27,6 @@ export const umnikoWebhook: RequestHandler<
         leadChanged(req, res, next);
         break;
       default:
-        console.log("Some action");
         res.sendStatus(204);
         break;
     }

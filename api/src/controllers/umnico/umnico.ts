@@ -20,18 +20,17 @@ export const messageIncoming: RequestHandler<
   unknown
 > = async (req, res, next) => {
   try {
-    console.log("message.incoming");
     const socialId: string = req.body.message.sender.socialId;
 
     const leadId = +req.body.leadId;
-    const telegramId = +socialId.replace("user_", "");
+    const telegramId = socialId.replace("user_", "");
     if (!leadId || !telegramId) {
       console.log("Params does not exist");
       throw createHttpError(422, "Params does not exist");
     }
 
     const telegramData = await TelegramData.findOne({
-      telegram_id: telegramId,
+      telegram_id: +telegramId,
     }).exec();
 
     if (!telegramData) {
@@ -95,11 +94,11 @@ export const leadChangedStatus: RequestHandler<
       throw createHttpError(422, "Lead has a non-existent status");
     }
 
-    console.log(leadStatus.name);
-
     if (leadStatus.name !== "Оплатили") {
       return;
     }
+
+    console.log(leadStatus.name);
 
     const telegramData = await TelegramDataModel.findOne({
       umnico_lead_id: +req.body.leadId,
@@ -180,11 +179,11 @@ export const leadChanged: RequestHandler<
       throw createHttpError(422, "Lead has a non-existent status");
     }
 
-    console.log(leadStatus.name);
-
     if (leadStatus.name !== "Оплатили") {
       return;
     }
+
+    console.log(leadStatus.name);
 
     const telegramData = await TelegramDataModel.findOne({
       umnico_lead_id: +req.body.leadId,
