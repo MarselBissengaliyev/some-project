@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const types = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
+const types = ["image/png", "image/jpeg", "image/jpg", "image/gif", 'image/webp'];
 
 /**
  * Here we validate our image
