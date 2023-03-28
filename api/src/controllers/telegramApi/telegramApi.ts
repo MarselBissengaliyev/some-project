@@ -166,9 +166,12 @@ export const sendMassMessage: RequestHandler<
 
           if (!photo && value) {
             await sendMessage(chatId, value, disableWebPagePreview)
-              .then((res) => {
+              .then(() => {
                 count++;
-                emitIo({ event: 'message-sent', message: `Has been sent message to ${count} users ` });
+                emitIo({
+                  event: "message-sent",
+                  message: `Has been sent message to ${count} users `,
+                });
               })
               .catch(async (err) => {
                 if (!err.response.data.ok) {
@@ -184,7 +187,10 @@ export const sendMassMessage: RequestHandler<
                   await telegramData.save();
 
                   errors++;
-                  emitIo({ event: 'message-sent-error', message: `Couldn't sent message to ${errors} users` });
+                  emitIo({
+                    event: "message-sent-error",
+                    message: `Couldn't sent message to ${errors} users`,
+                  });
 
                   console.log(
                     err.response.data.error_code,
@@ -199,10 +205,74 @@ export const sendMassMessage: RequestHandler<
             const extension = photo && re.exec(photo);
 
             if ((extension && extension[1]) === "gif") {
-              return await sendAnimation(chatId, photo, value, next);
+              return await sendAnimation(chatId, photo, value, next)
+                .then(() => {
+                  count++;
+                  emitIo({
+                    event: "message-sent",
+                    message: `Has been sent message to ${count} users `,
+                  });
+                })
+                .catch(async (err) => {
+                  if (!err.response.data.ok) {
+                    user.is_active = false;
+                    const telegramData = await TelegramDataModel.findOne({
+                      telegram_id: user.telegram_id,
+                    }).exec();
+                    if (!telegramData) {
+                      return;
+                    }
+                    telegramData.is_active = false;
+
+                    await telegramData.save();
+
+                    errors++;
+                    emitIo({
+                      event: "message-sent-error",
+                      message: `Couldn't sent message to ${errors} users`,
+                    });
+
+                    console.log(
+                      err.response.data.error_code,
+                      err.response.data.description
+                    );
+                  }
+                });
             }
 
-            await sendPhoto(chatId, photo, value, next);
+            await sendPhoto(chatId, photo, value, next)
+              .then(() => {
+                count++;
+                emitIo({
+                  event: "message-sent",
+                  message: `Has been sent message to ${count} users `,
+                });
+              })
+              .catch(async (err) => {
+                if (!err.response.data.ok) {
+                  user.is_active = false;
+                  const telegramData = await TelegramDataModel.findOne({
+                    telegram_id: user.telegram_id,
+                  }).exec();
+                  if (!telegramData) {
+                    return;
+                  }
+                  telegramData.is_active = false;
+
+                  await telegramData.save();
+
+                  errors++;
+                  emitIo({
+                    event: "message-sent-error",
+                    message: `Couldn't sent message to ${errors} users`,
+                  });
+
+                  console.log(
+                    err.response.data.error_code,
+                    err.response.data.description
+                  );
+                }
+              });
           }
 
           console.log(`Sending message to ${user.telegram_id}`);
