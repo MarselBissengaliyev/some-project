@@ -165,7 +165,7 @@ export const sendMassMessage: RequestHandler<
               })
               .catch(async (err) => {
                 console.log('suka');
-                if (!err.response.data.ok) {
+                if (err.response && !err.response.data.ok) {
                   errors++;
                   emitIo({
                     event: "message-sent-error",
@@ -208,7 +208,7 @@ export const sendMassMessage: RequestHandler<
                 })
                 .catch(async (err) => {
                   console.log(err);
-                  if (!err.response.data.ok) {
+                  if (err.response && !err.response.data.ok) {
                     errors++;
                     emitIo({
                       event: "message-sent-error",
@@ -246,8 +246,8 @@ export const sendMassMessage: RequestHandler<
                 });
               })
               .catch(async (err) => {
-                console.log('blyad');
-                if (!err.response.data.ok) {
+                console.log(err);
+                if (err.response && !err.response.data.ok) {
                   errors++;
                   emitIo({
                     event: "message-sent-error",
