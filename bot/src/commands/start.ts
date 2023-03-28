@@ -9,7 +9,6 @@ import PixelModel from "../models/pixel";
 import StartMessageModel from "../models/startMessage";
 import env from "../utils/validateEnv";
 import { StartContext } from "./start.interface";
-import facebookData from "../models/facebookData";
 
 /**
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
@@ -80,7 +79,7 @@ export const start = async (ctx: StartContext) => {
     is_deposit: false,
     telegram_bot_login: ctx.botInfo.username,
     time_lead: unixTimeStamp,
-    last_name_telegram: last_name ?? ""
+    last_name_telegram: last_name ?? "",
   })
     .then(async (data) => {
       if (data && data.facebookData) {

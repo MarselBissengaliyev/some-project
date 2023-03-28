@@ -9,15 +9,25 @@ import {
 } from "../../network/api.telegram";
 import SendMessage from "../SendMessage";
 import MyContext from "../../context/context";
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 
-// socket.emit('getSendedMessageCount', )
-// const socket = io("http://localhost:4444");
+const socket = io("http://localhost:4444");
 
 const Mass = ({ handleClose, token, bot }) => {
-  // socket.on("message-sent", (socket) => {
-  //   console.log(socket);
-  // });
+  const [value, setValue] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [testTelegramId, setTestTelegramId] = useState("");
+  const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  socket.on("message-sent", (socket) => {
+    setSuccess(socket);
+  });
+
+  socket.on('message-sent-error', (socket) => {
+    setError(socket);
+  })
 
   const turndownService = new TurndownService();
   const { setLoading } = useContext(MyContext);
@@ -30,30 +40,24 @@ const Mass = ({ handleClose, token, bot }) => {
   };
   turndownService.addRule("replace_tag_p_to_br", replaceParagraphsWithBreaks);
 
-  const [value, setValue] = useState("");
-  const [photo, setPhoto] = useState("");
-  const [testTelegramId, setTestTelegramId] = useState("");
-  const [disableWebPagePreview, setDisableWebPagePreview] = useState(true);
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     async function fetchSendMassMessage() {
       try {
-        const data = await sendMassMessage({
+        await sendMassMessage({
           disableWebPagePreview,
           value: turndownService.turndown(value),
           photo,
           telegramBotLogin: bot.username,
         });
-
-        setSuccess(data.message);
       } catch (error) {
         setError(error.message);
         console.error(error);
+        setTimeout(() => {
+          setError('');
+        }, 5000)
       }
     }
 

@@ -1,3 +1,4 @@
+import axios, { AxiosError } from "axios";
 import { RequestHandler } from "express";
 import fs from "fs";
 import createHttpError from "http-errors";
@@ -8,8 +9,6 @@ import {
   UpdateGeneralDataBody,
   UpdateGeneralDataParams,
 } from "./generalData.interface";
-import axios, { AxiosError } from "axios";
-import env from "../../utils/validateEnv";
 
 const API_TELEGRAM = 'https://api.telegram.org/bot';
 

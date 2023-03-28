@@ -34,6 +34,9 @@ const telegramDataSchema = new Schema({
   last_name_telegram: {
     type: String,
   },
+  click_id: {
+    type: String,
+  }
 });
 
 export type TelegramData = InferSchemaType<typeof telegramDataSchema>;
