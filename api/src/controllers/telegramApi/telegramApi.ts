@@ -213,6 +213,9 @@ export const sendMassMessage: RequestHandler<
                     if (
                       err.response.data.error_code === 403
                     ) {
+                      if (!user.telegram_id) {
+                        return;
+                      }
                       const telegramData = await TelegramDataModel.findOne({
                         telegram_id: user.telegram_id,
                       }).exec();
