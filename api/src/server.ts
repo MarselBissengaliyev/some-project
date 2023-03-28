@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import app from "./app";
 import env from "./utils/validateEnv";
 import http from 'http';
-import { init as initSocketIo } from './io';
+// import { init as initSocketIo } from './io';
 
 const port = env.PORT || 4444;
 
@@ -13,9 +13,9 @@ mongoose
   .connect(env.MONGO_CONNECTION_STRING)
   .then(() => {
     console.log("Mongoose connected");
-    server.listen(port, () => {
+    app.listen(port, () => {
       console.log(`Server running on port: ${port}`);
-      initSocketIo(server);
+      // initSocketIo(server);
     });
   })
   .catch(console.error);
