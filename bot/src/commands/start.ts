@@ -99,10 +99,6 @@ export const start = async (ctx: StartContext) => {
           const pixel = pixels[i];
           console.log(pixel.fb_pixel_id, data.facebookData.pixel);
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
-            const serverEventData: ServerEventInterface = {
-              eventName: "Lead",
-              actionSource: "website",
-            };
 
             const eventRequestData: EventRequestInterface = {
               fb_pixel_id: pixel.fb_pixel_id,
@@ -112,7 +108,6 @@ export const start = async (ctx: StartContext) => {
 
             await postEvent(
               { ip, fb_click: `fb.1.${data.facebookData.time_click}.${fb_click}`, user_agent },
-              serverEventData,
               eventRequestData
             );
             break;

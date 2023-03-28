@@ -11,7 +11,7 @@ import SendMessage from "../SendMessage";
 import MyContext from "../../context/context";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:4444");
+const socket = io("https://back.roiup.team");
 
 const Mass = ({ handleClose, token, bot }) => {
   const [value, setValue] = useState("");

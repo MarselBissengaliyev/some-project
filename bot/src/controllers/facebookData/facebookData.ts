@@ -20,7 +20,6 @@ const current_timestamp = Math.floor(new Date().getTime() / 1000);
  */
 export const postEvent = async (
   { ip, user_agent, fb_click }: UserDataInterface,
-  { eventName, actionSource }: ServerEventInterface,
   { fb_pixel_id, token, domain }: EventRequestInterface
 ) => {
   console.log("PostEvent run");
@@ -30,11 +29,11 @@ export const postEvent = async (
     .setFbc(fb_click);
 
   const serverEvent = new ServerEvent()
-    .setEventName(eventName)
+    .setEventName("Lead")
     .setEventTime(current_timestamp)
     .setUserData(userData)
-    .setActionSource(actionSource)
-    .setEventSourceUrl(domain);
+    .setActionSource("website")
+    .setEventSourceUrl(`https://${domain}`);
 
   const eventsData = [serverEvent];
 
