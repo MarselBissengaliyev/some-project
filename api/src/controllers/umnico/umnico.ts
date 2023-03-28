@@ -194,7 +194,7 @@ export const leadChanged: RequestHandler<
 
     telegramData.amount = req.body.lead?.amount
       ? +req.body.lead.amount
-      : +telegramData.amount;
+      : (telegramData.amount || 0);
 
     await telegramData.save();
     res.sendStatus(200);
