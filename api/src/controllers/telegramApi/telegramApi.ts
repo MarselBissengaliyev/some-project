@@ -61,7 +61,7 @@ export const sendPhoto = async (
     `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
     {
       chat_id: chatId,
-      photo,
+      photo: `${env}${photo}`,
       caption,
       disable_notification: false,
       reply_to_message_id: null,
@@ -97,7 +97,7 @@ export const sendAnimation = async (
     `${env.API_TELEGRAM}${generalData.bot_token}/sendAnimation`,
     {
       chat_id: chatId,
-      animation,
+      photo: `${env}${animation}`,
       caption,
       disable_notification: false,
       reply_to_message_id: null,
@@ -164,7 +164,7 @@ export const sendMassMessage: RequestHandler<
                 });
               })
               .catch(async (err) => {
-                console.log(err);
+                console.log('suka');
                 if (!err.response.data.ok) {
                   errors++;
                   emitIo({
@@ -192,7 +192,8 @@ export const sendMassMessage: RequestHandler<
                   }
                 }
               });
-          } else if (photo) {
+          } 
+          if (photo) {
             const re = /(?:\.([^.]+))?$/;
             const extension = photo && re.exec(photo);
 
@@ -245,7 +246,7 @@ export const sendMassMessage: RequestHandler<
                 });
               })
               .catch(async (err) => {
-                console.log(err);
+                console.log('blyad');
                 if (!err.response.data.ok) {
                   errors++;
                   emitIo({

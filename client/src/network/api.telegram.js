@@ -1,7 +1,5 @@
 import { fetchData, fetchTelegramApiData } from ".";
 
-const API_URL = process.env.REACT_APP_API_URL;
-
 /*
  ** Get a my bot info from telegram api
  */
@@ -54,7 +52,7 @@ export const sendAnimation = async (token, { chatId, animation, caption }) => {
       method: "POST",
       body: JSON.stringify({
         chat_id: chatId,
-        animation: `${API_URL}/${animation}`,
+        animation,
         caption,
         parse_mode: "Markdown",
         disable_notification: false,
@@ -73,14 +71,13 @@ export const sendAnimation = async (token, { chatId, animation, caption }) => {
  ** Send photo to a some user who existing in bot
  */
  export const sendPhoto = async (token, { chatId, photo, caption }) => {
-  console.log(`${API_URL}/${photo}`);
   const response = await fetchTelegramApiData(
     `${process.env.REACT_APP_API_TELEGRAM}${token}/sendPhoto`,
     {
       method: "POST",
       body: JSON.stringify({
         chat_id: chatId,
-        photo: `${API_URL}${photo}`,
+        photo,
         caption,
         parse_mode: "Markdown",
         disable_notification: false,
@@ -109,7 +106,7 @@ export const sendMassMessage = async ({
     {
       method: "POST",
       body: JSON.stringify({
-        photo: `${API_URL}${photo}`,
+        photo,
         value,
         parse_mode: "Markdown",
         disableWebPagePreview,
