@@ -173,7 +173,7 @@ export const sendMassMessage: RequestHandler<
                     err.response.data.error_code === 403
                   ) {
                     const telegramData = await TelegramDataModel.findOne({
-                      telegram_id: user.telegram_id + "",
+                      telegram_id: user.telegram_id,
                     }).exec();
                     if (!telegramData) {
                       return;
@@ -215,7 +215,7 @@ export const sendMassMessage: RequestHandler<
                       err.response.data.error_code === 403
                     ) {
                       const telegramData = await TelegramDataModel.findOne({
-                        telegram_id: user.telegram_id + "",
+                        telegram_id: user.telegram_id,
                       }).exec();
                       if (!telegramData) {
                         return;
@@ -253,7 +253,7 @@ export const sendMassMessage: RequestHandler<
                     err.response.data.error_code === 403
                   ) {
                     const telegramData = await TelegramDataModel.findOne({
-                      telegram_id: user.telegram_id + "",
+                      telegram_id: user.telegram_id,
                     }).exec();
                     if (!telegramData) {
                       return;
