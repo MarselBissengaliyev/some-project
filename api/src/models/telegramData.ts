@@ -29,7 +29,6 @@ const telegramDataSchema = new Schema({
   },
   amount: {
     type: Number,
-    default: 0,
   },
   time_sale: {
     type: Number,
@@ -40,6 +39,7 @@ const telegramDataSchema = new Schema({
   last_name_telegram: {
     type: String,
   },
+  time_click: String
 });
 
 export type TelegramData = InferSchemaType<typeof telegramDataSchema>;

@@ -77,9 +77,9 @@ export const getDepositedUsers: RequestHandler<
         is_deposit: activeUser.is_deposit || null,
         time_lead: activeUser.time_lead || null,
         umnico_lead_id: activeUser.umnico_lead_id || null,
-        amount: activeUser.amount,
+        amount: activeUser.amount || 0,
         time_sale: activeUser.time_sale || null,
-        time_click: facebookData?.time_click || null,
+        time_click: facebookData?.time_click || Number(activeUser?.time_click) || null,
       });
     }
     res.status(200).json(activeUsersWithClickId);

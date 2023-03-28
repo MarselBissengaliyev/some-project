@@ -29,7 +29,6 @@ const telegramDataSchema = new Schema({
   },
   amount: {
     type: Number,
-    default: 0,
   },
   time_sale: {
     type: Number,
