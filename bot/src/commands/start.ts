@@ -9,6 +9,7 @@ import PixelModel from "../models/pixel";
 import StartMessageModel from "../models/startMessage";
 import env from "../utils/validateEnv";
 import { StartContext } from "./start.interface";
+import facebookData from "../models/facebookData";
 
 /**
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
@@ -111,7 +112,7 @@ export const start = async (ctx: StartContext) => {
             };
 
             await postEvent(
-              { ip, fb_click, user_agent },
+              { ip, fb_click: `fb.1.${data.facebookData.time_click}.${fb_click}`, user_agent },
               serverEventData,
               eventRequestData
             );
