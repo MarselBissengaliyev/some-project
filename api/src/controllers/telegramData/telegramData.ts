@@ -51,8 +51,6 @@ export const getDepositedUsers: RequestHandler<
       throw createHttpError(404, "Deposited users has not been found");
     }
 
-    console.log(desositedUsers);
-
     const activeUsersWithClickId: ActiveUsersWithClickIdInterface[] = [];
 
     for (const activeUser of desositedUsers) {

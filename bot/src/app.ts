@@ -11,8 +11,6 @@ mongoose
   .connect(env.MONGO_CONNECTION_STRING)
   .then(async () => {
     console.log("Connected to MongoDB database");
-    const telegramData = await TelegramDataModel.find({ telegram_id: {$type: 'int'} }).exec();
-    console.log(telegramData);
     // Get token from database using Mongoose
     const generalData = await GeneralDataModel.findOne({}).exec();
 

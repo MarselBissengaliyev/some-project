@@ -55,7 +55,7 @@ export const sendPhoto = async (
     throw createHttpError(404, "General data has not been found");
   }
 
-  const { data, status } = await axios.post(
+  const { data } = await axios.post(
     `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
     {
       chat_id: chatId,
@@ -66,8 +66,6 @@ export const sendPhoto = async (
       parse_mode: "Markdown",
     }
   );
-
-  console.log("send photo status=", status);
 
   return data;
 };
@@ -102,8 +100,6 @@ export const sendAnimation = async (
       parse_mode: "Markdown",
     }
   );
-
-  console.log("send photo status=", status);
 
   return data;
 };
@@ -204,7 +200,6 @@ export const sendMassMessage: RequestHandler<
                 })
                 .catch(async (err) => {
                   if (err.response && !err.response.data.ok) {
-                    console.log(err.response);
                     errors++;
                     emitIo({
                       event: "message-sent-error",
@@ -244,7 +239,6 @@ export const sendMassMessage: RequestHandler<
                 });
               })
               .catch(async (err) => {
-                console.log(err);
                 if (err.response && !err.response.data.ok) {
                   errors++;
                   emitIo({
@@ -273,7 +267,6 @@ export const sendMassMessage: RequestHandler<
               });
           }
 
-          console.log(`Sending message to ${user.telegram_id}`);
         });
       }, 1000 * sec);
     }
