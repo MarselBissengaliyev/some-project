@@ -61,7 +61,7 @@ export const sendPhoto = async (
     `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
     {
       chat_id: chatId,
-      photo: `${env}${photo}`,
+      photo: `${env.API_URL}${photo}`,
       caption,
       disable_notification: false,
       reply_to_message_id: null,
@@ -97,7 +97,7 @@ export const sendAnimation = async (
     `${env.API_TELEGRAM}${generalData.bot_token}/sendAnimation`,
     {
       chat_id: chatId,
-      photo: `${env}${animation}`,
+      photo: `${env.API_URL}${animation}`,
       caption,
       disable_notification: false,
       reply_to_message_id: null,
@@ -153,6 +153,7 @@ export const sendMassMessage: RequestHandler<
         group.forEach(async (user: TelegramData) => {
           const chatId = user.telegram_id;
           console.log(chatId);
+          
 
           if (!photo && value) {
             await sendMessage(chatId, value, disableWebPagePreview)
