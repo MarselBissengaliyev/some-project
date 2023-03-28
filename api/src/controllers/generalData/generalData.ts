@@ -166,7 +166,6 @@ export const deleteImage: RequestHandler = async (req, res, next) => {
         });
       }
     });
-    console.log("Delete");
     const generalData = await GeneralDataModel.findOne({}).exec();
 
     if (!generalData) {

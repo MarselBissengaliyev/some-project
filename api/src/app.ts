@@ -27,7 +27,6 @@ const whitelist = ["https://front.roiup.team", 'http://localhost:3000', 'https:/
 app.use(
   cors({
     origin: function (origin, callback) {
-      console.log(origin);
       if (!origin || whitelist.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
@@ -62,7 +61,6 @@ app.use((req, res, next) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
-  console.log(error);
   let errorMessage = "An unkown error occured";
   let statusCode = 500;
 

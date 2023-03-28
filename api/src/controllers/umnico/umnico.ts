@@ -98,8 +98,6 @@ export const leadChangedStatus: RequestHandler<
       return;
     }
 
-    console.log(leadStatus.name);
-
     const telegramData = await TelegramDataModel.findOne({
       umnico_lead_id: +req.body.leadId,
     }).exec();
@@ -182,8 +180,6 @@ export const leadChanged: RequestHandler<
     if (leadStatus.name !== "Оплатили") {
       return;
     }
-
-    console.log(leadStatus.name);
 
     const telegramData = await TelegramDataModel.findOne({
       umnico_lead_id: +req.body.leadId,

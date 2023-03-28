@@ -127,7 +127,7 @@ export const updatePixel: RequestHandler<
  */
 export const deletePixel: RequestHandler = async (req, res, next) => {
   const pixelId = req.params.pixelId;
-  console.log("Delte");
+
   try {
     if (!mongoose.isValidObjectId(pixelId)) {
       throw createHttpError(400, "Invalid pixel id");

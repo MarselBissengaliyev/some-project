@@ -29,7 +29,6 @@ const telegramDataSchema = new Schema({
   },
   umnico_lead_id: {
     type: Number,
-    required: true,
   },
   amount: {
     type: Number,
@@ -41,6 +40,7 @@ const telegramDataSchema = new Schema({
   click_id: {
     type: String,
     unique: true,
+    sparse: true
   },
   last_name_telegram: {
     type: String,

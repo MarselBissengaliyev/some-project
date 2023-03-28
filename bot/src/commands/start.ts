@@ -14,7 +14,7 @@ import { StartContext } from "./start.interface";
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
  */
 export const start = async (ctx: StartContext) => {
-  console.log("Start");
+
   const startMessage = await StartMessageModel.findOne({}).exec();
 
   if (!startMessage) {
@@ -83,7 +83,6 @@ export const start = async (ctx: StartContext) => {
     last_name_telegram: last_name ?? ""
   })
     .then(async (data) => {
-      console.log(data?.facebookData);
       if (data && data.facebookData) {
         const pixels = await PixelModel.find({
           fb_pixel_id: data.facebookData.pixel,
@@ -100,6 +99,7 @@ export const start = async (ctx: StartContext) => {
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
+            console.log('Will be send');
             const serverEventData: ServerEventInterface = {
               eventName: "Lead",
               actionSource: "website",

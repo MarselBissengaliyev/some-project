@@ -5,6 +5,7 @@ import GeneralDataModel from "../../models/generalData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import env from "../../utils/validateEnv";
 import { SendMassMessageBody } from "./telegramApi.interface";
+import { emitIo } from "../../io";
 
 /**
  * Here we send message to a user
@@ -12,33 +13,27 @@ import { SendMassMessageBody } from "./telegramApi.interface";
 export const sendMessage = async (
   chatId: number,
   text: string,
-  disableWebPagePreview: boolean,
-  next: NextFunction
+  disableWebPagePreview: boolean
 ) => {
-  try {
-    const generalData = await GeneralDataModel.findOne({}).exec();
+  const generalData = await GeneralDataModel.findOne({}).exec();
 
-    if (!generalData) {
-      console.log("General data has not been found");
-      throw createHttpError(404, "General data has not been found");
-    }
-
-    const { data } = await axios.post(
-      `${env.API_TELEGRAM}${generalData.bot_token}/sendMessage`,
-      {
-        chat_id: chatId,
-        text: text,
-        parse_mode: "Markdown",
-        disable_web_page_preview: disableWebPagePreview,
-        disable_notification: true,
-        reply_to_message_id: null,
-      }
-    );
-
-    return data;
-  } catch (error) {
-    next(error);
+  if (!generalData) {
+    throw createHttpError(404, "General data has not been found");
   }
+
+  const res = await axios.post(
+    `${env.API_TELEGRAM}${generalData.bot_token}/sendMessage`,
+    {
+      chat_id: chatId,
+      text: text,
+      parse_mode: "Markdown",
+      disable_web_page_preview: disableWebPagePreview,
+      disable_notification: true,
+      reply_to_message_id: null,
+    }
+  );
+
+  return res;
 };
 
 /**
@@ -150,6 +145,9 @@ export const sendMassMessage: RequestHandler<
   ).exec();
 
   try {
+    let count = 0;
+    let errors = 0;
+
     if (!activeUsersId) {
       throw createHttpError(400, "The activeUsersId is important");
     }
@@ -167,15 +165,41 @@ export const sendMassMessage: RequestHandler<
           console.log(chatId);
 
           if (!photo && value) {
-            await sendMessage(chatId, value, disableWebPagePreview, next);
+            await sendMessage(chatId, value, disableWebPagePreview)
+              .then((res) => {
+                count++;
+                emitIo({ event: 'message-sent', message: `Has been sent message to ${count} users ` });
+              })
+              .catch(async (err) => {
+                if (!err.response.data.ok) {
+                  user.is_active = false;
+                  const telegramData = await TelegramDataModel.findOne({
+                    telegram_id: user.telegram_id,
+                  }).exec();
+                  if (!telegramData) {
+                    return;
+                  }
+                  telegramData.is_active = false;
+
+                  await telegramData.save();
+
+                  errors++;
+                  emitIo({ event: 'message-sent-error', message: `Couldn't sent message to ${errors} users` });
+
+                  console.log(
+                    err.response.data.error_code,
+                    err.response.data.description
+                  );
+                }
+              });
           }
 
           if (photo) {
             const re = /(?:\.([^.]+))?$/;
             const extension = photo && re.exec(photo);
-        
+
             if ((extension && extension[1]) === "gif") {
-              return await sendAnimation(chatId, photo, value, next)
+              return await sendAnimation(chatId, photo, value, next);
             }
 
             await sendPhoto(chatId, photo, value, next);
@@ -185,9 +209,8 @@ export const sendMassMessage: RequestHandler<
         });
       }, 1000 * sec);
     }
-
     res.status(200).json({
-      message: `The message will be sent to ${activeUsersId.length} users...`,
+      message: `Сообщение отправляеться`,
     });
   } catch (error) {
     next(error);
