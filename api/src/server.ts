@@ -12,6 +12,7 @@ const server = http.createServer(app);
 mongoose
   .connect(env.MONGO_CONNECTION_STRING)
   .then(() => {
+    mongoose.set('debug', true);
     console.log("Mongoose connected");
     server.listen(port, () => {
       console.log(`Server running on port: ${port}`);
