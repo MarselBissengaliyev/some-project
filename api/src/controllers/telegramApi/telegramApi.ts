@@ -5,7 +5,7 @@ import GeneralDataModel from "../../models/generalData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import env from "../../utils/validateEnv";
 import { SendMassMessageBody } from "./telegramApi.interface";
-import { emitIo } from "../../io";
+// import { emitIo } from "../../io";
 
 /**
  * Here we send message to a user
@@ -168,7 +168,7 @@ export const sendMassMessage: RequestHandler<
             await sendMessage(chatId, value, disableWebPagePreview)
               .then((res) => {
                 count++;
-                emitIo({ event: 'message-sent', message: `Has been sent message to ${count} users ` });
+                // emitIo({ event: 'message-sent', message: `Has been sent message to ${count} users ` });
               })
               .catch(async (err) => {
                 if (!err.response.data.ok) {
@@ -184,7 +184,7 @@ export const sendMassMessage: RequestHandler<
                   await telegramData.save();
 
                   errors++;
-                  emitIo({ event: 'message-sent-error', message: `Couldn't sent message to ${errors} users` });
+                  // emitIo({ event: 'message-sent-error', message: `Couldn't sent message to ${errors} users` });
 
                   console.log(
                     err.response.data.error_code,
