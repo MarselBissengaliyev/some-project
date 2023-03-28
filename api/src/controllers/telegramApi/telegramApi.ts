@@ -1,11 +1,11 @@
 import axios from "axios";
-import { NextFunction, RequestHandler } from "express";
+import { RequestHandler } from "express";
 import createHttpError from "http-errors";
+import { emitIo } from "../../io";
 import GeneralDataModel from "../../models/generalData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import env from "../../utils/validateEnv";
 import { SendMassMessageBody } from "./telegramApi.interface";
-import { emitIo } from "../../io";
 
 /**
  * Here we send message to a user
@@ -42,41 +42,36 @@ export const sendMessage = async (
 export const sendPhoto = async (
   chatId: number,
   photo: string,
-  caption: string,
-  next: NextFunction
+  caption: string
 ) => {
   if (!caption) {
     caption = "";
   }
 
-  try {
-    const generalData = await GeneralDataModel.findOne({}).exec();
+  const generalData = await GeneralDataModel.findOne({}).exec();
 
-    if (!generalData) {
-      console.log("General data has not been found");
-      throw createHttpError(404, "General data has not been found");
-    }
-
-    console.log(photo);
-
-    const { data, status } = await axios.post(
-      `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
-      {
-        chat_id: chatId,
-        photo,
-        caption,
-        disable_notification: false,
-        reply_to_message_id: null,
-        parse_mode: "Markdown",
-      }
-    );
-
-    console.log("send photo status=", status);
-
-    return data;
-  } catch (error) {
-    next(error);
+  if (!generalData) {
+    console.log("General data has not been found");
+    throw createHttpError(404, "General data has not been found");
   }
+
+  console.log(photo);
+
+  const { data, status } = await axios.post(
+    `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
+    {
+      chat_id: chatId,
+      photo,
+      caption,
+      disable_notification: false,
+      reply_to_message_id: null,
+      parse_mode: "Markdown",
+    }
+  );
+
+  console.log("send photo status=", status);
+
+  return data;
 };
 
 /**
@@ -85,39 +80,34 @@ export const sendPhoto = async (
 export const sendAnimation = async (
   chatId: number,
   animation: string,
-  caption: string,
-  next: NextFunction
+  caption: string
 ) => {
   if (!caption) {
     caption = "";
   }
 
-  try {
-    const generalData = await GeneralDataModel.findOne({}).exec();
+  const generalData = await GeneralDataModel.findOne({}).exec();
 
-    if (!generalData) {
-      console.log("General data has not been found");
-      throw createHttpError(404, "General data has not been found");
-    }
-
-    const { data, status } = await axios.post(
-      `${env.API_TELEGRAM}${generalData.bot_token}/sendAnimation`,
-      {
-        chat_id: chatId,
-        animation,
-        caption,
-        disable_notification: false,
-        reply_to_message_id: null,
-        parse_mode: "Markdown",
-      }
-    );
-
-    console.log("send photo status=", status);
-
-    return data;
-  } catch (error) {
-    next(error);
+  if (!generalData) {
+    console.log("General data has not been found");
+    throw createHttpError(404, "General data has not been found");
   }
+
+  const { data, status } = await axios.post(
+    `${env.API_TELEGRAM}${generalData.bot_token}/sendAnimation`,
+    {
+      chat_id: chatId,
+      animation,
+      caption,
+      disable_notification: false,
+      reply_to_message_id: null,
+      parse_mode: "Markdown",
+    }
+  );
+
+  console.log("send photo status=", status);
+
+  return data;
 };
 
 /**
@@ -175,7 +165,6 @@ export const sendMassMessage: RequestHandler<
               })
               .catch(async (err) => {
                 if (!err.response.data.ok) {
-                  user.is_active = false;
                   const telegramData = await TelegramDataModel.findOne({
                     telegram_id: user.telegram_id,
                   }).exec();
@@ -198,24 +187,34 @@ export const sendMassMessage: RequestHandler<
                   );
                 }
               });
-          }
-
-          if (photo) {
+          } else if (photo) {
             const re = /(?:\.([^.]+))?$/;
             const extension = photo && re.exec(photo);
 
             if ((extension && extension[1]) === "gif") {
-              return await sendAnimation(chatId, photo, value, next)
+              return await sendAnimation(chatId, photo, value)
                 .then(() => {
                   count++;
                   emitIo({
                     event: "message-sent",
-                    message: `Has been sent message to ${count} users `,
+                    message: `Has been sent message with animation to ${count} users `,
                   });
                 })
                 .catch(async (err) => {
+                  console.log(err);
                   if (!err.response.data.ok) {
-                    user.is_active = false;
+                    errors++;
+                    emitIo({
+                      event: "message-sent-error",
+                      message: `Couldn't sent message to ${errors} users`,
+                    });
+                    if (
+                      err.response.data.description ===
+                      "Bad Request: invalid file HTTP URL specified: URL host is empty"
+                    ) {
+                      return;
+                    }
+
                     const telegramData = await TelegramDataModel.findOne({
                       telegram_id: user.telegram_id,
                     }).exec();
@@ -226,12 +225,6 @@ export const sendMassMessage: RequestHandler<
 
                     await telegramData.save();
 
-                    errors++;
-                    emitIo({
-                      event: "message-sent-error",
-                      message: `Couldn't sent message to ${errors} users`,
-                    });
-
                     console.log(
                       err.response.data.error_code,
                       err.response.data.description
@@ -240,17 +233,29 @@ export const sendMassMessage: RequestHandler<
                 });
             }
 
-            await sendPhoto(chatId, photo, value, next)
+            await sendPhoto(chatId, photo, value)
               .then(() => {
                 count++;
                 emitIo({
                   event: "message-sent",
-                  message: `Has been sent message to ${count} users `,
+                  message: `Has been sent message with photo to ${count} users `,
                 });
               })
               .catch(async (err) => {
+                console.log(err);
                 if (!err.response.data.ok) {
-                  user.is_active = false;
+                  errors++;
+                  emitIo({
+                    event: "message-sent-error",
+                    message: `Couldn't sent message to ${errors} users`,
+                  });
+                  if (
+                    err.response.data.description ===
+                    "Bad Request: invalid file HTTP URL specified: URL host is empty"
+                  ) {
+                    return;
+                  }
+
                   const telegramData = await TelegramDataModel.findOne({
                     telegram_id: user.telegram_id,
                   }).exec();
@@ -260,12 +265,6 @@ export const sendMassMessage: RequestHandler<
                   telegramData.is_active = false;
 
                   await telegramData.save();
-
-                  errors++;
-                  emitIo({
-                    event: "message-sent-error",
-                    message: `Couldn't sent message to ${errors} users`,
-                  });
 
                   console.log(
                     err.response.data.error_code,
