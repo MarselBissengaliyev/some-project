@@ -2,15 +2,15 @@ import { InferSchemaType, Schema, model } from "mongoose";
 
 const telegramDataSchema = new Schema({
   telegram_id: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },
   first_name_telegram: {
-    type: String
+    type: String,
   },
   login_telegram: {
-    type: String
+    type: String,
   },
   is_active: {
     type: Boolean,
@@ -38,7 +38,7 @@ const telegramDataSchema = new Schema({
     type: Number,
   },
   click_id: {
-    type: String
+    type: String,
   },
   last_name_telegram: {
     type: String,

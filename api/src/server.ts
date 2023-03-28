@@ -1,8 +1,8 @@
+import http from "http";
 import mongoose from "mongoose";
 import app from "./app";
+import { init as initSocketIo } from "./io";
 import env from "./utils/validateEnv";
-import http from 'http';
-import { init as initSocketIo } from './io';
 
 const port = env.PORT || 4444;
 

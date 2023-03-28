@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import createHttpError from "http-errors";
 import FacebookDataModel from "../../models/facebookData";
 import TelegramDataModel from "../../models/telegramData";
 import UserModel from "../../models/user";
@@ -6,7 +7,6 @@ import {
   ActiveUsersWithClickIdInterface,
   GetTelegramDataParams,
 } from "./telegramData.interface";
-import createHttpError from "http-errors";
 
 /**
  * Here we get telegram data

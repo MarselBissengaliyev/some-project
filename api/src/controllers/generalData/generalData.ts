@@ -10,7 +10,7 @@ import {
   UpdateGeneralDataParams,
 } from "./generalData.interface";
 
-const API_TELEGRAM = 'https://api.telegram.org/bot';
+const API_TELEGRAM = "https://api.telegram.org/bot";
 
 /**
  * Here we update a general data token in the database
@@ -101,10 +101,7 @@ export const getGeneralData: RequestHandler<
     const generalData = await GeneralDataModel.findOne({}).exec();
 
     if (!generalData) {
-      throw createHttpError(
-        404,
-        "Genral data has not been found"
-      );
+      throw createHttpError(404, "Genral data has not been found");
     }
 
     res.status(200).json(generalData);

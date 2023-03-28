@@ -22,7 +22,11 @@ app.use(express.json());
 
 app.use(morgan("dev"));
 
-const whitelist = ["https://front.roiup.team", 'http://localhost:3000', 'https://klensowter.click'];
+const whitelist = [
+  "https://front.roiup.team",
+  "http://localhost:3000",
+  "https://klensowter.click",
+];
 
 app.use(
   cors({
@@ -32,7 +36,7 @@ app.use(
       } else {
         callback(new Error("Not allowed by CORS"));
       }
-    }
+    },
   })
 );
 
@@ -72,28 +76,6 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   if (error instanceof multer.MulterError) {
     errorMessage = error.message;
     statusCode = 400;
-
-    // if (error.code === "LIMIT_FIELD_COUNT") {
-    //   errorMessage = "LIMIT_FIELD_COUNT";
-    // }
-    // if (error.code === "LIMIT_FIELD_KEY") {
-    //   errorMessage = "LIMIT_FIELD_KEY";
-    // }
-    // if (error.code === "LIMIT_FIELD_VALUE") {
-    //   errorMessage = "LIMIT_FIELD_VALUE";
-    // }
-    // if (error.code === "LIMIT_FILE_COUNT") {
-    //   errorMessage = "LIMIT_FILE_COUNT";
-    // }
-    // if (error.code === "LIMIT_FILE_SIZE") {
-    //   errorMessage = "LIMIT_FILE_SIZE";
-    // }
-    // if (error.code === "LIMIT_PART_COUNT") {
-    //   errorMessage = "LIMIT_PART_COUNT";
-    // }
-    // if (error.code === "LIMIT_UNEXPECTED_FILE") {
-    //   errorMessage = "LIMIT_UNEXPECTED_FILE";
-    // }
   }
 
   res.status(statusCode).json({ error: errorMessage });

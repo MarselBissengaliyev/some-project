@@ -47,13 +47,13 @@ export const messageIncoming: RequestHandler<
       telegram_data_id: telegramData._id,
     }).exec();
 
-    const facebookData = user && await FacebookDataModel.findById(
-      user.facebook_data_id
-    ).exec();
+    const facebookData =
+      user && (await FacebookDataModel.findById(user.facebook_data_id).exec());
 
     await telegramData.save();
 
-    const clickid = (facebookData && facebookData.click_id)|| telegramData.click_id;
+    const clickid =
+      (facebookData && facebookData.click_id) || telegramData.click_id;
 
     await axios.post(
       `https://traffer.online/click.php?event5=1&clickid=${clickid}`
@@ -79,7 +79,7 @@ export const leadChangedStatus: RequestHandler<
       "https://api.umnico.com/v1.3/statuses",
       {
         headers: {
-          Authorization: env.UMNICO_API_TOKEN
+          Authorization: env.UMNICO_API_TOKEN,
         },
       }
     );
@@ -122,11 +122,11 @@ export const leadChangedStatus: RequestHandler<
       telegram_data_id: telegramData._id,
     });
 
-    const facebookData = user && await FacebookDataModel.findById(
-      user.facebook_data_id
-    ).exec();
+    const facebookData =
+      user && (await FacebookDataModel.findById(user.facebook_data_id).exec());
 
-    const cnv_id = (facebookData && facebookData.click_id) || telegramData.click_id;
+    const cnv_id =
+      (facebookData && facebookData.click_id) || telegramData.click_id;
 
     if (cnv_id) {
       const payout = telegramData.amount;

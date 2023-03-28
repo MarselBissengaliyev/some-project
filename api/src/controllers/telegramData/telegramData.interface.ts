@@ -4,7 +4,7 @@ export interface GetTelegramDataParams {
 
 export interface ActiveUsersWithClickIdInterface {
   click_id: string | null;
-  telegram_id: number | null;
+  telegram_id: string | null;
   first_name_telegram: string | null;
   login_telegram: string | null;
   is_active: boolean | null;

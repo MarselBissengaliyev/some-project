@@ -5,7 +5,6 @@ import {
 } from "facebook-nodejs-business-sdk";
 import {
   EventRequestInterface,
-  ServerEventInterface,
   UserDataInterface,
 } from "./facebookData.interface";
 

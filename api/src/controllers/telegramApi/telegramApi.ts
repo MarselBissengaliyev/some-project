@@ -11,7 +11,7 @@ import { SendMassMessageBody } from "./telegramApi.interface";
  * Here we send message to a user
  */
 export const sendMessage = async (
-  chatId: number,
+  chatId: string,
   text: string,
   disableWebPagePreview: boolean
 ) => {
@@ -40,7 +40,7 @@ export const sendMessage = async (
  * Here we send photo message to a user
  */
 export const sendPhoto = async (
-  chatId: number,
+  chatId: string,
   photo: string,
   caption: string
 ) => {
@@ -54,8 +54,6 @@ export const sendPhoto = async (
     console.log("General data has not been found");
     throw createHttpError(404, "General data has not been found");
   }
-
-  console.log(photo);
 
   const { data, status } = await axios.post(
     `${env.API_TELEGRAM}${generalData.bot_token}/sendPhoto`,
@@ -78,7 +76,7 @@ export const sendPhoto = async (
  * Here we send animation message to a user
  */
 export const sendAnimation = async (
-  chatId: number,
+  chatId: string,
   animation: string,
   caption: string
 ) => {
@@ -153,7 +151,6 @@ export const sendMassMessage: RequestHandler<
         group.forEach(async (user: TelegramData) => {
           const chatId = user.telegram_id;
           console.log(chatId);
-          
 
           if (!photo && value) {
             await sendMessage(chatId, value, disableWebPagePreview)
@@ -165,7 +162,7 @@ export const sendMassMessage: RequestHandler<
                 });
               })
               .catch(async (err) => {
-                console.log('suka');
+                console.log(err);
                 if (err.response && !err.response.data.ok) {
                   errors++;
                   emitIo({
@@ -173,11 +170,10 @@ export const sendMassMessage: RequestHandler<
                     message: `Couldn't sent message to ${errors} users`,
                   });
                   if (
-                    err.response.data.description ===
-                    "Bad Request: chat not found"
+                    err.response.data.error_code === 403
                   ) {
                     const telegramData = await TelegramDataModel.findOne({
-                      telegram_id: +user.telegram_id,
+                      telegram_id: user.telegram_id + "",
                     }).exec();
                     if (!telegramData) {
                       return;
@@ -193,7 +189,7 @@ export const sendMassMessage: RequestHandler<
                   }
                 }
               });
-          } 
+          }
           if (photo) {
             const re = /(?:\.([^.]+))?$/;
             const extension = photo && re.exec(photo);
@@ -216,11 +212,10 @@ export const sendMassMessage: RequestHandler<
                       message: `Couldn't sent message to ${errors} users`,
                     });
                     if (
-                      err.response.data.description ===
-                      "Bad Request: chat not found"
+                      err.response.data.error_code === 403
                     ) {
                       const telegramData = await TelegramDataModel.findOne({
-                        telegram_id: +user.telegram_id,
+                        telegram_id: user.telegram_id + "",
                       }).exec();
                       if (!telegramData) {
                         return;
@@ -255,11 +250,10 @@ export const sendMassMessage: RequestHandler<
                     message: `Couldn't sent message to ${errors} users`,
                   });
                   if (
-                    err.response.data.description ===
-                    "Bad Request: chat not found"
+                    err.response.data.error_code === 403
                   ) {
                     const telegramData = await TelegramDataModel.findOne({
-                      telegram_id: +user.telegram_id,
+                      telegram_id: user.telegram_id + "",
                     }).exec();
                     if (!telegramData) {
                       return;

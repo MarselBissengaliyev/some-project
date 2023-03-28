@@ -2,7 +2,7 @@ import { InferSchemaType, Schema, model } from "mongoose";
 
 const telegramDataSchema = new Schema({
   telegram_id: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

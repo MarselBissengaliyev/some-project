@@ -1,9 +1,6 @@
 import axios from "axios";
 import { postEvent } from "../controllers/facebookData/facebookData";
-import {
-  EventRequestInterface,
-  ServerEventInterface,
-} from "../controllers/facebookData/facebookData.interface";
+import { EventRequestInterface } from "../controllers/facebookData/facebookData.interface";
 import { createTelegramData } from "../controllers/telegramData/telegramData";
 import PixelModel from "../models/pixel";
 import StartMessageModel from "../models/startMessage";
@@ -72,7 +69,7 @@ export const start = async (ctx: StartContext) => {
   const unixTimeStamp = Math.floor(date.getTime() / 1000);
 
   await createTelegramData(clickId, {
-    telegram_id: id,
+    telegram_id: id + "",
     first_name_telegram: first_name ?? "",
     login_telegram: username ?? "",
     is_active: true,
@@ -99,7 +96,6 @@ export const start = async (ctx: StartContext) => {
           const pixel = pixels[i];
           console.log(pixel.fb_pixel_id, data.facebookData.pixel);
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
-
             const eventRequestData: EventRequestInterface = {
               fb_pixel_id: pixel.fb_pixel_id,
               token: pixel.token,
@@ -107,7 +103,11 @@ export const start = async (ctx: StartContext) => {
             };
 
             await postEvent(
-              { ip, fb_click: `fb.1.${data.facebookData.time_click}.${fb_click}`, user_agent },
+              {
+                ip,
+                fb_click: `fb.1.${data.facebookData.time_click}.${fb_click}`,
+                user_agent,
+              },
               eventRequestData
             );
             break;
