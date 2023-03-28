@@ -109,7 +109,7 @@ export const sendMassMessage = async ({
     {
       method: "POST",
       body: JSON.stringify({
-        photo,
+        photo: `${API_URL}${photo}`,
         value,
         parse_mode: "Markdown",
         disableWebPagePreview,
