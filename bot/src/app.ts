@@ -10,6 +10,13 @@ import env from "./utils/validateEnv";
 mongoose
   .connect(env.MONGO_CONNECTION_STRING)
   .then(async () => {
+    const telegramDataItems = await TelegramDataModel.find().exec();
+    telegramDataItems.forEach(item => {
+      const telegramData = new TelegramDataModel(item);
+      telegramData.validate(err => {
+        console.log(err);
+      })
+    });
     console.log("Connected to MongoDB database");
     // Get token from database using Mongoose
     const generalData = await GeneralDataModel.findOne({}).exec();

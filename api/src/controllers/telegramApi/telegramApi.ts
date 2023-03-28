@@ -266,7 +266,6 @@ export const sendMassMessage: RequestHandler<
                 }
               });
           }
-
         });
       }, 1000 * sec);
     }
