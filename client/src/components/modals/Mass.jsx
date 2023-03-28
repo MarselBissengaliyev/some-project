@@ -9,15 +9,15 @@ import {
 } from "../../network/api.telegram";
 import SendMessage from "../SendMessage";
 import MyContext from "../../context/context";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
 // socket.emit('getSendedMessageCount', )
-const socket = io("http://localhost:4444");
+// const socket = io("http://localhost:4444");
 
 const Mass = ({ handleClose, token, bot }) => {
-  socket.on("message-sent", (socket) => {
-    console.log(socket);
-  });
+  // socket.on("message-sent", (socket) => {
+  //   console.log(socket);
+  // });
 
   const turndownService = new TurndownService();
   const { setLoading } = useContext(MyContext);
