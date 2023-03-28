@@ -14,6 +14,7 @@ import { StartContext } from "./start.interface";
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
  */
 export const start = async (ctx: StartContext) => {
+  console.log('start-message=', ctx.startPayload);
 
   const startMessage = await StartMessageModel.findOne({}).exec();
 
