@@ -14,29 +14,32 @@ const telegramDataSchema = new Schema({
   },
   is_active: {
     type: Boolean,
-    required: true,
   },
   telegram_bot_login: {
     type: String,
-    required: true,
   },
   is_deposit: {
     type: Boolean,
-    required: true,
   },
   time_lead: {
     type: Number,
-    required: true,
   },
   umnico_lead_id: {
     type: Number,
   },
-  last_name_telegram: {
-    type: String,
+  amount: {
+    type: Number,
+    default: 0,
+  },
+  time_sale: {
+    type: Number,
   },
   click_id: {
     type: String,
-  }
+  },
+  last_name_telegram: {
+    type: String,
+  },
 });
 
 export type TelegramData = InferSchemaType<typeof telegramDataSchema>;

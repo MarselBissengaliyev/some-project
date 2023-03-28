@@ -14,15 +14,12 @@ const telegramDataSchema = new Schema({
   },
   is_active: {
     type: Boolean,
-    required: true,
   },
   telegram_bot_login: {
     type: String,
-    required: true,
   },
   is_deposit: {
     type: Boolean,
-    required: true,
   },
   time_lead: {
     type: Number,
