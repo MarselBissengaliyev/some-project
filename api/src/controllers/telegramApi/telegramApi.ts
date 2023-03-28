@@ -164,27 +164,32 @@ export const sendMassMessage: RequestHandler<
                 });
               })
               .catch(async (err) => {
+                console.log(err);
                 if (!err.response.data.ok) {
-                  const telegramData = await TelegramDataModel.findOne({
-                    telegram_id: user.telegram_id,
-                  }).exec();
-                  if (!telegramData) {
-                    return;
-                  }
-                  telegramData.is_active = false;
-
-                  await telegramData.save();
-
                   errors++;
                   emitIo({
                     event: "message-sent-error",
                     message: `Couldn't sent message to ${errors} users`,
                   });
+                  if (
+                    err.response.data.description ===
+                    "Bad Request: chat not found"
+                  ) {
+                    const telegramData = await TelegramDataModel.findOne({
+                      telegram_id: +user.telegram_id,
+                    }).exec();
+                    if (!telegramData) {
+                      return;
+                    }
+                    telegramData.is_active = false;
 
-                  console.log(
-                    err.response.data.error_code,
-                    err.response.data.description
-                  );
+                    await telegramData.save();
+
+                    console.log(
+                      err.response.data.error_code,
+                      err.response.data.description
+                    );
+                  }
                 }
               });
           } else if (photo) {
@@ -210,25 +215,23 @@ export const sendMassMessage: RequestHandler<
                     });
                     if (
                       err.response.data.description ===
-                      "Bad Request: invalid file HTTP URL specified: URL host is empty"
+                      "Bad Request: chat not found"
                     ) {
-                      return;
+                      const telegramData = await TelegramDataModel.findOne({
+                        telegram_id: +user.telegram_id,
+                      }).exec();
+                      if (!telegramData) {
+                        return;
+                      }
+                      telegramData.is_active = false;
+
+                      await telegramData.save();
+
+                      console.log(
+                        err.response.data.error_code,
+                        err.response.data.description
+                      );
                     }
-
-                    const telegramData = await TelegramDataModel.findOne({
-                      telegram_id: user.telegram_id,
-                    }).exec();
-                    if (!telegramData) {
-                      return;
-                    }
-                    telegramData.is_active = false;
-
-                    await telegramData.save();
-
-                    console.log(
-                      err.response.data.error_code,
-                      err.response.data.description
-                    );
                   }
                 });
             }
@@ -251,25 +254,23 @@ export const sendMassMessage: RequestHandler<
                   });
                   if (
                     err.response.data.description ===
-                    "Bad Request: invalid file HTTP URL specified: URL host is empty"
+                    "Bad Request: chat not found"
                   ) {
-                    return;
+                    const telegramData = await TelegramDataModel.findOne({
+                      telegram_id: +user.telegram_id,
+                    }).exec();
+                    if (!telegramData) {
+                      return;
+                    }
+                    telegramData.is_active = false;
+
+                    await telegramData.save();
+
+                    console.log(
+                      err.response.data.error_code,
+                      err.response.data.description
+                    );
                   }
-
-                  const telegramData = await TelegramDataModel.findOne({
-                    telegram_id: user.telegram_id,
-                  }).exec();
-                  if (!telegramData) {
-                    return;
-                  }
-                  telegramData.is_active = false;
-
-                  await telegramData.save();
-
-                  console.log(
-                    err.response.data.error_code,
-                    err.response.data.description
-                  );
                 }
               });
           }
