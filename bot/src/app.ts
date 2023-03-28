@@ -23,7 +23,7 @@ mongoose
 
     bot.hears("left_chat_member", async (ctx) => {
       const telegramData = await TelegramDataModel.findOne({
-        telegram_id: ctx.message.from.id,
+        telegram_id: ctx.message.from.id + '',
       }).exec();
 
       if (!telegramData) {
@@ -49,7 +49,7 @@ mongoose
 
         bot.hears("left_chat_member", async (ctx) => {
           const telegramData = await TelegramDataModel.findOne({
-            telegram_id: ctx.message.from.id,
+            telegram_id: ctx.message.from.id + '',
           }).exec();
 
           if (!telegramData) {

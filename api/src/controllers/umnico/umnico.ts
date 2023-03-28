@@ -30,7 +30,7 @@ export const messageIncoming: RequestHandler<
     }
 
     const telegramData = await TelegramData.findOne({
-      telegram_id: +telegramId,
+      telegram_id: telegramId,
     }).exec();
 
     if (!telegramData) {
