@@ -204,8 +204,8 @@ export const sendMassMessage: RequestHandler<
                   });
                 })
                 .catch(async (err) => {
-                  console.log(err);
                   if (err.response && !err.response.data.ok) {
+                    console.log(err.response);
                     errors++;
                     emitIo({
                       event: "message-sent-error",
