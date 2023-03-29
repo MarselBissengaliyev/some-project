@@ -94,7 +94,7 @@ export const start = async (ctx: StartContext) => {
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
-            await axios.post(`https://graph.facebook.com/16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`, {
+            await axios.post(`https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`, {
               "data": [
                 {
                    "event_name": "Lead",
@@ -109,12 +109,8 @@ export const start = async (ctx: StartContext) => {
                    "opt_out": false
                 },
              ]
-            }).then(
-              (response) => {
+            }).then((response) => {
                 console.log("Response: ", response);
-              },
-              (err) => {
-                console.error("Error: ", err);
               }
             ).catch((err) => {
               console.error('Catch error: ', err);
