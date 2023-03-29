@@ -19,19 +19,12 @@ const current_timestamp = Math.floor(new Date().getTime() / 1000);
  */
 export const postEvent = async (
   { ip, user_agent, fb_click }: UserDataInterface,
-  { fb_pixel_id, token, domain }: EventRequestInterface
+  { pixel_id, token, domain }: EventRequestInterface
 ) => {
-  console.log("ip=", ip);
-  console.log("user_agent=", user_agent);
-  console.log("fb_click=", fb_click);
-  console.log("fb_pixel_id=", fb_pixel_id);
-  console.log("token=", token);
-  console.log("token=", `https://${domain}`);
-
   const userData = new UserData()
     .setClientIpAddress(ip)
     .setClientUserAgent(user_agent)
-    .setFbc(fb_click);
+    .setFbc(`fb.1.${fb_click.time_click}.${fb_click.value}`);
 
   const serverEvent = new ServerEvent()
     .setEventName("Lead")
@@ -41,8 +34,9 @@ export const postEvent = async (
     .setEventSourceUrl(`https://${domain}`);
 
   const eventsData = [serverEvent];
+  console.log(eventsData);
 
-  const eventRequest = new EventRequest(token, fb_pixel_id).setEvents(
+  const eventRequest = new EventRequest(token, pixel_id).setEvents(
     eventsData
   );
 

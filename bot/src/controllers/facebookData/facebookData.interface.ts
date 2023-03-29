@@ -1,7 +1,10 @@
 export interface UserDataInterface {
   ip: string;
   user_agent: string;
-  fb_click: string;
+  fb_click: {
+    time_click: number;
+    value: string;
+  };
 }
 
 export interface ServerEventInterface {
@@ -10,7 +13,7 @@ export interface ServerEventInterface {
 }
 
 export interface EventRequestInterface {
-  fb_pixel_id: string;
+  pixel_id: string;
   token: string;
   domain: string;
 }
