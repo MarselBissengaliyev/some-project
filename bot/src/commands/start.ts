@@ -113,7 +113,6 @@ export const start = async (ctx: StartContext) => {
               },
               eventRequestData
             );
-            break;
           }
         }
 
