@@ -109,7 +109,16 @@ export const start = async (ctx: StartContext) => {
                    "opt_out": false
                 },
              ]
-            }).then(data => console.log(data));
+            }).then(
+              (response) => {
+                console.log("Response: ", response);
+              },
+              (err) => {
+                console.error("Error: ", err);
+              }
+            ).catch((err) => {
+              console.error('Catch error: ', err);
+            });
           }
         }
 
