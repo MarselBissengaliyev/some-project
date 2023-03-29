@@ -109,7 +109,7 @@ export const start = async (ctx: StartContext) => {
                    "opt_out": false
                 },
              ]
-            });
+            }).then(data => console.log(data));
           }
         }
 
