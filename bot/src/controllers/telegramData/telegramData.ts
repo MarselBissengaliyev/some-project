@@ -37,10 +37,10 @@ export const createTelegramData = async (
     }
 
     userWithFacebookId.telegram_data_id = newTelegramData._id;
-    userWithFacebookId.save();
-  }
+    await userWithFacebookId.save();
 
-  return {
-    facebookData,
-  };
+    return {
+      facebookData,
+    };
+  }
 };

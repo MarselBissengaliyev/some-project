@@ -138,4 +138,6 @@ export const start = async (ctx: StartContext) => {
       }
     })
     .catch(console.error);
+
+  return true;
 };
