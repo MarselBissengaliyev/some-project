@@ -63,6 +63,7 @@ const Deposists = () => {
                 <option value="time_lead">time_lead</option>
                 <option value="amount">amount</option>
                 <option value="click_id">click_id</option>
+                <option value="umnico_lead_id">umnico_lead_id</option>
                 <option value="time_sale">time_sale</option>
                 <option value="time_click">time_click</option>
               </select>
@@ -84,6 +85,7 @@ const Deposists = () => {
                   <th>time_lead</th>
                   <th>amount</th>
                   <th>click_id</th>
+                  <th>umnico_lead_id</th>
                   <th>time_sale</th>
                   <th>time_click</th>
                 </tr>
@@ -99,6 +101,7 @@ const Deposists = () => {
                         </th>
                         <td>{user.amount ? user.amount : "-"}</td>
                         <td>{user.click_id ? user.click_id : "-"}</td>
+                        <td>{user.umnico_lead_id ? user.umnico_lead_id : "-"}</td>
                         <td>
                           {user.time_sale ? formatDate(user.time_sale) : "-"}
                         </td>
