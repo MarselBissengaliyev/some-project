@@ -78,19 +78,6 @@ export const start = async (ctx: StartContext) => {
   })
     .then(async (data) => {
       if (data && data.facebookData) {
-        await axios
-        .post(
-          `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
-        )
-        .then((res) => {
-          console.log("send data to traffer");
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.error("tragger error");
-          console.error(err);
-        });
-
         const domain = data.facebookData.domain;
         const ip = data.facebookData.ip;
         const fb_click = data.facebookData.fb_click;
@@ -107,7 +94,7 @@ export const start = async (ctx: StartContext) => {
           return;
         }
 
-        console.log('Pixel will be send');
+        console.log("Pixel will be send");
         await axios
           .post(
             `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
@@ -128,8 +115,22 @@ export const start = async (ctx: StartContext) => {
               ],
             }
           )
-          .then((response) => {
-            console.log("Response: ", response);
+          .then(async (response) => {
+            console.log("Response: ", response.data);
+            if (data.facebookData) {
+              await axios
+                .post(
+                  `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
+                )
+                .then((res) => {
+                  console.log("send data to traffer");
+                  console.log(res.data);
+                })
+                .catch((err) => {
+                  console.error("tragger error");
+                  console.error(err);
+                });
+            }
           })
           .catch((err) => {
             console.error("Catch error: ", err);
