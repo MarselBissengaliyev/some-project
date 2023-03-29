@@ -43,4 +43,6 @@ export const createTelegramData = async (
       facebookData,
     };
   }
+
+  return;
 };
