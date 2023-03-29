@@ -1,5 +1,4 @@
 import axios from "axios";
-import { EventRequestInterface } from "../controllers/facebookData/facebookData.interface";
 import { createTelegramData } from "../controllers/telegramData/telegramData";
 import PixelModel from "../models/pixel";
 import StartMessageModel from "../models/startMessage";
@@ -81,7 +80,7 @@ export const start = async (ctx: StartContext) => {
       if (data && data.facebookData) {
         await axios
         .post(
-          `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
+          `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
         )
         .then((res) => {
           console.log("send data to traffer");
