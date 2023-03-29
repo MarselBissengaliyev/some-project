@@ -22,6 +22,7 @@ export const postEvent = async (
   { fb_pixel_id, token, domain }: EventRequestInterface
 ) => {
   console.log("PostEvent run");
+  console.log(ip, user_agent, fb_click, fb_pixel_id, token, `https://${domain}`);
   const userData = new UserData()
     .setClientIpAddress(ip)
     .setClientUserAgent(user_agent)
