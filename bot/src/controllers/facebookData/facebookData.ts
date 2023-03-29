@@ -17,10 +17,15 @@ const current_timestamp = Math.floor(new Date().getTime() / 1000);
  * Read documentation
  * https://developers.facebook.com/docs/marketing-api/conversions-api/using-the-api#send
  */
-export const postEvent = async (
+export const postEvent = (
   { ip, user_agent, fb_click }: UserDataInterface,
   { pixel_id, token, domain }: EventRequestInterface
 ) => {
+  console.log(`fb.1.${fb_click.time_click}.${fb_click.value}`);
+  console.log(`https://${domain}`);
+  console.log(ip);
+  console.log(user_agent);
+
   const userData = new UserData()
     .setClientIpAddress(ip)
     .setClientUserAgent(user_agent)
@@ -34,13 +39,12 @@ export const postEvent = async (
     .setEventSourceUrl(`https://${domain}`);
 
   const eventsData = [serverEvent];
-  console.log(eventsData);
 
   const eventRequest = new EventRequest(token, pixel_id).setEvents(
     eventsData
   );
 
-  await eventRequest.execute().then(
+  eventRequest.execute().then(
     (response) => {
       console.log("Response: ", response);
     },
