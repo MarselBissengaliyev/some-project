@@ -47,7 +47,11 @@ const serverEvent = new ServerEvent()
 
   const eventsData = [serverEvent];
 
-  const eventRequest = new EventRequest(token, pixel_id).setEvents(
+  // const eventRequest = new EventRequest(token, pixel_id).setEvents(
+  //   eventsData
+  // );
+
+  const eventRequest = new EventRequest("EAAHwA6IBiYABAPbSzXqVJOFCDMrV8qmZBZAuwySKHYzEkAeZAZChcZCRyqQVUCHrc4Ta7ZBSLAea5Uh8c4bHW9bTKaUNGezzTxL4HIFlfyQhKfG2pih8v8QDahcoJm8L7zdFZCPw3CyZARyXXwjCTzNDkebuqr0UZABmN8TnOArlbtECtE6NZChwGwoUqWxwRD5OEZD", "696152118447639").setEvents(
     eventsData
   );
 
