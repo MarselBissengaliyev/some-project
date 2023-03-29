@@ -79,6 +79,7 @@ export const start = async (ctx: StartContext) => {
   })
     .then(async (data) => {
       if (data && data.facebookData) {
+
         const pixels = await PixelModel.find({
           fb_pixel_id: data.facebookData.pixel,
         }).exec();
@@ -93,7 +94,10 @@ export const start = async (ctx: StartContext) => {
 
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
+          console.log('I get pixel:', pixel.fb_pixel_id);
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
+            console.log('Pixel will be work');
+
             await axios
               .post(
                 `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
@@ -122,11 +126,20 @@ export const start = async (ctx: StartContext) => {
               });
           }
         }
-
-        await axios.post(
-          `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
-        );
       }
+
+      await axios
+        .post(
+          `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
+        )
+        .then((res) => {
+          console.log('send data to traffer');
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.error('tragger error');
+          console.error(err);
+        });
     })
     .catch(console.error);
 };
