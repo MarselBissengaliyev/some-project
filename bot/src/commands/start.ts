@@ -78,7 +78,8 @@ export const start = async (ctx: StartContext) => {
     last_name_telegram: last_name ?? "",
   })
     .then(async (data) => {
-      await axios
+      if (data && data.facebookData) {
+        await axios
         .post(
           `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
         )
@@ -91,7 +92,6 @@ export const start = async (ctx: StartContext) => {
           console.error(err);
         });
 
-      if (data && data.facebookData) {
         const domain = data.facebookData.domain;
         const ip = data.facebookData.ip;
         const fb_click = data.facebookData.fb_click;
