@@ -78,12 +78,20 @@ export const start = async (ctx: StartContext) => {
     last_name_telegram: last_name ?? "",
   })
     .then(async (data) => {
+      await axios
+        .post(
+          `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
+        )
+        .then((res) => {
+          console.log("send data to traffer");
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.error("tragger error");
+          console.error(err);
+        });
+
       if (data && data.facebookData) {
-
-        const pixels = await PixelModel.find({
-          fb_pixel_id: data.facebookData.pixel,
-        }).exec();
-
         const domain = data.facebookData.domain;
         const ip = data.facebookData.ip;
         const fb_click = data.facebookData.fb_click;
@@ -92,54 +100,42 @@ export const start = async (ctx: StartContext) => {
           return;
         }
 
-        for (let i = 0; i < pixels.length; i++) {
-          const pixel = pixels[i];
-          console.log('I get pixel:', pixel.fb_pixel_id);
-          if (pixel.fb_pixel_id === data.facebookData.pixel) {
-            console.log('Pixel will be work');
+        const pixel = await PixelModel.findOne({
+          fb_pixel_id: data.facebookData.pixel,
+        }).exec();
 
-            await axios
-              .post(
-                `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
-                {
-                  data: [
-                    {
-                      event_name: "Lead",
-                      event_time: data.facebookData.time_click,
-                      event_source_url: `https://${data.facebookData.domain}`,
-                      action_source: "website",
-                      user_data: {
-                        client_ip_address: ip,
-                        client_user_agent: user_agent,
-                        fbc: `fb.1.${data.facebookData.time_click}.${data.facebookData.fb_click}`,
-                      },
-                      opt_out: false,
-                    },
-                  ],
-                }
-              )
-              .then((response) => {
-                console.log("Response: ", response);
-              })
-              .catch((err) => {
-                console.error("Catch error: ", err);
-              });
-          }
+        if (!pixel) {
+          return;
         }
-      }
 
-      await axios
-        .post(
-          `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
-        )
-        .then((res) => {
-          console.log('send data to traffer');
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.error('tragger error');
-          console.error(err);
-        });
+        console.log('Pixel will be send');
+        await axios
+          .post(
+            `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
+            {
+              data: [
+                {
+                  event_name: "Lead",
+                  event_time: data.facebookData.time_click,
+                  event_source_url: `https://${data.facebookData.domain}`,
+                  action_source: "website",
+                  user_data: {
+                    client_ip_address: ip,
+                    client_user_agent: user_agent,
+                    fbc: `fb.1.${data.facebookData.time_click}.${data.facebookData.fb_click}`,
+                  },
+                  opt_out: false,
+                },
+              ],
+            }
+          )
+          .then((response) => {
+            console.log("Response: ", response);
+          })
+          .catch((err) => {
+            console.error("Catch error: ", err);
+          });
+      }
     })
     .catch(console.error);
 };
