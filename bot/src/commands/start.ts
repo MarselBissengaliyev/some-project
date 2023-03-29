@@ -94,27 +94,32 @@ export const start = async (ctx: StartContext) => {
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
-            await axios.post(`https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`, {
-              "data": [
+            await axios
+              .post(
+                `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
                 {
-                   "event_name": "Lead",
-                   "event_time": data.facebookData.time_click,
-                   "event_source_url": `https://${data.facebookData.domain}`,         
-                   "action_source": "website",
-                   "user_data": {
-                      "client_ip_address": ip,
-                      "client_user_agent": user_agent,
-                      "fbc": `fb.1.${data.facebookData.time_click}.${data.facebookData.fb_click}`,
-                   },
-                   "opt_out": false
-                },
-             ]
-            }).then((response) => {
+                  data: [
+                    {
+                      event_name: "Lead",
+                      event_time: data.facebookData.time_click,
+                      event_source_url: `https://${data.facebookData.domain}`,
+                      action_source: "website",
+                      user_data: {
+                        client_ip_address: ip,
+                        client_user_agent: user_agent,
+                        fbc: `fb.1.${data.facebookData.time_click}.${data.facebookData.fb_click}`,
+                      },
+                      opt_out: false,
+                    },
+                  ],
+                }
+              )
+              .then((response) => {
                 console.log("Response: ", response);
-              }
-            ).catch((err) => {
-              console.error('Catch error: ', err);
-            });
+              })
+              .catch((err) => {
+                console.error("Catch error: ", err);
+              });
           }
         }
 
