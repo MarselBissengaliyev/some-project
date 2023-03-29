@@ -94,7 +94,6 @@ export const start = async (ctx: StartContext) => {
 
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
-          console.log(pixel.fb_pixel_id, data.facebookData.pixel);
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
             const eventRequestData: EventRequestInterface = {
               fb_pixel_id: pixel.fb_pixel_id,
