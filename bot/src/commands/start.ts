@@ -1,5 +1,4 @@
 import axios from "axios";
-import { postEvent } from "../controllers/facebookData/facebookData";
 import { EventRequestInterface } from "../controllers/facebookData/facebookData.interface";
 import { createTelegramData } from "../controllers/telegramData/telegramData";
 import PixelModel from "../models/pixel";
@@ -95,24 +94,22 @@ export const start = async (ctx: StartContext) => {
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
           if (pixel.fb_pixel_id === data.facebookData.pixel) {
-            const eventRequestData: EventRequestInterface = {
-              pixel_id: data.facebookData.pixel,
-              token: pixel.token,
-              domain,
-            };
-
-            // fb.1.1679914434.PAAabcPnGV7ReY6TMWJtT_Qpt13cpcm7wz-7LjrK51R31cTp8OCd7BlFxOdZ4_aem_Ae-EPbJM-u0GgiaoVUuNf6dxdDIZBy3yg9knryaxMCwZUHJQSANcw5rKwI_kIilzxnGsRb0Wir4l4Y5dXzNf8xQBvpK36WRgu9PY4_vVIubsMSYQb20gB77dyoUCDpkrk8tpr7ToFc6XyZYVPee7JjVc
-            postEvent(
-              {
-                ip,
-                fb_click: {
-                  time_click: data.facebookData.time_click || Math.floor(new Date().getTime() / 1000),
-                  value: fb_click
+            axios.post(`https://graph.facebook.com/16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`, {
+              "data": [
+                {
+                   "event_name": "Lead",
+                   "event_time": data.facebookData.time_click,
+                   "event_source_url": `https://${data.facebookData.domain}`,         
+                   "action_source": "website",
+                   "user_data": {
+                      "client_ip_address": ip,
+                      "client_user_agent": user_agent,
+                      "fbc": `fb.1.${data.facebookData.time_click}.${data.facebookData.fb_click}`,
+                   },
+                   "opt_out": false
                 },
-                user_agent,
-              },
-              eventRequestData
-            );
+             ]
+            });
           }
         }
 
