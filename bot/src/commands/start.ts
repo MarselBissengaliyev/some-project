@@ -67,10 +67,6 @@ export const start = async (ctx: StartContext) => {
   const date = new Date();
   const unixTimeStamp = Math.floor(date.getTime() / 1000);
 
-  await axios.post(
-    `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
-  );
-
   await createTelegramData(clickId, {
     telegram_id: id + "",
     first_name_telegram: first_name ?? "",
@@ -126,6 +122,10 @@ export const start = async (ctx: StartContext) => {
               });
           }
         }
+
+        await axios.post(
+          `http://traffer.online/click.php?cnv_id=${clickId}&payout=0&cnv_status=lead`
+        );
       }
     })
     .catch(console.error);
