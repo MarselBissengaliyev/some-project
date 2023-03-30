@@ -18,7 +18,7 @@ export const sendMessage = async (
   const generalData = await GeneralDataModel.findOne({}).exec();
 
   if (!generalData) {
-    throw createHttpError(404, "General data has not been found");
+    return;
   }
 
   const res = await axios.post(
@@ -52,7 +52,7 @@ export const sendPhoto = async (
 
   if (!generalData) {
     console.log("General data has not been found");
-    throw createHttpError(404, "General data has not been found");
+    return;
   }
 
   const { data } = await axios.post(

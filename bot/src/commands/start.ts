@@ -11,8 +11,14 @@ import { StartContext } from "./start.interface";
  */
 export const start = async (ctx: StartContext) => {
   const startMessage = await StartMessageModel.findOne({}).exec();
-
   const telegramId = ctx.message?.from.id;
+
+  if (!telegramId) {
+    return;
+  }
+
+  const userProfilePhotos = await ctx.telegram.getUserProfilePhotos(telegramId);
+
   const notActiveTelegramData = await TelegramDataModel.findOne({
     telegram_id: telegramId,
     is_active: false,
@@ -27,32 +33,34 @@ export const start = async (ctx: StartContext) => {
     return;
   }
 
-  if (startMessage.photo) {
-    const re = /(?:\.([^.]+))?$/;
-    const extension = startMessage.photo && re.exec(startMessage.photo);
+  if (userProfilePhotos.photos[0]) {
+    if (startMessage.photo) {
+      const re = /(?:\.([^.]+))?$/;
+      const extension = startMessage.photo && re.exec(startMessage.photo);
 
-    if ((extension && extension[1]) === "gif") {
-      return await ctx.replyWithAnimation(
-        `${env.API_URL}${startMessage.photo}`,
-        {
-          caption: startMessage.message,
-          parse_mode: "Markdown",
-          disable_notification: false,
-        }
-      );
+      if ((extension && extension[1]) === "gif") {
+        return await ctx.replyWithAnimation(
+          `${env.API_URL}${startMessage.photo}`,
+          {
+            caption: startMessage.message,
+            parse_mode: "Markdown",
+            disable_notification: false,
+          }
+        );
+      }
+
+      await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
+        caption: startMessage.message,
+        parse_mode: "Markdown",
+        disable_notification: false,
+      });
+    } else {
+      await ctx.reply(startMessage.message, {
+        disable_notification: false,
+        disable_web_page_preview: startMessage.disable_web_page_preview,
+        parse_mode: "Markdown",
+      });
     }
-
-    await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
-      caption: startMessage.message,
-      parse_mode: "Markdown",
-      disable_notification: false,
-    });
-  } else {
-    await ctx.reply(startMessage.message, {
-      disable_notification: false,
-      disable_web_page_preview: startMessage.disable_web_page_preview,
-      parse_mode: "Markdown",
-    });
   }
 
   const clickId = ctx.startPayload;
