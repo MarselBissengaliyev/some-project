@@ -22,13 +22,14 @@ export const createTelegramData = async (
     const message = "This user has already been added";
 
     console.log(message);
-    throw createHttpError(400, message);
+    return;
   }
 
   const newTelegramData = await TelegramDataModel.create({ ...telegramData });
 
   if (!facebookData) {
-    throw createHttpError(404, 'Facebook data has not been found');
+    console.log('Facebook data has not been found');
+    return;
   }
 
   const userWithFacebookId = await UserModel.findOne({
@@ -38,7 +39,7 @@ export const createTelegramData = async (
   if (!userWithFacebookId) {
     const message = "User with this facebook_data_id has not been found";
     console.log(message);
-    throw createHttpError(404, message);
+    return;
   }
 
   userWithFacebookId.telegram_data_id = newTelegramData._id;
