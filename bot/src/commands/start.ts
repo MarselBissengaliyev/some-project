@@ -2,6 +2,7 @@ import axios from "axios";
 import { createTelegramData } from "../controllers/telegramData/telegramData";
 import PixelModel from "../models/pixel";
 import StartMessageModel from "../models/startMessage";
+import TelegramDataModel from "../models/telegramData";
 import env from "../utils/validateEnv";
 import { StartContext } from "./start.interface";
 
@@ -10,6 +11,17 @@ import { StartContext } from "./start.interface";
  */
 export const start = async (ctx: StartContext) => {
   const startMessage = await StartMessageModel.findOne({}).exec();
+
+  const telegramId = ctx.message?.from.id;
+  const notActiveTelegramData = await TelegramDataModel.findOne({
+    telegram_id: telegramId,
+    is_active: false,
+  }).exec();
+
+  if (notActiveTelegramData) {
+    notActiveTelegramData.is_active = true;
+    await notActiveTelegramData.save();
+  }
 
   if (!startMessage) {
     return;
@@ -137,7 +149,7 @@ export const start = async (ctx: StartContext) => {
           });
       }
     })
-    .catch(console.error);
+    .catch();
 
   return true;
 };

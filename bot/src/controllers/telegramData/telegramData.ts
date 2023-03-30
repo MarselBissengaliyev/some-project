@@ -20,6 +20,7 @@ export const createTelegramData = async (
 
   if (existingTelegramData) {
     const message = "This user has already been added";
+
     console.log(message);
     throw createHttpError(400, message);
   }
