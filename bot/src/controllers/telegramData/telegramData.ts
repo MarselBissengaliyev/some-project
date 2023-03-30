@@ -1,3 +1,4 @@
+import createHttpError from "http-errors";
 import FacebookDataModel from "../../models/facebookData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import UserModel from "../../models/user";
@@ -20,29 +21,29 @@ export const createTelegramData = async (
   if (existingTelegramData) {
     const message = "This user has already been added";
     console.log(message);
-    return;
+    throw createHttpError(400, message);
   }
 
   const newTelegramData = await TelegramDataModel.create({ ...telegramData });
 
-  if (facebookData) {
-    const userWithFacebookId = await UserModel.findOne({
-      facebook_data_id: facebookData._id,
-    }).exec();
-
-    if (!userWithFacebookId) {
-      const message = "User with this facebook_data_id has not been found";
-      console.log(message);
-      return;
-    }
-
-    userWithFacebookId.telegram_data_id = newTelegramData._id;
-    await userWithFacebookId.save();
-
-    return {
-      facebookData,
-    };
+  if (!facebookData) {
+    throw createHttpError(404, 'Facebook data has not been found');
   }
 
-  return;
+  const userWithFacebookId = await UserModel.findOne({
+    facebook_data_id: facebookData._id,
+  }).exec();
+
+  if (!userWithFacebookId) {
+    const message = "User with this facebook_data_id has not been found";
+    console.log(message);
+    throw createHttpError(404, message);
+  }
+
+  userWithFacebookId.telegram_data_id = newTelegramData._id;
+  await userWithFacebookId.save();
+
+  return {
+    facebookData,
+  };
 };
