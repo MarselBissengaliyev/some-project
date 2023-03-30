@@ -28,7 +28,7 @@ export const sendMessage = async (
       text: text,
       parse_mode: "Markdown",
       disable_web_page_preview: disableWebPagePreview,
-      disable_notification: true,
+      disable_notification: false,
       reply_to_message_id: null,
     }
   );
