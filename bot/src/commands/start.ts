@@ -14,9 +14,12 @@ export const start = async (ctx: StartContext) => {
   const startMessage = await StartMessageModel.findOne({}).exec();
   const telegramId = ctx.message?.from.id;
 
-  const facebookData = await FacebookDataModel.findOne({
-    click_id: startMessage,
-  }).exec();
+  let facebookData;
+  if (startMessage) {
+    facebookData = await FacebookDataModel.findOne({
+      click_id: startMessage,
+    }).exec();
+  }
 
   let facebookLog;
   if (facebookData) {
