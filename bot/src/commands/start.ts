@@ -11,7 +11,10 @@ import { StartContext } from "./start.interface";
  */
 export const start = async (ctx: StartContext) => {
   const startMessage = await StartMessageModel.findOne({}).exec();
+  console.log('clickId=', startMessage)
+
   const telegramId = ctx.message?.from.id;
+  console.log('telegramId=', startMessage)
 
   if (!telegramId) {
     return;
