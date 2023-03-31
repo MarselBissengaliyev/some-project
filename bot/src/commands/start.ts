@@ -63,19 +63,10 @@ export const start = async (ctx: StartContext) => {
   const clickId = ctx.startPayload;
 
   if (!ctx.message) {
-    console.log("Has not been found message");
     return;
   }
 
-  console.log(
-    ctx.message.from.id,
-    ctx.message.from.first_name,
-    ctx.message.from.username,
-    clickId
-  );
-
   if (!ctx.message.from.id) {
-    console.log("Has not been found id or first_name or username or clickId");
     return;
   }
   const { id, first_name, username, last_name } = ctx.message.from;
@@ -111,7 +102,6 @@ export const start = async (ctx: StartContext) => {
           return;
         }
 
-        console.log("Pixel will be send");
         await axios
           .post(
             `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
@@ -140,11 +130,9 @@ export const start = async (ctx: StartContext) => {
                   `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
                 )
                 .then((res) => {
-                  console.log("send data to traffer");
                   console.log(res.data);
                 })
                 .catch((err) => {
-                  console.error("tragger error");
                   console.error(err);
                 });
             }

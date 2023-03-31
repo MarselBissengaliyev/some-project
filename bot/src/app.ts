@@ -10,12 +10,10 @@ import env from "./utils/validateEnv";
 mongoose
   .connect(env.MONGO_CONNECTION_STRING)
   .then(async () => {
-    console.log("Connected to MongoDB database");
     // Get token from database using Mongoose
     const generalData = await GeneralDataModel.findOne({}).exec();
 
     if (!generalData) {
-      console.log("General data has not been found");
       return;
     }
 
@@ -27,7 +25,6 @@ mongoose
       }).exec();
 
       if (!telegramData) {
-        console.log("Telegram data has not been found");
         return;
       }
 
@@ -53,7 +50,6 @@ mongoose
           }).exec();
 
           if (!telegramData) {
-            console.log("Telegram data has not been found");
             return;
           }
 

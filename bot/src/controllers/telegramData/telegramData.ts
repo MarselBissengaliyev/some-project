@@ -14,14 +14,14 @@ export const createTelegramData = async (
     click_id: click_id,
   }).exec();
 
+  console.log((telegramData?.time_lead && new Date(telegramData?.time_lead ).toUTCString()), `telegramId=${telegramData.telegram_id}`);
+  console.log((facebookData?.time_click && new Date(facebookData?.time_click ).toUTCString()) || null, `clickId=${facebookData?.click_id || null}`);
+
   const existingTelegramData = await TelegramDataModel.findOne({
     telegram_id: telegramData.telegram_id,
   }).exec();
 
   if (existingTelegramData) {
-    const message = "This user has already been added";
-
-    console.log(message);
     return;
   }
 
@@ -33,8 +33,6 @@ export const createTelegramData = async (
     }).exec();
 
     if (!userWithFacebookId) {
-      const message = "User with this facebook_data_id has not been found";
-      console.log(message);
       return;
     }
   
