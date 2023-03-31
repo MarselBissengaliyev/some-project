@@ -27,25 +27,24 @@ export const createTelegramData = async (
 
   const newTelegramData = await TelegramDataModel.create({ ...telegramData });
 
-  if (!facebookData) {
-    console.log('Facebook data has not been found');
-    return;
+  if (facebookData) {
+    const userWithFacebookId = await UserModel.findOne({
+      facebook_data_id: facebookData._id,
+    }).exec();
+
+    if (!userWithFacebookId) {
+      const message = "User with this facebook_data_id has not been found";
+      console.log(message);
+      return;
+    }
+  
+    userWithFacebookId.telegram_data_id = newTelegramData._id;
+    await userWithFacebookId.save();
+
+    return {
+      facebookData,
+    };
   }
 
-  const userWithFacebookId = await UserModel.findOne({
-    facebook_data_id: facebookData._id,
-  }).exec();
-
-  if (!userWithFacebookId) {
-    const message = "User with this facebook_data_id has not been found";
-    console.log(message);
-    return;
-  }
-
-  userWithFacebookId.telegram_data_id = newTelegramData._id;
-  await userWithFacebookId.save();
-
-  return {
-    facebookData,
-  };
+  return;
 };
