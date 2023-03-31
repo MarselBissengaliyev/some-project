@@ -122,19 +122,12 @@ export const start = async (ctx: StartContext) => {
               ],
             }
           )
-          .then(async (response) => {
-            console.log("Response: ", response.data);
+          .then(async () => {
             if (data.facebookData) {
               await axios
                 .post(
                   `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
                 )
-                .then((res) => {
-                  console.log(res.data);
-                })
-                .catch((err) => {
-                  console.error(err);
-                });
             }
           })
           .catch((err) => {

@@ -14,8 +14,16 @@ export const createTelegramData = async (
     click_id: click_id,
   }).exec();
 
-  console.log((telegramData?.time_lead && new Date(telegramData?.time_lead ).toUTCString()), `telegramId=${telegramData.telegram_id}`);
-  console.log((facebookData?.time_click && new Date(facebookData?.time_click ).toUTCString()) || null, `clickId=${facebookData?.click_id || null}`);
+  const facebookLog =
+    (facebookData?.time_click &&
+      new Date(facebookData?.time_click * 1000).toUTCString()) ||
+    null + `-clickId-${facebookData?.click_id || null}`;
+  const telegramLog =
+    (telegramData?.time_lead &&
+      new Date(telegramData?.time_lead * 1000).toUTCString()) +
+    `-telegramId-${telegramData.telegram_id}`;
+
+  console.log(facebookLog, '-', telegramLog);
 
   const existingTelegramData = await TelegramDataModel.findOne({
     telegram_id: telegramData.telegram_id,
@@ -35,7 +43,7 @@ export const createTelegramData = async (
     if (!userWithFacebookId) {
       return;
     }
-  
+
     userWithFacebookId.telegram_data_id = newTelegramData._id;
     await userWithFacebookId.save();
 
