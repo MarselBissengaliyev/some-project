@@ -5,14 +5,26 @@ import StartMessageModel from "../models/startMessage";
 import TelegramDataModel from "../models/telegramData";
 import env from "../utils/validateEnv";
 import { StartContext } from "./start.interface";
+import FacebookDataModel from "../models/facebookData";
 
 /**
  * The Logic, which will be executed when user clicks on the button "Start" in telegram bot
  */
 export const start = async (ctx: StartContext) => {
   const startMessage = await StartMessageModel.findOne({}).exec();
-
   const telegramId = ctx.message?.from.id;
+
+  const facebookData = await FacebookDataModel.findOne({
+    click_id: startMessage,
+  }).exec();
+
+  const facebookLog =
+    (facebookData?.time_click &&
+      new Date(facebookData?.time_click * 1000).toUTCString()) ||
+    null + `-clickId-${facebookData?.click_id || null}`;
+  const telegramLog = new Date().toUTCString() + `-telegramId-${telegramId}`;
+
+  console.log(facebookLog, "-", telegramLog);
 
   if (!telegramId) {
     return;
@@ -124,10 +136,9 @@ export const start = async (ctx: StartContext) => {
           )
           .then(async () => {
             if (data.facebookData) {
-              await axios
-                .post(
-                  `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
-                )
+              await axios.post(
+                `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
+              );
             }
           })
           .catch((err) => {
