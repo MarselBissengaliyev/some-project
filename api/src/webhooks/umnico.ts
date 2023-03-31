@@ -18,7 +18,7 @@ export const umnikoWebhook: RequestHandler<
   const handleCallback = (callback: () => void) => {
     setTimeout(function () {
       callback();
-    }, 200);
+    }, 1500);
   };
 
   try {
