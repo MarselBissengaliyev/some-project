@@ -15,16 +15,22 @@ export const umnikoWebhook: RequestHandler<
   UmnikoWebhookDataBody,
   unknown
 > = async (req, res, next) => {
+  const handleCallback = (callback: () => void) => {
+    setTimeout(function () {
+      callback();
+    }, 1500);
+  };
+
   try {
     switch (req.body.type) {
       case "lead.changed.status":
-        leadChangedStatus(req, res, next);
+        handleCallback(() => leadChangedStatus(req, res, next));
         break;
       case "message.incoming":
-        messageIncoming(req, res, next);
+        handleCallback(() => messageIncoming(req, res, next));
         break;
       case "lead.changed":
-        leadChanged(req, res, next);
+        handleCallback(() => leadChanged(req, res, next));
         break;
       default:
         res.sendStatus(204);
