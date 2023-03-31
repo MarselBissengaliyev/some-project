@@ -18,10 +18,13 @@ export const start = async (ctx: StartContext) => {
     click_id: startMessage,
   }).exec();
 
-  const facebookLog =
-    (facebookData?.time_click &&
-      new Date(facebookData?.time_click * 1000).toUTCString()) ||
-    null + `-clickId-${facebookData?.click_id || null}`;
+  let facebookLog;
+  if (facebookData) {
+    const date =facebookData.time_click && new Date(facebookData.time_click * 1000).toUTCString() || 'null';
+    facebookLog = `${date}-clickId-${facebookData?.click_id || null}`;
+  } else {
+    facebookLog = 'null-null';
+  }
   const telegramLog = new Date().toUTCString() + `-telegramId-${telegramId}`;
 
   console.log(facebookLog, "-", telegramLog);
