@@ -34,7 +34,7 @@ const telegramDataSchema = new Schema({
     type: Number,
   },
   click_id: {
-    type: String,
+    type: String
   },
   last_name_telegram: {
     type: String,

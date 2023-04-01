@@ -58,41 +58,40 @@ export const start = async (ctx: StartContext) => {
   if (!startMessage) {
     return;
   }
-  try {
-    if (
-      (await ctx.getChatMember(telegramId)).status !== "left" &&
-      (await ctx.getChatMember(telegramId)).status !== "kicked"
-    ) {
-      if (startMessage.photo) {
-        const re = /(?:\.([^.]+))?$/;
-        const extension = startMessage.photo && re.exec(startMessage.photo);
-    
-        if ((extension && extension[1]) === "gif") {
-          return await ctx.replyWithAnimation(
-            `${env.API_URL}${startMessage.photo}`,
-            {
-              caption: startMessage.message,
-              parse_mode: "Markdown",
-              disable_notification: false,
-            }
-          );
-        }
-    
-        await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
-          caption: startMessage.message,
-          parse_mode: "Markdown",
-          disable_notification: false,
-        });
-      } else {
-        await ctx.reply(startMessage.message, {
-          disable_notification: false,
-          disable_web_page_preview: startMessage.disable_web_page_preview,
-          parse_mode: "Markdown",
-        });
+
+  if (
+    (await ctx.getChatMember(telegramId)).status !== "left" &&
+    (await ctx.getChatMember(telegramId)).status !== "kicked"
+  ) {
+    if (startMessage.photo) {
+      const re = /(?:\.([^.]+))?$/;
+      const extension = startMessage.photo && re.exec(startMessage.photo);
+
+      if ((extension && extension[1]) === "gif") {
+        return await ctx.replyWithAnimation(
+          `${env.API_URL}${startMessage.photo}`,
+          {
+            caption: startMessage.message,
+            parse_mode: "Markdown",
+            disable_notification: false,
+          }
+        );
       }
+
+      await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
+        caption: startMessage.message,
+        parse_mode: "Markdown",
+        disable_notification: false,
+      });
+    } else {
+      await ctx.reply(startMessage.message, {
+        disable_notification: false,
+        disable_web_page_preview: startMessage.disable_web_page_preview,
+        parse_mode: "Markdown",
+      });
     }
-  } catch (err) {
-    console.error(err);
+  } else {
+    return;
   }
 
   const clickId = ctx.startPayload;
@@ -111,58 +110,53 @@ export const start = async (ctx: StartContext) => {
     telegram_bot_login: ctx.botInfo.username,
     time_lead: unixTimeStamp,
     last_name_telegram: last_name ?? "",
-  })
-    .then(async (data) => {
-      if (data && data.facebookData) {
-        const domain = data.facebookData.domain;
-        const ip = data.facebookData.ip;
-        const fb_click = data.facebookData.fb_click;
-        const user_agent = data.facebookData.user_agent;
-        if (!domain || !ip || !fb_click || !user_agent) {
-          return;
-        }
-
-        const pixel = await PixelModel.findOne({
-          fb_pixel_id: data.facebookData.pixel,
-        }).exec();
-
-        if (!pixel) {
-          return;
-        }
-
-        await axios
-          .post(
-            `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
-            {
-              data: [
-                {
-                  event_name: "Lead",
-                  event_time: data.facebookData.time_click,
-                  event_source_url: `https://${data.facebookData.domain}`,
-                  action_source: "website",
-                  user_data: {
-                    client_ip_address: ip,
-                    client_user_agent: user_agent,
-                    fbc: `fb.1.${data.facebookData.time_click}.${data.facebookData.fb_click}`,
-                  },
-                  opt_out: false,
-                },
-              ],
-            }
-          )
-          .then(async () => {
-            if (data.facebookData) {
-              await axios.post(
-                `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
-              );
-            }
-          })
-          .catch((err) => {
-            console.error("Catch error: ", err);
-          });
+  }).then(async (data) => {
+    if (data && data.facebookData) {
+      const domain = data.facebookData.domain;
+      const ip = data.facebookData.ip;
+      const fb_click = data.facebookData.fb_click;
+      const user_agent = data.facebookData.user_agent;
+      if (!domain || !ip || !fb_click || !user_agent) {
+        return;
       }
-    })
-    .catch();
+
+      const pixel = await PixelModel.findOne({
+        fb_pixel_id: data.facebookData.pixel,
+      }).exec();
+
+      if (!pixel) {
+        return;
+      }
+
+      await axios
+        .post(
+          `https://graph.facebook.com/v16.0/${pixel.fb_pixel_id}/events?access_token=${pixel.token}.`,
+          {
+            data: [
+              {
+                event_name: "Lead",
+                event_time: data.facebookData.time_click,
+                event_source_url: `https://${data.facebookData.domain}`,
+                action_source: "website",
+                user_data: {
+                  client_ip_address: ip,
+                  client_user_agent: user_agent,
+                  fbc: `fb.1.${data.facebookData.time_click}.${data.facebookData.fb_click}`,
+                },
+                opt_out: false,
+              },
+            ],
+          }
+        )
+        .then(async () => {
+          if (data.facebookData) {
+            await axios.post(
+              `http://traffer.online/click.php?cnv_id=${data.facebookData.click_id}&payout=0&cnv_status=lead`
+            );
+          }
+        });
+    }
+  });
 
   return true;
 };

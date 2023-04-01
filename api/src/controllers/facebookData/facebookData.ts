@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import FacebookDataModel from "../../models/facebookData";
 import UserModel from "../../models/user";
 import { CreateFacebookDataBody } from "./facebookData.interface";
+import TelegramDataModel from "../../models/telegramData";
 
 /**
  * Here we create a fecbook_data document in the database
@@ -34,11 +35,15 @@ export const createFacebookData: RequestHandler<
       throw createHttpError(400, "Parameters missing");
     }
 
+    const telegramDataWithClickId = await TelegramDataModel.findOne({
+      click_id: click_id,
+    }).exec();
+
     const existingClickId = await FacebookDataModel.findOne({
       click_id: click_id,
     }).exec();
 
-    if (existingClickId) {
+    if (existingClickId || telegramDataWithClickId) {
       throw createHttpError(409, "Click_id already taken.");
     }
 
