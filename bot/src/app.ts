@@ -19,19 +19,6 @@ mongoose
 
     let bot = new Telegraf(generalData.bot_token);
 
-    bot.hears("left_chat_member", async (ctx) => {
-      const telegramData = await TelegramDataModel.findOne({
-        telegram_id: ctx.message.from.id + '',
-      }).exec();
-
-      if (!telegramData) {
-        return;
-      }
-
-      telegramData.is_active = false;
-      await telegramData.save();
-    });
-
     bot.start((ctx) => start(ctx));
 
     // Start listening for Telegram updates
@@ -43,19 +30,6 @@ mongoose
 
         const updatedToken = change.updateDescription?.updatedFields?.bot_token;
         bot = new Telegraf(updatedToken);
-
-        bot.hears("left_chat_member", async (ctx) => {
-          const telegramData = await TelegramDataModel.findOne({
-            telegram_id: ctx.message.from.id + '',
-          }).exec();
-
-          if (!telegramData) {
-            return;
-          }
-
-          telegramData.is_active = false;
-          await telegramData.save();
-        });
 
         bot.start((ctx) => start(ctx));
 
