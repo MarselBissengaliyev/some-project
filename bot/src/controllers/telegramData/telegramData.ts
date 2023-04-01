@@ -1,4 +1,3 @@
-import createHttpError from "http-errors";
 import FacebookDataModel from "../../models/facebookData";
 import TelegramDataModel, { TelegramData } from "../../models/telegramData";
 import UserModel from "../../models/user";

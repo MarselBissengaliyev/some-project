@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import { Telegraf } from "telegraf";
 import { start } from "./commands/start";
 import GeneralDataModel from "./models/generalData";
-import TelegramDataModel from "./models/telegramData";
 import env from "./utils/validateEnv";
 
 // Connect to MongoDB database using Mongoose
@@ -19,10 +18,10 @@ mongoose
 
     let bot = new Telegraf(generalData.bot_token);
 
-    bot.start((ctx) => start(ctx));
+    bot.start(async (ctx) => await start(ctx));
 
     // Start listening for Telegram updates
-    bot.launch();
+    await bot.launch();
 
     GeneralDataModel.watch().on("change", async (change) => {
       if (change.operationType === "update") {
@@ -31,10 +30,10 @@ mongoose
         const updatedToken = change.updateDescription?.updatedFields?.bot_token;
         bot = new Telegraf(updatedToken);
 
-        bot.start((ctx) => start(ctx));
+        bot.start(async (ctx) =>  await start(ctx));
 
         // Start listening for Telegram updates
-        bot.launch();
+        await bot.launch();
       }
     });
   })
