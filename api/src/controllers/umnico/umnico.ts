@@ -200,29 +200,6 @@ export const leadChanged: RequestHandler<
 
     await telegramData.save();
 
-    const user = await User.findOne({
-      telegram_data_id: telegramData._id,
-    });
-
-      const facebookData =
-      user && (await FacebookDataModel.findById(user.facebook_data_id).exec());
-
-    const cnv_id =
-      (facebookData && facebookData.click_id) || telegramData.click_id;
-
-    if (cnv_id) {
-      const payout = telegramData.amount;
-      const cnv_status = "approved";
-
-      await axios
-        .post(`https://traffer.online/click.php?event6=1&clickid=${cnv_id}`)
-        .then(async () => {
-          await axios.post(
-            `https://traffer.online/click.php?cnv_status=${cnv_status}&payout=${payout}&cnv_id=${cnv_id}`
-          );
-        });
-    }
-
     res.sendStatus(200);
   } catch (error) {
     next(error);
