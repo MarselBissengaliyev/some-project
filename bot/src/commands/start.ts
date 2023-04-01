@@ -12,6 +12,15 @@ import FacebookDataModel from "../models/facebookData";
  */
 export const start = async (ctx: StartContext) => {
   const startMessage = await StartMessageModel.findOne({}).exec();
+
+  if (!ctx.message) {
+    return;
+  }
+
+  if (!ctx.message.from.id) {
+    return;
+  }
+
   const telegramId = ctx.message?.from.id;
 
   const facebookData = await FacebookDataModel.findOne({
@@ -88,13 +97,6 @@ export const start = async (ctx: StartContext) => {
 
   const clickId = ctx.startPayload;
 
-  if (!ctx.message) {
-    return;
-  }
-
-  if (!ctx.message.from.id) {
-    return;
-  }
   const { id, first_name, username, last_name } = ctx.message.from;
 
   const date = new Date();
