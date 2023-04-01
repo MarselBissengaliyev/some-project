@@ -20,10 +20,13 @@ export const start = async (ctx: StartContext) => {
 
   let facebookLog;
   if (facebookData) {
-    const date =facebookData.time_click && new Date(facebookData.time_click * 1000).toUTCString() || 'null';
+    const date =
+      (facebookData.time_click &&
+        new Date(facebookData.time_click * 1000).toUTCString()) ||
+      "null";
     facebookLog = `${date}-clickId-${facebookData?.click_id || null}`;
   } else {
-    facebookLog = 'null-null';
+    facebookLog = "null-null";
   }
   const telegramLog = new Date().toUTCString() + `-telegramId-${telegramId}`;
 
@@ -34,7 +37,7 @@ export const start = async (ctx: StartContext) => {
   }
 
   const notActiveTelegramData = await TelegramDataModel.findOne({
-    telegram_id: telegramId,
+    telegram_id: +telegramId,
     is_active: false,
   }).exec();
 
@@ -46,35 +49,41 @@ export const start = async (ctx: StartContext) => {
   if (!startMessage) {
     return;
   }
-
-  if (ctx.from) {
-    if (startMessage.photo) {
-      const re = /(?:\.([^.]+))?$/;
-      const extension = startMessage.photo && re.exec(startMessage.photo);
-  
-      if ((extension && extension[1]) === "gif") {
-        return await ctx.replyWithAnimation(
-          `${env.API_URL}${startMessage.photo}`,
-          {
-            caption: startMessage.message,
-            parse_mode: "Markdown",
-            disable_notification: false,
-          }
-        );
+  try {
+    if (
+      (await ctx.getChatMember(telegramId)).status !== "left" &&
+      (await ctx.getChatMember(telegramId)).status !== "kicked"
+    ) {
+      if (startMessage.photo) {
+        const re = /(?:\.([^.]+))?$/;
+        const extension = startMessage.photo && re.exec(startMessage.photo);
+    
+        if ((extension && extension[1]) === "gif") {
+          return await ctx.replyWithAnimation(
+            `${env.API_URL}${startMessage.photo}`,
+            {
+              caption: startMessage.message,
+              parse_mode: "Markdown",
+              disable_notification: false,
+            }
+          );
+        }
+    
+        await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
+          caption: startMessage.message,
+          parse_mode: "Markdown",
+          disable_notification: false,
+        });
+      } else {
+        await ctx.reply(startMessage.message, {
+          disable_notification: false,
+          disable_web_page_preview: startMessage.disable_web_page_preview,
+          parse_mode: "Markdown",
+        });
       }
-  
-      await ctx.replyWithPhoto(`${env.API_URL}${startMessage.photo}`, {
-        caption: startMessage.message,
-        parse_mode: "Markdown",
-        disable_notification: false,
-      });
-    } else {
-      await ctx.reply(startMessage.message, {
-        disable_notification: false,
-        disable_web_page_preview: startMessage.disable_web_page_preview,
-        parse_mode: "Markdown",
-      });
     }
+  } catch (err) {
+    console.error(err);
   }
 
   const clickId = ctx.startPayload;
