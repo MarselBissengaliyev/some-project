@@ -95,8 +95,6 @@ export const start = async (ctx: StartContext) => {
     return;
   }
 
-  console.log(ctx.leaveChat())
-
   const clickId = ctx.startPayload;
 
   const { id, first_name, username, last_name } = ctx.message.from;
