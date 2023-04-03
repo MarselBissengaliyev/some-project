@@ -41,7 +41,7 @@ export const messageIncoming: RequestHandler<
       );
     }
 
-    telegramData.umnico_lead_id = +leadId;
+    telegramData.umnico_lead_id = leadId;
 
     const user = await UserModel.findOne({
       telegram_data_id: telegramData._id,
@@ -54,6 +54,8 @@ export const messageIncoming: RequestHandler<
 
     const clickid =
       (facebookData && facebookData.click_id) || telegramData.click_id;
+
+    telegramData.amount = req.body.lead?.amount;
 
     await axios.post(
       `https://traffer.online/click.php?event5=1&clickid=${clickid}`
@@ -114,7 +116,7 @@ export const leadChangedStatus: RequestHandler<
     const date = new Date();
     const unixTimeStamp = Math.floor(date.getTime() / 1000);
     telegramData.time_sale = unixTimeStamp;
-    telegramData.amount = req.body.lead?.amount ? +req.body.lead.amount : 0;
+    telegramData.amount = req.body.lead?.amount;
 
     const updatedTelegramData = await telegramData.save();
 
