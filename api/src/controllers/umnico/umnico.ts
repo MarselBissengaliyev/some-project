@@ -95,7 +95,7 @@ export const leadChangedStatus: RequestHandler<
     }
 
     if (leadStatus.name !== "Оплатили") {
-      return;
+      res.sendStatus(204);
     }
 
     const telegramData = await TelegramDataModel.findOne({
@@ -178,7 +178,7 @@ export const leadChanged: RequestHandler<
     }
 
     if (leadStatus.name !== "Оплатили") {
-      return;
+      res.sendStatus(204);
     }
 
     const telegramData = await TelegramDataModel.findOne({
