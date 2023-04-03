@@ -116,7 +116,7 @@ export const leadChangedStatus: RequestHandler<
     telegramData.time_sale = unixTimeStamp;
     telegramData.amount = req.body.lead?.amount ? +req.body.lead.amount : 0;
 
-    await telegramData.save();
+    const updatedTelegramData = await telegramData.save();
 
     const user = await User.findOne({
       telegram_data_id: telegramData._id,
@@ -129,7 +129,7 @@ export const leadChangedStatus: RequestHandler<
       (facebookData && facebookData.click_id) || telegramData.click_id;
 
     if (cnv_id) {
-      const payout = telegramData.amount;
+      const payout = updatedTelegramData.amount;
       const cnv_status = "approved";
 
       await axios
@@ -196,7 +196,7 @@ export const leadChanged: RequestHandler<
 
     telegramData.amount = req.body.lead?.amount
     ? +req.body.lead.amount
-    : (telegramData.amount || 0);
+    : 0;
 
     await telegramData.save();
 
