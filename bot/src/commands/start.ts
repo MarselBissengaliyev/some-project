@@ -96,6 +96,8 @@ export const start = async (ctx: StartContext) => {
 
   const clickId = ctx.startPayload;
 
+  console.log(ctx.chat?.type);
+
   const { id, first_name, username, last_name } = ctx.message.from;
 
   const date = new Date();
